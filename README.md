@@ -8,11 +8,14 @@ note: you may use whichever method you are most comfortable with.
 
 - install Postgres Database. I recommend [Postgres App](https://postgresapp.com/)
 - optional: install SQL client of your choice. I recommend [TablePlus](https://tableplus.co)
-- install [yarn](https://github.com/yarnpkg/yarn): `npm install --global yarn`
-- install [commitizen](https://github.com/commitizen/cz-cli): `npm install commitizen -g`
-- use your preffered virtual environment, we are using pipenv: `pipenv`
-- clone repo: `git clone https://github.com/PopcornRobot/wavelength.git`
-- install dependencies: `pip install requirements.txt`
+- install [yarn](https://github.com/yarnpkg/yarn): `npm i -g yarn`
+- install [commitizen](https://github.com/commitizen/cz-cli): `npm i -g commitizen`
+- clone repo (with dot after): `git clone https://github.com/PopcornRobot/wavelength.git .`
+- create `.env` file in root, copy `.env.sample` contents and update credentials
+- use your preffered virtual environment, we are using pipenv: `pipenv shell`
+- install dependencies: `pip install -r requirements.txt`
+- install JS dependencies: `yarn`
+- migrate to postgres DB: `python manage.py migrate`
 - start server: `python manage.py runserver_plus`
 
 ## Deploy on Heroku
