@@ -91,7 +91,7 @@ There are three types of stages:
 - make sure master is up to date, in master branch: `git pull`
 - branch off `git checkout -b feature/your-feature-branch`
 - add to branch `git add .`
-- user commitizen to commit: `git cz` (follow command prompts)
+- use commitizen to commit: `yarn commit` (follow command prompts)
 - push your code: `git push`
 
 ## Tips

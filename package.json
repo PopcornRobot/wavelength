@@ -6,9 +6,13 @@
   "repository": "https://github.com/PopcornRobot/wavelength.git",
   "author": "None",
   "license": "None",
-  "private": false,
+  "private": true,
   "devDependencies": {
     "cz-conventional-changelog": "3.3.0"
+  },
+  "scripts": {
+    "deploy": "git push heroku master",
+    "commit": "git cz"
   },
   "config": {
     "commitizen": {
