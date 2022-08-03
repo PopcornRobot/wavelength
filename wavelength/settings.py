@@ -31,10 +31,10 @@ SECRET_KEY = os.environ.get('SECRET_KEY', default='foo')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get('DEBUG', default=0))
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'hidden-tundra-00304.herokuapp.com']
 
 # CSRF trusted origins
-CSRF_TRUSTED_ORIGINS = ['https://pacific-coast-16530.herokuapp.com']
+CSRF_TRUSTED_ORIGINS = ['https://hidden-tundra-00304.herokuapp.com']
 
 INTERNAL_IPS = ['127.0.0.1']
 
