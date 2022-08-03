@@ -63,7 +63,7 @@ heroku run python manage.py migrate -a {{HEROKU_APP_NAME}}
 - we will be using [Heroku container build manifest](https://devcenter.heroku.com/articles/build-docker-images-heroku-yml) to deploy our Docker images.
 - setup your Heroku container stack: `heroku stack:set container -a {{HEROKU_APP_NAME}}`
 - create an `heroku.yml` (already created in this repo) file this will inform heroku on the Dockerfile to build from and any commands to run.
-- initialize a Git repo and create a commit ie `git add .`, `git commit -am "featL first commit:"` and `git push`.
+- initialize a Git repo and create a commit ie `git add .`, `yarn commit"` and `git push`.
 - install the `heroku-manifest` plugin from the beta CLI channel: `heroku plugins:install @heroku-cli/plugin-manifest`
 - add the Heroku remote: `heroku git:remote -a {{HEROKU_APP_NAME}}` this links up your remotes with heroku master
 - deploy to Heroku master to build your image and deploy your container: `git push heroku master`
