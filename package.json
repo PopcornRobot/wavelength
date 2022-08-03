@@ -1,0 +1,22 @@
+{
+  "name": "wavelength",
+  "version": "1.0.0",
+  "description": "Popcorn Robot",
+  "main": "index.js",
+  "repository": "https://github.com/PopcornRobot/wavelength.git",
+  "author": "None",
+  "license": "None",
+  "private": true,
+  "devDependencies": {
+    "cz-conventional-changelog": "3.3.0"
+  },
+  "scripts": {
+    "deploy": "git push heroku master",
+    "commit": "git cz"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}

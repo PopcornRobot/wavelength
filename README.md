@@ -6,9 +6,14 @@ Wavelegnth is a project developed by Popcorn Robot team
 
 note: you may use whichever method you are most comfortable with.
 
+- install Postgres Database. I recommend [Postgres App](https://postgresapp.com/)
+- optional: install SQL client of your choice. I recommend [TablePlus](https://tableplus.co)
+- install [yarn](https://github.com/yarnpkg/yarn): `npm install --global yarn`
+- install [commitizen](https://github.com/commitizen/cz-cli): `npm install commitizen -g`
 - use your preffered virtual environment, we are using pipenv: `pipenv`
 - clone repo: `git clone https://github.com/PopcornRobot/wavelength.git`
 - install dependencies: `pip install requirements.txt`
+- start server: `python manage.py runserver_plus`
 
 ## Deploy on Heroku
 
@@ -60,7 +65,7 @@ heroku run python manage.py migrate -a {{HEROKU_APP_NAME}}
 - add the Heroku remote: `heroku git:remote -a {{HEROKU_APP_NAME}}` this links up your remotes with heroku master
 - deploy to Heroku master to build your image and deploy your container: `git push heroku master`
 
-#### Create the Postgres database
+### Create the Postgres database
 
 ```bash
 heroku addons:create heroku-postgresql:hobby-dev -a {{HEROKU_APP_NAME}}
@@ -71,11 +76,23 @@ Once the database is up, run the migrations:
 ```bash
 heroku run python manage.py makemigrations -a {{HEROKU_APP_NAME}}
 heroku run python manage.py migrate -a {{HEROKU_APP_NAME}}
+```
 
 Note: be sure to update site url in your allowed host.  Replace anywhere that has, `{{HEROKU_APP_NAME}}`
 
 There are three types of stages:
 - `setup` is used to define Heroku addons and configuration variables to create during app provisioning.
-- `release` is used to define tasks that you'd like to execute during a release.
+- `release` is used to define tasks that you would like to execute during a release.
 - `run` is used to define which commands to run for the web and worker processes.
 
+## Workflow
+
+- make sure you are on master: `git checkout master`
+- make sure master is up to date, in master branch: `git pull`
+- branch off `git checkout -b feature/your-feature-branch`
+- add to branch `git add .`
+- use commitizen to commit: `yarn commit` (follow command prompts)
+- push your code: `git push`
+
+## Tips
+- reset your branch `git reset --hard HEAD`
