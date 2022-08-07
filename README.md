@@ -99,7 +99,9 @@ There are three types of stages:
 
 ## Tests
 
-To initalize testing, run: `pytest`.  Tests will be automated in GitHub Actions.
+To initalize testing, run: `pytest` or `pytest -vv` for verbose test outputs.  Tests will be automated with GitHub Actions.
+
+- all test should be named with `test_{{name}}`. This includes files and functions. Refer to test samples in app
 
 ## Tips
 - reset your branch `git reset --hard HEAD`
