@@ -31,12 +31,10 @@ SECRET_KEY = os.environ.get('SECRET_KEY', default='foo')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get('DEBUG', default=0))
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'vast-earth-36970.herokuapp.com']
-
-# CSRF trusted origins
-CSRF_TRUSTED_ORIGINS = ['https://vast-earth-36970.herokuapp.com']
-
-INTERNAL_IPS = ['127.0.0.1']
+# validations
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(' ')
+CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS').split(' ')
+INTERNAL_IPS = os.environ.get('INTERNAL_IPS')
 
 # Application definition
 
