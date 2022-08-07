@@ -97,5 +97,9 @@ There are three types of stages:
 - use commitizen to commit: `yarn commit` (follow command prompts)
 - push your code: `git push`
 
+## Tests
+
+To initalize testing, run: `pytest`.  Tests will be automated in GitHub Actions.
+
 ## Tips
 - reset your branch `git reset --hard HEAD`
