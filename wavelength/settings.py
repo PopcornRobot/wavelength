@@ -46,8 +46,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_extensions',                # https://django-extensions.readthedocs.io/en/latest/
-    'debug_toolbar',                    # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html
+    'django_extensions',                    # https://django-extensions.readthedocs.io/en/latest/
+    'debug_toolbar',                        # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html
+    # db health checks
+    'health_check',                         # https://django-health-check.readthedocs.io/en/latest/readme.html
+    'health_check.db',
+    'health_check.cache',
+    'health_check.storage',
+    'health_check.contrib.migrations',
 ]
 
 MIDDLEWARE = [
