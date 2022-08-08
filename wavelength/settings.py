@@ -31,12 +31,10 @@ SECRET_KEY = os.environ.get('SECRET_KEY', default='foo')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get('DEBUG', default=0))
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'vast-earth-36970.herokuapp.com']
-
-# CSRF trusted origins
-CSRF_TRUSTED_ORIGINS = ['https://vast-earth-36970.herokuapp.com']
-
-INTERNAL_IPS = ['127.0.0.1']
+# validations
+ALLOWED_HOSTS = ['localhost, 127.0.0.1, vast-earth-36970.herokuapp.com']
+CSRF_TRUSTED_ORIGINS = 'https://vast-earth-36970.herokuapp.com'
+INTERNAL_IPS = '127.0.0.1'
 
 # Application definition
 
@@ -48,8 +46,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_extensions',                # https://django-extensions.readthedocs.io/en/latest/
-    'debug_toolbar',                    # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html
+    'django_extensions',                    # https://django-extensions.readthedocs.io/en/latest/
+    'debug_toolbar',                        # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html
+    # db health checks
+    'health_check',                         # https://django-health-check.readthedocs.io/en/latest/readme.html
+    'health_check.db',
+    'health_check.cache',
+    'health_check.storage',
+    'health_check.contrib.migrations',
 ]
 
 MIDDLEWARE = [
