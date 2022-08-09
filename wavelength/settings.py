@@ -34,7 +34,7 @@ DEBUG = int(os.environ.get('DEBUG', default=0))
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'vast-earth-36970.herokuapp.com']
 
 # CSRF trusted origins
-CSRF_TRUSTED_ORIGINS = ['https://vast-earth-36970.herokuapp.com']
+CSRF_TRUSTED_ORIGINS = []
 
 INTERNAL_IPS = ['127.0.0.1']
 
