@@ -1,4 +1,11 @@
 name: Automatic Rebase
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
 jobs:
   rebase:
     name: Rebase
