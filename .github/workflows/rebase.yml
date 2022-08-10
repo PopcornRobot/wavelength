@@ -1,7 +1,5 @@
-name: Automatic Rebase
-
 on: issue_comment
-
+name: Automatic Rebase
 jobs:
   rebase:
     name: Rebase
