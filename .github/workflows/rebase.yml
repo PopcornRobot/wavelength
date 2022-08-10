@@ -1,5 +1,7 @@
-on: issue_comment
 name: Automatic Rebase
+
+on: [push, pull_request_review]
+
 jobs:
   rebase:
     name: Rebase
