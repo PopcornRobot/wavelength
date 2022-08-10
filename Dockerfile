@@ -35,7 +35,7 @@ RUN adduser -D myuser
 USER myuser
 
 # run migrations
-# RUN python manage.py migrate
+RUN python manage.py migrate
 
 # run gunicorn
 CMD gunicorn wavelength.wsgi:application --bind 0.0.0.0:$PORT
