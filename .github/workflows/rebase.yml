@@ -1,14 +1,11 @@
-name: Automatic Rebase
+name: Rebase Pull Requests
 
-on: [push, pull_request_review]
+on:
+  push:
+    branches: ['**']
 
 jobs:
   rebase:
-    name: Rebase
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - name: Automatic Rebase
-      uses: cirrus-actions/rebase@1.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: linhbn123/rebase-pull-requests@v1.0.1
