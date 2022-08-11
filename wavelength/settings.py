@@ -32,11 +32,9 @@ SECRET_KEY = os.environ.get('SECRET_KEY', default='foo')
 DEBUG = int(os.environ.get('DEBUG', default=0))
 
 # validations
-ALLOWED_HOSTS = ['*'] #['localhost, 127.0.0.1 , vast-earth-36970.herokuapp.com'] --> Ask about this
+ALLOWED_HOSTS = ['*', 'pr6-wavelength-staging.herokuapp.com']
 CSRF_TRUSTED_ORIGINS = ''
 INTERNAL_IPS = '127.0.0.1'
-
-# Application definition
 
 INSTALLED_APPS = [
     'app.apps.AppConfig',
