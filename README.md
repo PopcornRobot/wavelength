@@ -107,3 +107,4 @@ To initalize testing, run: `pytest` or `pytest -vv` for verbose test outputs.  T
 ## Tips
 
 - reset your branch `git reset --hard HEAD`
+- this repo has a release script to help run collect static and migrate. To use, run `chmod u+x ./release.sh` to give permission to run shell script. Then run `./release.sh`
