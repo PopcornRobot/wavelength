@@ -30,7 +30,7 @@ class Player(models.Model):
 
 class Question_history(models.Model):
     player = models.OneToOneField(Player, on_delete=models.CASCADE)
-    question = models.ForeignKey(Question, on_delete=models.CASCADE) //connect to Question model
+    question = models.ForeignKey(Question, on_delete=models.CASCADE) #connect to Question model
 
     def __str__(self):
         return self.player
