@@ -21,4 +21,17 @@ class GameRoom(models.Model):
 
     def __str__(self):
         return str(self.game_id) + " " + self.room_key + " " + str(self.is_game_active) + " " + str(self.players) + " " + str(self.created_at) + " " + str(self.updated_at)
+    
+class Player(models.Model):
+    username = models.CharField(max_length = 20)
+
+    def __str__(self):
+        return self.player
+
+class Question_history(models.Model):
+    player = models.OneToOneField(Player, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE) //connect to Question model
+
+    def __str__(self):
+        return self.player
 
