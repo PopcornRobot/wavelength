@@ -28,7 +28,7 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # collect static files
-# RUN python manage.py collectstatic --noinput -i admin -i django_extensions -i debug_toolbar
+RUN python manage.py collectstatic --noinput -i admin -i django_extensions -i debug_toolbar
 
 # add and run as non-root user
 RUN adduser -D myuser

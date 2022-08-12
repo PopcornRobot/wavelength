@@ -17,7 +17,7 @@ class GameRoom(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{str(self.game_id)} {self.room_key} {self.is_game_active} {self.players} {self.created_at} {self.updated_at}"
+        return f"{self.game_id} {self.room_key} {self.is_game_active} {self.players} {self.created_at} {self.updated_at}"
 
 class GameTurn(models.Model):
     team_id = models.ForeignKey("Team", on_delete=models.CASCADE)
