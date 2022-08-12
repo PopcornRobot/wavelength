@@ -1,5 +1,7 @@
 asgiref==3.5.2
+async-timeout==4.0.2
 attrs==22.1.0
+Deprecated==1.2.13
 dj-database-url==0.5.0
 Django==4.0.6
 django-debug-toolbar==3.5.0
@@ -19,8 +21,10 @@ pytest==7.1.2
 pytest-django==4.5.2
 python-decouple==3.6
 python-dotenv==0.20.0
+redis==4.3.4
 sqlparse==0.4.2
 tomli==2.0.1
 tzdata==2022.1
 Werkzeug==2.2.0
 whitenoise==6.2.0
+wrapt==1.14.1

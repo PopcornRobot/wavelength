@@ -12,7 +12,7 @@ note: you may use whichever method you are most comfortable with.
 - install [commitizen](https://github.com/commitizen/cz-cli): `npm i -g commitizen`
 - clone repo (with dot after): `git clone https://github.com/PopcornRobot/wavelength.git .`
 - create `.env` file in root, copy `.env.sample` contents and update credentials
-- use your preffered virtual environment, we are using pipenv: `pipenv shell`
+- use your preffered virtual environment, we are using pipenv: `pipenv shell`, this project is also equipt with pyenv version.
 - install dependencies: `pip install -r requirements.txt`
 - install JS dependencies: `yarn`
 - migrate to postgres DB: `python manage.py migrate`
@@ -84,6 +84,7 @@ heroku run python manage.py migrate -a {{HEROKU_APP_NAME}}
 Note: be sure to update site url in your allowed host.  Replace anywhere that has, `{{HEROKU_APP_NAME}}`
 
 There are three types of stages:
+
 - `setup` is used to define Heroku addons and configuration variables to create during app provisioning.
 - `release` is used to define tasks that you would like to execute during a release.
 - `run` is used to define which commands to run for the web and worker processes.
@@ -104,4 +105,6 @@ To initalize testing, run: `pytest` or `pytest -vv` for verbose test outputs.  T
 - all test should be named with `test_{{name}}`. This includes files and functions. Refer to test samples in app
 
 ## Tips
+
 - reset your branch `git reset --hard HEAD`
+- this repo has a release script to help run collect static and migrate. To use, run `chmod u+x ./release.sh` to give permission to run shell script. Then run `./release.sh`
