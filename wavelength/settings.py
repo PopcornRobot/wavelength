@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'health_check.cache',
     'health_check.storage',
     'health_check.contrib.migrations',
+    'health_check.contrib.redis',
 ]
 
 MIDDLEWARE = [
@@ -106,6 +107,8 @@ DATABASES = {
 DATABASE_URL = os.environ.get('DATABASE_URL')
 DATABASES['default'].update(dj_database_url.config(default=DATABASE_URL, conn_max_age=500, ssl_require=True))
 
+# Redis URL
+REDIS_URL = os.environ.get('REDIS_URL')
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -157,3 +160,11 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Cache Tables
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': REDIS_URL,
+    }
+}
