@@ -25,18 +25,19 @@ class Player(models.Model):
     def __str__(self):
         return self.player
 
-class Question_history(models.Model):
-    player = models.OneToOneField(Player, on_delete=models.CASCADE)
-    question = models.ForeignKey(Question, on_delete=models.CASCADE) #connect to Question model
+# TODO: will uncomment when models are finalize, temporary commented out
+# class QuestionHistory(models.Model):
+#     player = models.OneToOneField(Player, on_delete=models.CASCADE)
+#     question = models.ForeignKey(Question, on_delete=models.CASCADE) #connect to Question model
 
-    def __str__(self):
-        return self.player
+#     def __str__(self):
+#         return self.player
 
 class GameTurn(models.Model):
-    team_id = models.ForeignKey("Team", on_delete=models.CASCADE)
-    session_id = models.ForeignKey("Game", on_delete=models.CASCADE)
-    question = models.ForeignKey("Question", on_delete=models.CASCADE)
-    clue_giver = models.ForeignKey("User", on_delete=models.CASCADE)
+    # team_id = models.ForeignKey("Team", on_delete=models.CASCADE)
+    # session_id = models.ForeignKey("Game", on_delete=models.CASCADE)
+    # question = models.ForeignKey("Question", on_delete=models.CASCADE)
+    # clue_giver = models.ForeignKey("User", on_delete=models.CASCADE)
     clue_given = models.CharField(max_length=100)
     game_answer = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
