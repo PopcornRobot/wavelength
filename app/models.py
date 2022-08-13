@@ -17,7 +17,7 @@ class GameRoom(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return str(self.game_id) + " " + self.room_key + " " + str(self.is_game_active) + " " + str(self.players) + " " + str(self.created_at) + " " + str(self.updated_at)
+        return f"{self.game_id} {self.room_key} {self.is_game_active} {self.players} {self.created_at} {self.updated_at}"
     
 class Player(models.Model):
     username = models.CharField(max_length = 20)
