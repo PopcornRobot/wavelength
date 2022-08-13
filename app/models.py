@@ -7,23 +7,33 @@ class Question(models.Model):
     def __str__(self):
         return self.question
 
-class GameRoom(models.Model):
-    # game_id = models.ForeignKey("Question", on_delete=models.CASCADE)
-    room_key = models.CharField(max_length=100)
-    is_game_active = models.BooleanField(default=False)
-    players = models.IntegerField(default=0)
-    teams = models.IntegerField(default=0)
+# This models is only to enable the Game, the game's id will be used as the session ID required for the teams & game turn creation
+class Game(models.Model):
+    is_game_waiting = models.BooleanField(default=False)
+    is_game_running = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.game_id} {self.room_key} {self.is_game_active} {self.players} {self.created_at} {self.updated_at}"
+        return f"{self.is_game_waiting} {self.is_game_running} {self.created_at} {self.updated_at}"
     
 class Player(models.Model):
     username = models.CharField(max_length = 20)
 
     def __str__(self):
         return self.player
+
+# This models will store the information of the players , team name and scores
+class Team(models.Model):
+    team_name = models.CharField(max_length=100)
+    score = models.BooleanField(default=False)
+    session_id = models.ForeignKey(Game, on_delete=models.CASCADE) #connect to Game model
+    players = models.ForeignKey(Player, on_delete=models.CASCADE) #connect to Player model
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.team_name} {self.score} {self.session_id} {self.players} {self.created_at} {self.updated_at}"
 
 # TODO: will uncomment when models are finalize, temporary commented out
 # class QuestionHistory(models.Model):
