@@ -1,0 +1,40 @@
+{% comment %} 
+
+OBJECTIVE:
+Place Holder for "base.html" and static objects
+{% extends "base.html" %}
+{% load static %} 
+
+STAUTS:
+base.html and static are in development
+
+{% endcomment %}
+
+{% block title %}Wavelength{% endblock %}
+{% block page_title %} Team Room {% endblock %}
+{% block body %} 
+{% comment %} {{request.get_full_path}} {% endcomment %}
+
+<div class="container">
+    <div class="bs-docs-section">
+      <div class="page header">
+        <div class="row">
+            <div class="col-lg-15">
+                {% comment %} TEAM_NAME is a place holder for team name this may change into a form {% endcomment %}
+                <h2> Welcome to your "TEAM_NAME" </h2>
+                <h1> Your team members are: </h2>
+            </div>
+        </div>  
+      </div>
+    </div>
+    {% comment %} the teams context will be sorted from the views {% endcomment %}
+    {% for teams in all_players %}
+        <div class="bs-component">  
+            <div  class="row">
+                <div class="col-1">
+                    <h1> {{ members.players }} </h2>
+                </div>
+            </div>
+        </div>    
+    {% endfor %}
+    
