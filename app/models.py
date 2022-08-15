@@ -2,6 +2,7 @@ from django.db import models
 
 class Question(models.Model):
     # user = models.ForeignKey("app.Model", verbose_name=_(""), on_delete=models.CASCADE)
+    # unless we want to merge them, this model should have two CharFields: left_spectrum and right_spectrum
     question = models.CharField(max_length=50)
 
     def __str__(self):
@@ -41,7 +42,7 @@ class Team(models.Model):
 #     question = models.ForeignKey(Question, on_delete=models.CASCADE) #connect to Question model
 
 #     def __str__(self):
-#         return self.player
+#         return f "{self.player} {self.question}"
 
 class GameTurn(models.Model):
     # team_id = models.ForeignKey("Team", on_delete=models.CASCADE)
