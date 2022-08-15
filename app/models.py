@@ -45,13 +45,8 @@ class QuestionHistory(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-<<<<<<< HEAD
-#     def __str__(self):
-#         return f "{self.player} {self.question}"
-=======
     def __str__(self):
-        return f"{self.player} {self.question} {self.created_at} {self.updated_at}"
->>>>>>> eda7b56c1a51f4e7efd636a9762722856c572e1f
+        return f"{self.player} {self.question}"
 
 class GameTurn(models.Model):
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
