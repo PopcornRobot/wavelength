@@ -1,0 +1,53 @@
+{% comment %} 
+
+OBJECTIVE:
+Place Holder for "base.html" and static objects
+{% extends "base.html" %}
+{% load static %} 
+
+STAUTS:
+base.html and static are in development
+
+{% endcomment %}
+
+<style>>
+    {% block style %}
+    .container {
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .item {
+        width: 10em;
+    }
+    
+    .center {
+        margin: auto;
+        width: 60%;
+        padding: 10px;
+        text-align: center;
+        border: 3px solid blue;
+      }
+    {% endblock %}
+    </style>
+    
+    {% block body %} 
+    <div class="center">
+        Room {{game.id}}
+    </div>
+    
+    <div class='center'>
+        {% comment %} {% for player in player_list %}
+            {{player.username}}
+        {% endfor %} {% endcomment %}
+    </div>
+    <div style='padding:10px ; text-align:center'>
+        <button href= >Leave Room</button>
+        <button href= >Start Game</button>
+        {% comment %} {% if player.id == game.host.id%}
+        
+        {% endif %} {% endcomment %}
+    </div>
+    {% endblock %}

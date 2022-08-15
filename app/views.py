@@ -69,7 +69,20 @@ def game_room(request, game_id):
     # Get game instance and player
     game_instance = Game.objects.get(id=game_id)
     player = Player.objects.get(player_id)
-
-    
     
     return render(request, 'app/team_room.html', context)
+
+# page with auto-refreshing list of games available for joining
+def game_list(request):
+
+    game_list = Game.objects.order_by('created_at')
+
+    context = { 'game_list':game_list }
+    return render(request, 'wavelength/game_list.html', context)
+
+def game_session(request):
+
+    player_list = Game.objects.order_by('created_at')
+
+    context = { 'player_list':player_list }
+    return render(request, 'wavelength/game_session.html', context)

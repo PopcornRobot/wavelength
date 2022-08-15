@@ -1,0 +1,51 @@
+{% comment %} 
+
+OBJECTIVE:
+Place Holder for "base.html" and static objects
+{% extends "base.html" %}
+{% load static %} 
+
+STAUTS:
+base.html and static are in development
+
+{% endcomment %}
+
+<style>>
+{% block style %}
+.container {
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.item {
+    width: 10em;
+}
+
+.center {
+    margin: auto;
+    width: 60%;
+    padding: 10px;
+    text-align: center;
+    border: 3px solid blue;
+  }
+{% endblock %}
+</style>
+
+{% block body %} 
+<div class="center">
+    Choose a Game to Join
+</div>
+
+<div class='center'>
+    {% comment %} {% for game in game_list %}
+        {% if game.is_game_waiting == True and game.is_game_active == False %}
+           Room {{game.id}}  <button class="btn btn-primary" href=>Join Game</button>
+        {% endif %}
+    {% endfor %} {% endcomment %}
+</div>
+<div style='padding:10px ; text-align:center'>
+    <button href= >Return to Start Page</button>
+</div>
+{% endblock %}

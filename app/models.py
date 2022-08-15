@@ -12,6 +12,7 @@ class Question(models.Model):
 
 # This models is only to enable the Game, the game's id will be used as the session ID required for the teams & game turn creation
 class Game(models.Model):
+    #consider setting is_waiting default to True as that will be the state of all newly created Game objects
     is_game_waiting = models.BooleanField(default=False)
     is_game_running = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
