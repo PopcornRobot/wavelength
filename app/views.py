@@ -86,3 +86,12 @@ def game_session(request):
 
     context = { 'player_list':player_list }
     return render(request, 'wavelength/game_session.html', context)
+def start_page(request):
+    context = {}
+    return render(request, "wavelength/start_page.html", context)
+
+def player_registration_form(request):
+    if request.method == 'POST':
+        # Assigns the form input to the players name
+        player_name = request.POST['name']
+    return HttpResponseRedirect(reverse('app:start_page'))
