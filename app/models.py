@@ -20,6 +20,7 @@ class Team(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE) #connect to Game model
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    #consider adding field game_host: player with privilege to start a game
 
     def __str__(self):
         return f" the team name is: {self.name}, the team's score is:{self.score}, the current game is: {self.game}, created: {self.created_at}, updated: {self.updated_at}"
