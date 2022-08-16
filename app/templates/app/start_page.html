@@ -1,0 +1,28 @@
+{% comment %} {% extend "base.html" %} {% endcomment %}
+
+{% block body %}
+<center>
+  <h1>Wavelegth Tournament</h1>
+  <form action = "player_registration_form" method="post">
+      {% csrf_token %}
+      <div class="block">
+        <br>
+          <label>Name:</label>
+          <input type="text" name="name" >
+        </br>
+      </div>
+      <div class="block">
+        <br>
+          <a href=""><button class="button is-success is-fullwidth is-medium mt-5"
+            type="submit">Create Room</button></a>
+        </br>
+      </div>
+      <div class="block">
+        <br>
+          <a href=""><button class="button is-success is-fullwidth is-medium mt-5"
+            type="submit">Join Room</button></a>
+        </br>
+      </div>
+  </form>
+</center>
+{% endblock %}
