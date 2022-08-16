@@ -82,7 +82,7 @@ def game_list(request):
 
 def game_session(request):
 
-    player_list = Game.objects.order_by('created_at')
+    player_list = Team.objects.order_by('created_at')
 
     context = { 'player_list':player_list }
     return render(request, 'wavelength/game_session.html', context)

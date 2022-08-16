@@ -12,11 +12,12 @@ class Question(models.Model):
 
 # This models is only to enable the Game, the game's id will be used as the session ID required for the teams & game turn creation
 class Game(models.Model):
-    #consider setting is_waiting default to True as that will be the state of all newly created Game objects
+    #consider setting is_game_waiting default to True as that will be the state of all newly created Game objects
     is_game_waiting = models.BooleanField(default=False)
     is_game_running = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    #consider adding field game_host: player with privilege to start a game
 
     def __str__(self):
         return f"{self.is_game_waiting} {self.is_game_running} {self.created_at} {self.updated_at}"
@@ -32,6 +33,8 @@ class Team(models.Model):
     team_name = models.CharField(max_length=100)
     score = models.IntegerField(default=0)
     game_session = models.ForeignKey(Game, on_delete=models.CASCADE) #connect to Game model
+    #having players be a FK of Team still feels very clunky compared to having team a FK of Player. It means there will be many
+    #identical team objects with only difference being player compared to an unchanged number of player objects which just have the team field added to them
     players = models.ForeignKey(Player, on_delete=models.CASCADE) #connect to Player model
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
