@@ -78,17 +78,17 @@ def game_list(request):
     game_list = Game.objects.order_by('created_at')
 
     context = { 'game_list':game_list }
-    return render(request, 'wavelength/game_list.html', context)
+    return render(request, 'app/game_list.html', context)
 
 def game_session(request):
 
     player_list = Team.objects.order_by('created_at')
 
     context = { 'player_list':player_list }
-    return render(request, 'wavelength/game_session.html', context)
+    return render(request, 'app/game_session.html', context)
 def start_page(request):
     context = {}
-    return render(request, "wavelength/start_page.html", context)
+    return render(request, "app/start_page.html", context)
 
 def player_registration_form(request):
     if request.method == 'POST':
