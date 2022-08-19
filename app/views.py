@@ -86,6 +86,7 @@ def game_session(request):
 
     context = { 'player_list':player_list }
     return render(request, 'app/game_session.html', context)
+    
 def start_page(request):
     context = {}
     return render(request, "app/start_page.html", context)
