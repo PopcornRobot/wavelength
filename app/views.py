@@ -1,6 +1,7 @@
 from unicodedata import name
 from unittest import expectedFailure
 from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
+from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.urls import reverse
 from .models import *
@@ -24,53 +25,51 @@ def random_name():
     # Returns a new randome name
     return new_name
 
-# When a player wants to play he/she has to type a username and select start/join.
-# creating the player objects
-# When a player wants to play the game selects "Start Game" or "Join game"
-# the player is redirected to this function where the game objects are created
-def game_registration(request, game_id):
-    if request.GET == 'GET':
-        # Assigns the form input to the players name
-        player_name = request.GET['name']
-        # Creates player object;
-        new_player = Player.objects.create(username=player_name)
-        # Assigns the id of the object to the player_id variable
-        player_id = new_player.id
-        # If game does not exist create's one
-        if not Game.objects.get(id=game_id).exists():
-            # Create's new game
-            new_game = Game.objects.create(is_game_waiting=True, is_game_running=False)
-            team_new_name = random_name()
-            new_team = Team.objects.create(team_name=team_new_name, score=0, game_session=new_game.id)
+# This function will be enable only by the host
+def team_creation(request, game_id):
+    # Obtain the game instance
+    game_instance = Game.objects.get(id= game_id)
+    # Number of players in game
+    players = Player.objects.filter(game=game_instance)
+
+    # if there are more than 4 players
+    if players.count() > 4:
+        
+        # Verifies if the division has decimals
+        if players.count()//3 == players.count()/3:
+            # it does not have decimals
+            # Stores the number of teams for the game
+            teams_number = players.count()/3
         else:
-            # Joins an exisint game
-            new_game = Game.objects.get(id = game_id)
-        # Id assignation
-        game_id = new_game.id
-    # Returns to team room view/page parsing the player_id and game_id as argument  
-    return HttpResponseRedirect(reverse('app:team_creation'), kwargs={'player_id' : player_id, 'game_id' : game_id})
+            # it has decimals
+            teams_number = int(players.count()/3)+1
 
-def team_creation(request, game_id, player_id):
-    new_team_name = random_name()
-    game_instance = Game.objects.get(id=game_id)
-    player = Player.objects.get(player_id)
-    if not Team.objects.filter(game_session=game_instance).exists() and not Team.objects.filter(team_name=new_team_name).exists():
-        new_team_name = random_name()
-        new_team = Team.objects.create(team_name=new_team_name,score=0,game_session=game_instance, players=player)
-        team_id = new_team.id
+        for number in teams_number:
+            team_name = random_name()
+            new_team = Team.objects.create(name=team_name, score=0, game=game_instance)
+            for player in players:
+                player.team = new_team
+            
     else:
-        print('In design')
-    return HttpResponseRedirect(reverse('app:game_room'), kwargs={'team_id' : team_id})
+        # creates a single game
+        # Creates random name
+        team_name = random_name()
+        # Creates a team
+        new_team = Team.objects.create(name=team_name, score=0, game=game_instance)
+        # Goes inside the filtered players
+        for player in players:
+            # Assigns the team id to the current players
+            player.team = new_team.id
 
+    return HttpResponseRedirect(reverse('app:team_page'), kwargs={'game_instance':game_instance})
 
-# This function assigns and distributes the teams using the game instance and the player's id 
-# as inputs to create the team objects
-def game_room(request, game_id):
-    # Get game instance and player
-    game_instance = Game.objects.get(id=game_id)
-    player = Player.objects.get(player_id)
-    
-    return render(request, 'app/team_room.html', context)
+# Team page will print aall the members in the team 
+def team_page(request, game_instance):
+    teams = Team.objects.get(game=game_instance)
+    teammates = Player.objects.filter(team = teams)
+    context = {'teammates':teammates}
+    return render(request, "app/team_page.html",context)
+
 
 # page with auto-refreshing list of games available for joining
 def game_list(request):
