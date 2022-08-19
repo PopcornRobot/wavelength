@@ -3,7 +3,7 @@
 {% block body %}
 <center>
   <h1>Wavelegth Tournament</h1>
-  <form action = "player_registration_form" method="post">
+  <form action="player_registration_form" method="post">
       {% csrf_token %}
         <br>
           <label>Name:</label>
@@ -13,7 +13,7 @@
           <a href="#"><button type="submit">Create Room</button></a>
         </br>
   </form>
-  <form action="" method="post">
+  <form action="player_registration_form" method="post">
     {% csrf_token %}
       <br>
         <label>Name:</label>
