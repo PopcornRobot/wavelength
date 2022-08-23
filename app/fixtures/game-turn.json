@@ -1,1 +1,17 @@
-[]
+[
+  {
+    "model": "app.gameturn",
+    "pk": 1,
+    "fields": {
+      "team": 1,
+      "game": 1,
+      "question": 1,
+      "player": 1,
+      "clue_given": "this is a clue",
+      "question_answer":3,
+      "team_answer": 5,
+      "created_at": "2022-08-22T08:08:08.472Z",
+      "updated_at": "2022-08-22T08:08:08.472Z"
+    }
+  }
+]
