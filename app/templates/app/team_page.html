@@ -28,13 +28,19 @@ base.html and static are in development
       </div>
     </div>
     {% comment %} the teams context will be sorted from the views {% endcomment %}
-    {% for player in teammates %}
-        <div class="bs-component">  
-            <div  class="row">
-                <div class="col-1">
-                    <h1> {{ player.username }} </h2>
+    {% if teammates is not None%}
+        {% for player in teammates %}
+            <div class="bs-component">  
+                <div  class="row">
+                    <div class="col-1">
+                        <h1> {{ player.username }} </h2>
+                    </div>
                 </div>
-            </div>
-        </div>    
-    {% endfor %}
+            </div>    
+        {% endfor %}
     
+    {% else %}
+        <h1> test</h2>
+    {% endif %}
+
+{% endblock %}

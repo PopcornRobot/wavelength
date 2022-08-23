@@ -13,8 +13,9 @@ def index(request):
     return HttpResponse("Hello, world")
 
 
+########################################## JAJA! project starts here ################################################################
 
-# This function opens a file that stores a list of 250 team names and resturns a random name from the list
+# AC: This function opens a file that stores a list of 250 team names and resturns a random name from the list
 def random_name():
     # open the file
     with open("app/static/txt/team_names.csv") as f:
@@ -25,56 +26,56 @@ def random_name():
     # Returns a new randome name
     return new_name
 
-# This function will be enable only by the host
+# AC: This function assignes the players to the teams, taking the number of possible teams and the amount of players as arguments
+def get_teams(team_names, players):
+    # randomly shuffles all the players
+    randomly_ordered_players = random.sample(players, len(players))
+    # stores the number of possible teams
+    number_of_teams = len(team_names)
+
+    return {
+        # Returns a list of players randomly assigned to the team index 
+        # Slice the information into team with random name as first value and then seperates it by ":" 
+        # and assigns as many players as they can fit per team [first player:second:third:team_number]
+        team_names[i]: randomly_ordered_players[i::number_of_teams]
+        for i in range(number_of_teams)
+    }
+
+# AC: This function will be enable only by the host
 def team_creation(request, game_id):
     # Obtain the game instance
-    game_instance = Game.objects.get(id= game_id)
+    game_instance = Game.objects.get(id=game_id)
     # Number of players in game
     players = Player.objects.filter(game=game_instance)
+    # Calculating the amount of teams and distributions
+    # number of players/4 players per team and +1 to round number
+    number_of_teams = int(players.count()/4)+1
+    print(number_of_teams)
+    team_mates = int(len(players)/number_of_teams)
 
-    # if there are more than 4 players
-    if players.count() > 4:
-        
-        # Verifies if the division has decimals
-        if players.count()//3 == players.count()/3:
-            # it does not have decimals
-            # Stores the number of teams for the game
-            teams_number = players.count()/3
-        else:
-            # it has decimals
-            teams_number = int(players.count()/3)+1
+    print("players = "+str(len(players)))
+    print("teams =" +str(number_of_teams))
 
-        for number in teams_number:
-            team_name = random_name()
-            new_team = Team.objects.create(name=team_name, score=0, game=game_instance)
-            for player in players:
-                player.team = new_team
-            
-    else:
-        # creates a single game
-        # Creates random name
-        team_name = random_name()
-        # Creates a team
-        new_team = Team.objects.create(name=team_name, score=0, game=game_instance)
-        # Goes inside the filtered players
-        for player in players:
-            # Assigns the team id to the current players
-            player.team = new_team.id
+    team_names=[]
+    for i in range(0,number_of_teams):
+        name = random_name()
+        # print(name)
+        team_names.append(name.removesuffix("\n"))
+    
+    # Dictionary with the sorted teams
+    teams = get_teams(team_names, players)
 
-    return HttpResponseRedirect(reverse('app:team_page'), kwargs={'game_instance':game_instance})
+    for key, values in teams.items():
+        new_team = Team.objects.create()
 
-# Team page will print aall the members in the team 
-def team_page(request, game_instance):
-    teams = Team.objects.get(game=game_instance)
-    teammates = Player.objects.filter(team = teams)
+    return HttpResponseRedirect(reverse('app:team_page', kwargs={'game_instance' : game_instance}))
+
+# AC: Team page will print aall the members in the team 
+def team_page(request):
+    # teams = Team.objects.get(game=game_instance)
+    teammates = None
     context = {'teammates':teammates}
     return render(request, "app/team_page.html",context)
-
-###########################################################################################################
-def test_team_page(request):
-    context={}
-    return render(request,"app/test_team_page.html",context)    
-###########################################################################################################
 
 # page with auto-refreshing list of games available for joining
 def game_list(request):
