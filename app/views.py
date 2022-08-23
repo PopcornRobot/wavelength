@@ -70,6 +70,11 @@ def team_page(request, game_instance):
     context = {'teammates':teammates}
     return render(request, "app/team_page.html",context)
 
+###########################################################################################################
+def test_team_page(request):
+    context={}
+    return render(request,"app/test_team_page.html",context)    
+###########################################################################################################
 
 # page with auto-refreshing list of games available for joining
 def game_list(request):
