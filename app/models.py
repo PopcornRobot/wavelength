@@ -59,8 +59,8 @@ class QuestionHistory(models.Model):
     """
     This will store the questions previously assigned
     """
-    player = models.OneToOneField(Player, on_delete=models.CASCADE)     #connect to Player model
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)    #connect to Question model
+    player = models.OneToOneField(Player, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
