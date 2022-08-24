@@ -11,7 +11,7 @@ urlpatterns = [
     path('team_page/<int:game_id>/', views.team_page, name='team_page'),
     
     path('game_list', views.game_list, name='game_list'),
-    path('game_session', views.game_session, name='game_session'),
+    path('game_session/<int:current_game>', views.game_session, name='game_session'),
     path("start_page", views.start_page, name='start_page'),
     path("host_player_registration_form", views.host_player_registration_form, name='host_player_registration_form'),
     path("join_player_registration_form", views.join_player_registration_form, name='join_player_registration_form'),
