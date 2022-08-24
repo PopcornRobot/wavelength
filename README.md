@@ -89,6 +89,10 @@ There are three types of stages:
 - `release` is used to define tasks that you would like to execute during a release.
 - `run` is used to define which commands to run for the web and worker processes.
 
+### Seeding Database
+
+This project has fixtures provided. To seed your database, run: `python manage.py loaddata game team player question question-history game-turn`
+
 ## Workflow
 
 - make sure you are on master: `git checkout master`
