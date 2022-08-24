@@ -75,15 +75,17 @@ def game_room(request, game_id):
 # page with auto-refreshing list of games available for joining
 def game_list(request):
 
-    game_list = Game.objects.order_by('created_at')
+    game_list = Game.objects.filter(is_game_waiting=True, is_game_running=False)
 
     context = { 'game_list':game_list }
     return render(request, 'app/game_list.html', context)
 
 # join list of existing room
 def game_session(request):
-
-    player_list = Team.objects.order_by('created_at')
+    
+    game_id = request.GET.get('game_id')
+    game = Game.objects.get(id=game_id)
+    player_list = Player.objects.filter(game=game)
 
     context = { 'player_list':player_list }
     return render(request, 'app/game_session.html', context)

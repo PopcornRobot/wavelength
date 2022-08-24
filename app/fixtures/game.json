@@ -1,10 +1,10 @@
 [
   {
-    "model": "app.question",
+    "model": "app.game",
     "pk": 1,
     "fields": {
-      "left_spectrum": "left spectrum question",
-      "right_spectrum": "right spectrum question",
+      "is_game_waiting": true,
+      "is_game_running": false,
       "created_at": "2022-08-22T08:08:08.472Z",
       "updated_at": "2022-08-22T08:08:08.472Z"
     }
