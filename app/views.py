@@ -80,6 +80,7 @@ def game_list(request):
     context = { 'game_list':game_list }
     return render(request, 'app/game_list.html', context)
 
+# join list of existing room
 def game_session(request):
     
     game_id = request.GET.get('game_id')
@@ -88,13 +89,43 @@ def game_session(request):
 
     context = { 'player_list':player_list }
     return render(request, 'app/game_session.html', context)
-    
+# create a waiting room   
+def waiting_room(request, host):
+    context = {"host": host}
+    return render(request, "app/waiting_room.html", context)
+
 def start_page(request):
     context = {}
     return render(request, "app/start_page.html", context)
 
-def player_registration_form(request):
+def host_player_registration_form(request):
     if request.method == 'POST':
         # Assigns the form input to the players name
-        player_name = request.POST['name']
+        player_name = request.POST['username']
+        new_game = Game.objects.create()
+        host = Player.objects.create(username=player_name,is_host=True,game=new_game)
+    return HttpResponseRedirect(reverse('app:waiting_room', kwargs={'host': host.username}))
+
+def join_player_registration_form(request):
+    if request.method == 'POST':
+        player_name = request.POST['username']
     return HttpResponseRedirect(reverse('app:start_page'))
+
+def question_clue_spectrum(request):
+    context = {}
+    return render(request, "app/question_clue_spectrum.html", context)
+
+def clue_form(request):
+    if request.method == 'Post':
+        player_clue = request.POST['clue']
+    return HttpResponseRedirect(reverse('app:question_clue_spectrum'))
+
+def game_end(request):
+    context = {}
+    return render(request, "app/game_end.html", context)
+
+def team_score(request):
+    team_name = request.GET['team_name']
+    team_scores = Team.objects.filter(name__startswith=team_name)
+    context = {"team_scores": team_scores}
+    return HttpResponseRedirect(reverse('app:game_end'))

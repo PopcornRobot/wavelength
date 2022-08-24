@@ -1,0 +1,23 @@
+{% comment %} {% extends "base.html" %} {% endcomment %}
+{% load static %}
+
+{% block body %}
+<center>
+    <h1>Wavelength</h1>
+    <h1>Tournament</h1>
+    <hr>
+    <img src="{% static '/img/question_clue_spectrum.png' %}">
+    <p><b>Timer: 3 minutes</b></p>
+    <form action="clue_form" method="post">
+        {% csrf_token %}
+        <br>
+          <label for="clue">Clue:</label>
+          <input id="clue" type="text" name="clue">
+        </br>
+        <br>
+          <button><a href="question_clue_spectrum">New Clue</a></button>
+          <input type="submit" value="Submit">
+        </br>
+    </from>
+</center>
+{% endblock %}
