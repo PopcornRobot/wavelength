@@ -1,6 +1,7 @@
 from unicodedata import name
 from unittest import expectedFailure
 from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
+from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.urls import reverse
 from .models import *
@@ -12,8 +13,9 @@ def index(request):
     return HttpResponse("Hello, world")
 
 
+########################################## JAJA! project starts here ################################################################
 
-# This function opens a file that stores a list of 250 team names and resturns a random name from the list
+# AC: This function opens a file that stores a list of 250 team names and resturns a random name from the list
 def random_name():
     # open the file
     with open("app/static/txt/team_names.csv") as f:
@@ -24,53 +26,65 @@ def random_name():
     # Returns a new randome name
     return new_name
 
-# When a player wants to play he/she has to type a username and select start/join.
-# creating the player objects
-# When a player wants to play the game selects "Start Game" or "Join game"
-# the player is redirected to this function where the game objects are created
-def game_registration(request, game_id):
-    if request.GET == 'GET':
-        # Assigns the form input to the players name
-        player_name = request.GET['name']
-        # Creates player object;
-        new_player = Player.objects.create(username=player_name)
-        # Assigns the id of the object to the player_id variable
-        player_id = new_player.id
-        # If game does not exist create's one
-        if not Game.objects.get(id=game_id).exists():
-            # Create's new game
-            new_game = Game.objects.create(is_game_waiting=True, is_game_running=False)
-            team_new_name = random_name()
-            new_team = Team.objects.create(team_name=team_new_name, score=0, game_session=new_game.id)
-        else:
-            # Joins an exisint game
-            new_game = Game.objects.get(id = game_id)
-        # Id assignation
-        game_id = new_game.id
-    # Returns to team room view/page parsing the player_id and game_id as argument  
-    return HttpResponseRedirect(reverse('app:team_creation'), kwargs={'player_id' : player_id, 'game_id' : game_id})
+# AC: This function assignes the players to the teams, taking the number of possible teams and the amount of players as arguments
+def get_teams(team_names, players):
+    # randomly shuffles all the players
+    randomly_ordered_players = random.sample(players, len(players))
+    # stores the number of possible teams
+    number_of_teams = len(team_names)
 
-def team_creation(request, game_id, player_id):
-    new_team_name = random_name()
+    return {
+        # Returns a list of players randomly assigned to the team index 
+        # Slice the information into team with random name as first value and then seperates it by ":" 
+        # and assigns as many players as they can fit per team [first player:second:third:team_number]
+        team_names[i]: randomly_ordered_players[i::number_of_teams]
+        for i in range(number_of_teams)
+    }
+
+# AC: This function will be enable only by the host
+def team_creation(request, game_id=1):
+    # Obtain the game instance
     game_instance = Game.objects.get(id=game_id)
-    player = Player.objects.get(player_id)
-    if not Team.objects.filter(game_session=game_instance).exists() and not Team.objects.filter(team_name=new_team_name).exists():
-        new_team_name = random_name()
-        new_team = Team.objects.create(team_name=new_team_name,score=0,game_session=game_instance, players=player)
-        team_id = new_team.id
-    else:
-        print('In design')
-    return HttpResponseRedirect(reverse('app:game_room'), kwargs={'team_id' : team_id})
+    # Number of players in game
+    players = Player.objects.filter(game=game_instance)
+    # Calculating the amount of teams and distributions
+    # number of players/4 players per team and +1 to round number
+    number_of_teams = int(players.count()/4)+1
+    print(number_of_teams)
+    team_mates = int(len(players)/number_of_teams)
 
+    print("players = "+str(len(players)))
+    print("teams =" +str(number_of_teams))
 
-# This function assigns and distributes the teams using the game instance and the player's id 
-# as inputs to create the team objects
-def game_room(request, game_id):
-    # Get game instance and player
-    game_instance = Game.objects.get(id=game_id)
-    player = Player.objects.get(player_id)
+    team_names=[]
+    for i in range(0,number_of_teams):
+        name = random_name()
+        # print(name)
+        team_names.append(name.removesuffix("\n"))
     
-    return render(request, 'app/team_room.html', context)
+    # Dictionary with the sorted teams
+    teams = get_teams(team_names, players)
+
+    # List comprehension
+    for key, values in teams.items():
+        # Creating new team
+        new_team = Team.objects.create(name=key, game=game_id)
+        # Get players name
+        player_assignation = Player.objects.get(username= [p for p in values])
+        # Player's object stores the team created
+        player_assignation.team=new_team
+        # Saves dataset
+        player_assignation.save()
+
+    return HttpResponseRedirect(reverse('app:team_page', kwargs={'game_instance' : game_instance}))
+
+# AC: Team page will print aall the members in the team 
+def team_page(request):
+    # teams = Team.objects.get(game=game_instance)
+    teammates = None
+    context = {'teammates':teammates}
+    return render(request, "app/team_page.html",context)
+
 
 # page with auto-refreshing list of games available for joining
 def game_list(request):
