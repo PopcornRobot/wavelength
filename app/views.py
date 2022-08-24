@@ -9,9 +9,15 @@ import random
 teams_placeholder = {}
 
 def index(request):
-    return HttpResponse("Hello, world")
+    
+    return render(request, 'app/index.html')
 
+def room(request, room_name):
+    username= request.GET.get('username', 'Anonymous')
+    messages = Message.objects.filter(room=room_name)[0:25]
 
+    context = {'room_name' : room_name, 'username' : username, 'messages' : messages}
+    return render(request, 'app/room.html', context)
 
 # This function opens a file that stores a list of 250 team names and resturns a random name from the list
 def random_name():
