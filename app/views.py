@@ -65,8 +65,11 @@ def team_creation(request, game_id):
     # Dictionary with the sorted teams
     teams = get_teams(team_names, players)
 
+    # List comprehension
     for key, values in teams.items():
-        new_team = Team.objects.create()
+        print(key)
+        print(values)
+        new_team = Team.objects.create(name=[p for p in values],game=game_id)
 
     return HttpResponseRedirect(reverse('app:team_page', kwargs={'game_instance' : game_instance}))
 
@@ -76,6 +79,7 @@ def team_page(request):
     teammates = None
     context = {'teammates':teammates}
     return render(request, "app/team_page.html",context)
+
 
 # page with auto-refreshing list of games available for joining
 def game_list(request):
