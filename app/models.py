@@ -25,7 +25,7 @@ class Team(models.Model):
     # TODO: consider adding field game_host: player with privilege to start a game
 
     def __str__(self):
-        return f" the team name is: {self.name}, the team's score is:{self.score}, the current game is: {self.game}, created: {self.created_at}, updated: {self.updated_at}"
+        return f" the team name is: {self.name}, the team's score is:{self.score}, the current game is: {self.game}"
 
 class Player(models.Model):
     """
@@ -41,7 +41,7 @@ class Player(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f" the current player is: {self.username}, is this the host: {self.is_host}, the players team is: {self.team}, the player's game is: {self.game}, created: {self.created_at}, updated: {self.updated_at}"
+        return f" the current player is: {self.username}, is this the host: {self.is_host}, the players team is: {self.team}, the player's game is: {self.game}"
 
 class Question(models.Model):
     """
@@ -53,7 +53,7 @@ class Question(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f" the left spectrum is: {self.left_spectrum}, the right spectrum is: {self.right_spectrum}, created: {self.created_at}, updated: {self.updated_at}"
+        return f" the left spectrum is: {self.left_spectrum}, the right spectrum is: {self.right_spectrum}"
 
 class QuestionHistory(models.Model):
     """
@@ -65,7 +65,7 @@ class QuestionHistory(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f" the player assigned with the question is: {self.player}, used question: {self.question}, created: {self.created_at}, updated: {self.updated_at}"
+        return f" the player assigned with the question is: {self.player}, used question: {self.question}"
 
 class GameTurn(models.Model):
     """
@@ -83,12 +83,3 @@ class GameTurn(models.Model):
 
     def __str__(self):
         return f" the team in the room is:{self.team}, the game is: {self.game}, the question is:{self.question}, the clue giver is: {self.clue_giver}, the previous clue is: {self.clue_given}, the current question answer is: {self.question_answer}, the team answer is {self.team_answer}, created: {self.created_at}, updated: {self.updated_at}"
-
-class Message(models.Model):
-  username = models.CharField(max_length=255)
-  room = models.CharField(max_length=255)
-  content = models.TextField()
-  date_added = models.DateTimeField(auto_now_add=True)
-
-  class Meta:
-    ordering = ('date_added',)
