@@ -83,3 +83,12 @@ class GameTurn(models.Model):
 
     def __str__(self):
         return f" the team in the room is:{self.team}, the game is: {self.game}, the question is:{self.question}, the clue giver is: {self.clue_giver}, the previous clue is: {self.clue_given}, the current question answer is: {self.question_answer}, the team answer is {self.team_answer}, created: {self.created_at}, updated: {self.updated_at}"
+
+class Message(models.Model):
+  username = models.CharField(max_length=255)
+  room = models.CharField(max_length=255)
+  content = models.TextField()
+  date_added = models.DateTimeField(auto_now_add=True)
+
+  class Meta:
+    ordering = ('date_added',)
