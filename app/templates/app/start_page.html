@@ -3,24 +3,24 @@
 {% block body %}
 <center>
   <h1>Wavelegth Tournament</h1>
-  <form action="player_registration_form" method="post">
+  <form action="host_player_registration_form" method="post">
       {% csrf_token %}
         <br>
           <label>Name:</label>
-          <input type="text" name="name">
+          <input type="text" name="username">
         </br>
         <br>
-          <a href="#"><button type="submit">Create Room</button></a>
+          <button type="submit">Create Room</button>
         </br>
   </form>
-  <form action="player_registration_form" method="post">
+  <form action="join_player_registration_form" method="post">
     {% csrf_token %}
       <br>
         <label>Name:</label>
-        <input type="text" name="name">
+        <input type="text" name="username">
       </br>
       <br>
-        <a href="#"><button type="submit">Join Room</button></a>
+       <button type="submit">Join Room</button>
       </br>  
   </form>
 </center>
