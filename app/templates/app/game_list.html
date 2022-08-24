@@ -39,11 +39,11 @@ base.html and static are in development
 </div>
 
 <div class='center'>
-    {% comment %} {% for game in game_list %}
-        {% if game.is_game_waiting == True and game.is_game_active == False %}
+    {% for game in game_list %}
+       
            Room {{game.id}}  <button class="btn btn-primary" href= >Join Game</button>
-        {% endif %}
-    {% endfor %} {% endcomment %}
+        
+    {% endfor %}
 </div>
 <div style='padding:10px ; text-align:center'>
     <button href= >Return to Start Page</button>
