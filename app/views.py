@@ -42,7 +42,7 @@ def get_teams(team_names, players):
     }
 
 # AC: This function will be enable only by the host
-def team_creation(request, game_id):
+def team_creation(request, game_id=1):
     # Obtain the game instance
     game_instance = Game.objects.get(id=game_id)
     # Number of players in game
@@ -67,9 +67,14 @@ def team_creation(request, game_id):
 
     # List comprehension
     for key, values in teams.items():
-        print(key)
-        print(values)
-        new_team = Team.objects.create(name=[p for p in values],game=game_id)
+        # Creating new team
+        new_team = Team.objects.create(name=key, game=game_id)
+        # Get players name
+        player_assignation = Player.objects.get(username= [p for p in values])
+        # Player's object stores the team created
+        player_assignation.team=new_team
+        # Saves dataset
+        player_assignation.save()
 
     return HttpResponseRedirect(reverse('app:team_page', kwargs={'game_instance' : game_instance}))
 

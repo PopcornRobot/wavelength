@@ -54,7 +54,8 @@ for i in range(0,number_of_teams):
 teams = get_teams(team_names, players)
 for team_nm, playing in teams.items():
     print(team_nm)
-    print(p for p in playing)
+    # print(p for p in playing)
+    print(v for v in playing)
 
 print("##############################################")
-print(teams)
+# print(teams)
