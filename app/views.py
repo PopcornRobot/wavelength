@@ -81,14 +81,15 @@ def game_list(request):
     return render(request, 'app/game_list.html', context)
 
 # join list of existing room
-def game_session(request):
-    
-    game_id = request.GET.get('game_id')
-    game = Game.objects.get(id=game_id)
+def game_session(request, current_game):
+    # host.game.id
+    # game_id = request.GET.get('game_id')
+    game = Game.objects.get(id=current_game)
     player_list = Player.objects.filter(game=game)
 
     context = { 'player_list':player_list }
     return render(request, 'app/game_session.html', context)
+
 # create a waiting room   
 def waiting_room(request, host):
     context = {"host": host}
@@ -104,12 +105,15 @@ def host_player_registration_form(request):
         player_name = request.POST['username']
         new_game = Game.objects.create()
         host = Player.objects.create(username=player_name,is_host=True,game=new_game)
-    return HttpResponseRedirect(reverse('app:waiting_room', kwargs={'host': host.username}))
+        print(host.id)
+        print(new_game.id)
+        current_game = new_game.id
+    return HttpResponseRedirect(reverse('app:game_session', kwargs={'current_game': current_game}))
 
 def join_player_registration_form(request):
     if request.method == 'POST':
         player_name = request.POST['username']
-    return HttpResponseRedirect(reverse('app:start_page'))
+    return HttpResponseRedirect(reverse('app:game_list'))
 
 def question_clue_spectrum(request):
     context = {}
