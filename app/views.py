@@ -42,11 +42,13 @@ def get_teams(team_names, players):
     }
 
 # AC: This function will be enable only by the host
-def team_creation(request, game_id=1):
-    # Obtain the game instance
-    game_instance = Game.objects.get(id=game_id)
+def team_creation(request, player_id):
     # Number of players in game
     players = Player.objects.filter(game=game_instance)
+
+    # Obtain the game instance
+    game_instance = Game.objects.get(game=players.game)
+    
     # Calculating the amount of teams and distributions
     # number of players/4 players per team and +1 to round number
     number_of_teams = int(players.count()/4)+1

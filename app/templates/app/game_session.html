@@ -45,9 +45,8 @@ base.html and static are in development
     </div>
     <div style='padding:10px ; text-align:center'>
         <button href="#" >Leave Room</button>
-        <button href="#" >Start Game</button>
-        {% comment %} {% if player.id == game.host.id%}
-        
-        {% endif %} {% endcomment %}
+        {% if player.is_host == True %}
+            <button href="{% url 'app:response_form' player_id=player.id %}" >Start Game</button>
+        {% endif %} 
     </div>
     {% endblock %}
