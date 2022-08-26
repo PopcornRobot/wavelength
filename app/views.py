@@ -92,6 +92,7 @@ def game_list(request):
     game_list = Game.objects.filter(is_game_waiting=True, is_game_running=False)
 
     context = { 'game_list':game_list }
+    print(game_list)
     return render(request, 'app/game_list.html', context)
 
 # join list of existing room
@@ -127,7 +128,13 @@ def host_player_registration_form(request):
 def join_player_registration_form(request):
     if request.method == 'POST':
         player_name = request.POST['username']
+        print(player_name)
     return HttpResponseRedirect(reverse('app:game_list'))
+
+# def player_game_assignment(request) need to work on this function
+def player_game_assignment(request):
+    
+    return HttpResponseRedirect(reverse('app:game_session'))
 
 def question_clue_spectrum(request):
     context = {}
@@ -139,6 +146,8 @@ def clue_form(request):
     return HttpResponseRedirect(reverse('app:question_clue_spectrum'))
 
 def game_end(request):
+    team1 = Team.objects.get()
+    team2 = Team.objects.get()
     context = {}
     return render(request, "app/game_end.html", context)
 

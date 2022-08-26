@@ -20,4 +20,6 @@ urlpatterns = [
     path("game_end", views.game_end, name="game_end"),
     path("team_score", views.team_score, name='team_score'),
     path("waiting_room/<host>", views.waiting_room, name="waiting_room"),
+    path("player_game_assignment", views.player_game_assignment, name="player_game_assignment"),
+    
 ]
