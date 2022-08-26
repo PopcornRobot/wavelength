@@ -52,9 +52,11 @@ def team_creation(request, game_id=1):
     number_of_teams = int(players.count()/4)+1
     print(number_of_teams)
     team_mates = int(len(players)/number_of_teams)
-
+    
+    print("***************************************************************")
     print("players = "+str(len(players)))
     print("teams =" +str(number_of_teams))
+    print("***************************************************************")
 
     team_names=[]
     for i in range(0,number_of_teams):
@@ -96,7 +98,6 @@ def game_list(request):
 
 # join list of existing room
 def game_session(request, current_game):
-    # host.game.id
     # game_id = request.GET.get('game_id')
     game = Game.objects.get(id=current_game)
     player_list = Player.objects.filter(game=game)
