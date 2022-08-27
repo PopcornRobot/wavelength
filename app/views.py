@@ -42,6 +42,8 @@ def get_teams(team_names, players):
     }
 
 # AC: This function will be enable only by the host
+# NOTE: Create a player joining argument to track who joins and use it as URL #
+
 def team_creation(request, player_game):
     # Stores the name of all the players
     player_names = []
@@ -82,8 +84,6 @@ def team_creation(request, player_game):
     teams = get_teams(team_names, player_names)
     # List comprehension
     for team_name, team_mates in teams.items():
-        print(team_name)
-        print(team_mates)
         # Creating new team
         new_team = Team.objects.create(name=team_name, game=game_instance)
         # Search for the players names inside the team
@@ -95,10 +95,10 @@ def team_creation(request, player_game):
             team_assignation.save()
 
         # -- ALL GOOD until HERE ---
-    return HttpResponseRedirect(reverse('app:team_page', kwargs={'game_instance' : game_instance}))
+    return HttpResponseRedirect(reverse('app:team_page', kwargs={'players':players, 'game_instance' : game_instance}))
 
 # AC: Team page will print aall the members in the team 
-def team_page(request):
+def team_page(request, players, game_instance):
     # teams = Team.objects.get(game=game_instance)
     teammates = None
     context = {'teammates':teammates}
@@ -133,11 +133,7 @@ def player_game_assignation(request, game_id, player_id):
 def game_session(request, game_id):
     # game_id = request.GET.get('game_id')
     game = Game.objects.get(id=game_id)
-    print(game)
-
     player_list = Player.objects.filter(game=game)
-    print(player_list)
-
     context = { 'player_list' : player_list, 'game' : game }
     return render(request, 'app/game_session.html', context)
 
@@ -156,8 +152,6 @@ def host_player_registration_form(request):
         player_name = request.POST['username']
         new_game = Game.objects.create()
         host = Player.objects.create(username=player_name,is_host=True,game=new_game)
-        print(host.id)
-        print(new_game.id)
         game_id = new_game.id
         player_id = host.id
     return HttpResponseRedirect(reverse('app:game_session', kwargs={'game_id': game_id}))
