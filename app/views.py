@@ -53,18 +53,29 @@ def team_creation(request, player_game, player_id):
     players = Player.objects.filter(game=player_game)
     # Obtain the game instance
     game_instance = Game.objects.get(id=player_game)
-    # Calculating the amount of teams and distributions
-    # number of players/4 players per team and +1 to round number
-    number_of_teams = int(players.count()/4)+1
-    number_of_team_players = int(len(players)/number_of_teams)
+    # Game instance has started and is no longer waiting for players 
+    game_instance.is_game_waiting = False
+    # Game is running
+    game_instance.is_game_running = True
+    game_instance.save()
     
-    print("***************************************************************")
-    print(" This is a print for Teams algorithm confirmation only for debugging")
-    print("game = " +str(game_instance.id))
-    print("players = "+str(len(players)))
-    print("teams =" +str(number_of_teams))
-    print("teammates = " +str(number_of_team_players))
-    print("***************************************************************")
+    # Checks for number of players before assigning teams
+    if len(players) > 4:
+        # Calculating the amount of teams and distributions
+        # number of players/4 players per team and +1 to round number
+        number_of_teams = int(players.count()/4)
+        number_of_team_players = int(len(players)/number_of_teams)
+    else:
+        # Single team
+        number_of_teams = 1
+
+    # print("***************************************************************")
+    # print(" This is a print for Teams algorithm confirmation only for debugging")
+    # print("game = " +str(game_instance.id))
+    # print("players = "+str(len(players)))
+    # print("teams =" +str(number_of_teams))
+    # print("teammates = " +str(number_of_team_players))
+    # print("***************************************************************")
 
     # All player names assignation,
     for player in players:
@@ -102,24 +113,13 @@ def team_creation(request, player_game, player_id):
 
 # AC: Team page will print aall the members in the team 
 def team_page(request, host_id, game_id):
-    print("***************************************************************")
-    host = Player.objects.get(id=host_id)
-    print(host.game.id)
-    print("***************************************************************")
-    teams = Team.objects.filter(game=game_id)
-    for team in teams:
-        print(team.name)
 
-    print("***************************************************************")
+    host = Player.objects.get(id=host_id)
+    teams = Team.objects.filter(game=game_id)
     players = Player.objects.filter(game=host.game)
-    for player in players:
-        print(player.username)
-        print(player.team.name)
-    print("***************************************************************")
-    
+
     context = {'teams':teams, 'players':players}
     return render(request, "app/team_page.html",context)
-
 
 # page with auto-refreshing list of games available for joining
 def game_list(request, player_id):
@@ -163,6 +163,9 @@ def start_page(request):
     return render(request, "app/start_page.html", context)
 
 def host_player_registration_form(request):
+    #############################################
+    # Needs a condition to avoid repeated names #
+    #############################################
     if request.method == 'POST':
         # Assigns the form input to the players name
         player_name = request.POST['username']
@@ -173,6 +176,9 @@ def host_player_registration_form(request):
     return HttpResponseRedirect(reverse('app:game_session', kwargs={'game_id': game_id}))
 
 def join_player_registration_form(request):
+    #############################################
+    # Needs a condition to avoid repeated names #
+    #############################################
     if request.method == 'POST':
         player_name = request.POST['username']
         new_player= Player.objects.create(username=player_name, is_host=False)
