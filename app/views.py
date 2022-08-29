@@ -44,9 +44,11 @@ def get_teams(team_names, players):
 # AC: This function will be enable only by the host
 # NOTE: Create a player joining argument to track who joins and use it as URL #
 
-def team_creation(request, player_game):
+def team_creation(request, player_game, player_id):
     # Stores the name of all the players
     player_names = []
+    # Retrieve host
+    host_player = Player.objects.get(id=player_id)
     # Number of players in game
     players = Player.objects.filter(game=player_game)
     # Obtain the game instance
@@ -93,15 +95,29 @@ def team_creation(request, player_game):
             # Assigns the team to the player model
             team_assignation.team = new_team
             team_assignation.save()
-
-        # -- ALL GOOD until HERE ---
-    return HttpResponseRedirect(reverse('app:team_page', kwargs={'players':players, 'game_instance' : game_instance}))
+            game_id = game_instance.id
+            host_id = host_player.id
+            
+    return HttpResponseRedirect(reverse('app:team_page', kwargs={ 'host_id': host_id, 'game_id' : game_id}))
 
 # AC: Team page will print aall the members in the team 
-def team_page(request, players, game_instance):
-    # teams = Team.objects.get(game=game_instance)
-    teammates = None
-    context = {'teammates':teammates}
+def team_page(request, host_id, game_id):
+    print("***************************************************************")
+    host = Player.objects.get(id=host_id)
+    print(host.game.id)
+    print("***************************************************************")
+    teams = Team.objects.filter(game=game_id)
+    for team in teams:
+        print(team.name)
+
+    print("***************************************************************")
+    players = Player.objects.filter(game=host.game)
+    for player in players:
+        print(player.username)
+        print(player.team.name)
+    print("***************************************************************")
+    
+    context = {'teams':teams, 'players':players}
     return render(request, "app/team_page.html",context)
 
 
