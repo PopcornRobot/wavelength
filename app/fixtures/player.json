@@ -4,9 +4,9 @@
     "pk": 1,
     "fields": {
       "username": "test-player",
-      "is_host": true,
-      "team": 1,
-      "game": 1,
+      "is_host": false,
+      "team": null,
+      "game": 16,
       "created_at": "2022-08-22T08:08:08.472Z",
       "updated_at": "2022-08-22T08:08:08.472Z"
     }
@@ -18,7 +18,7 @@
       "username": "player-2",
       "is_host": false,
       "team": null,
-      "game": 1,
+      "game": 16,
       "created_at": "2022-08-22T08:08:08.472Z",
       "updated_at": "2022-08-22T08:08:08.472Z"
     }
@@ -30,7 +30,7 @@
       "username": "player-3",
       "is_host": false,
       "team": null,
-      "game": 1,
+      "game": 16,
       "created_at": "2022-08-22T08:08:08.472Z",
       "updated_at": "2022-08-22T08:08:08.472Z"
     }
@@ -42,7 +42,7 @@
       "username": "player-4",
       "is_host": false,
       "team": null,
-      "game": 1,
+      "game": 16,
       "created_at": "2022-08-22T08:08:08.472Z",
       "updated_at": "2022-08-22T08:08:08.472Z"
     }
@@ -54,7 +54,7 @@
       "username": "player-5",
       "is_host": false,
       "team": null,
-      "game": 1,
+      "game": 16,
       "created_at": "2022-08-22T08:08:08.472Z",
       "updated_at": "2022-08-22T08:08:08.472Z"
     }
@@ -66,7 +66,7 @@
       "username": "player-6",
       "is_host": false,
       "team": null,
-      "game": 1,
+      "game": 16,
       "created_at": "2022-08-22T08:08:08.472Z",
       "updated_at": "2022-08-22T08:08:08.472Z"
     }
@@ -78,7 +78,7 @@
       "username": "player-7",
       "is_host": false,
       "team": null,
-      "game": 1,
+      "game": 16,
       "created_at": "2022-08-22T08:08:08.472Z",
       "updated_at": "2022-08-22T08:08:08.472Z"
     }
@@ -90,7 +90,7 @@
       "username": "player-8",
       "is_host": false,
       "team": null,
-      "game": 1,
+      "game": 16,
       "created_at": "2022-08-22T08:08:08.472Z",
       "updated_at": "2022-08-22T08:08:08.472Z"
     }
@@ -102,7 +102,7 @@
       "username": "player-9",
       "is_host": false,
       "team": null,
-      "game": 1,
+      "game": 16,
       "created_at": "2022-08-22T08:08:08.472Z",
       "updated_at": "2022-08-22T08:08:08.472Z"
     }
@@ -114,7 +114,7 @@
       "username": "player-10",
       "is_host": false,
       "team": null,
-      "game": 1,
+      "game": 16,
       "created_at": "2022-08-22T08:08:08.472Z",
       "updated_at": "2022-08-22T08:08:08.472Z"
     }
@@ -126,7 +126,7 @@
       "username": "player-11",
       "is_host": false,
       "team": null,
-      "game": 1,
+      "game": 16,
       "created_at": "2022-08-22T08:08:08.472Z",
       "updated_at": "2022-08-22T08:08:08.472Z"
     }
@@ -138,7 +138,7 @@
       "username": "player-12",
       "is_host": false,
       "team": null,
-      "game": 1,
+      "game": 16,
       "created_at": "2022-08-22T08:08:08.472Z",
       "updated_at": "2022-08-22T08:08:08.472Z"
     }

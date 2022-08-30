@@ -21,26 +21,22 @@ base.html and static are in development
         <div class="row">
             <div class="col-lg-15">
                 {% comment %} TEAM_NAME is a place holder for team name this may change into a form {% endcomment %}
-                <h2> Welcome to your "TEAM_NAME" </h2>
+                <h2> Welcome </h2>
                 <h1> Your team members are: </h2>
             </div>
         </div>  
       </div>
     </div>
     {% comment %} the teams context will be sorted from the views {% endcomment %}
-    {% if teammates is not None%}
-        {% for player in teammates %}
+        {% for player in players %}
             <div class="bs-component">  
                 <div  class="row">
                     <div class="col-1">
-                        <h1> {{ player.username }} </h2>
+                        <h3> {{ player.username }} </h3>
+                        <h3> {{ player.team.name }} </h3>
                     </div>
                 </div>
             </div>    
         {% endfor %}
-    
-    {% else %}
-        <h1> test</h2>
-    {% endif %}
 
 {% endblock %}
