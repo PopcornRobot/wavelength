@@ -40,14 +40,15 @@ base.html and static are in development
     
     <div class='center'>
         {% for player in player_list %}
-            {{player.username}}
+            <p>{{player.username}}</p>
+        </div>
+        <div style='padding:10px ; text-align:center'>
+            <button href="{% url 'app:start_page' %}" >Leave Room</button>
+            {% if player.is_host == True %}
+                <a href="{% url 'app:team_creation' player_game=game.id player_id=player.id %}">
+                    <button type="submit">Start Game</button>
+                </a>
+            {% endif %} 
+        </div>
         {% endfor %}
-    </div>
-    <div style='padding:10px ; text-align:center'>
-        <button href="#" >Leave Room</button>
-        <button href="#" >Start Game</button>
-        {% comment %} {% if player.id == game.host.id%}
-        
-        {% endif %} {% endcomment %}
-    </div>
     {% endblock %}
