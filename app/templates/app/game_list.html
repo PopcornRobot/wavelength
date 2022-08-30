@@ -41,11 +41,15 @@ base.html and static are in development
 <div class='center'>
     {% for game in game_list %}
        
+<<<<<<< HEAD
            Room {{game.id}}  <button class="btn btn-primary" href="player_game_assignment" >Join Game</button>
+=======
+           <p>Room {{game.id}}  <button class="btn btn-primary" href= >Join Game</button></p>
+>>>>>>> master
         
     {% endfor %}
 </div>
 <div style='padding:10px ; text-align:center'>
-    <button href= >Return to Start Page</button>
+    <a class="btn btn-primary" href={% url 'app:start_page' %}>Return to Start Page</a>
 </div>
 {% endblock %}
