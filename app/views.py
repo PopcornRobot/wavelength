@@ -70,19 +70,20 @@ def team_creation(request, player_game, player_id):
     if len(players) > 4:
         # Calculating the amount of teams and distributions
         # number of players/4 players per team and +1 to round number
-        number_of_teams = int(players.count()/4)
+        number_of_teams = int(players.count()/4)+1
         number_of_team_players = int(len(players)/number_of_teams)
     else:
         # Single team
         number_of_teams = 1
+        number_of_team_players = int(len(players)/number_of_teams)
 
-    # print("***************************************************************")
-    # print(" This is a print for Teams algorithm confirmation only for debugging")
-    # print("game = " +str(game_instance.id))
-    # print("players = "+str(len(players)))
-    # print("teams =" +str(number_of_teams))
-    # print("teammates = " +str(number_of_team_players))
-    # print("***************************************************************")
+    print("***************************************************************")
+    print(" This is a print for Teams algorithm confirmation only for debugging")
+    print("game = " +str(game_instance.id))
+    print("players = "+str(len(players)))
+    print("teams =" +str(number_of_teams))
+    print("teammates = " +str(number_of_team_players))
+    print("***************************************************************")
 
     # All player names assignation,
     for player in players:
@@ -111,6 +112,9 @@ def team_creation(request, player_game, player_id):
             # Gets the player based on the name and is assigned to team assignation
             team_assignation = players.get(username=participant)
             # Assigns the team to the player model
+            print("***************************************************************")
+            print('team names = ' + str(new_team.name))
+            print("***************************************************************")
             team_assignation.team = new_team
             team_assignation.save()
             game_id = game_instance.id
