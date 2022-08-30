@@ -4,11 +4,12 @@ from . import views
 app_name="app"
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('chatty', views.index, name='index'),
+    path('chatty/<str:room_name>/', views.room, name='room'),
     # AC
     path('team_creation/<int:game_id>/', views.team_creation, name='team_creation'),
     # AC
-    path('team_page/<int:game_id>/', views.team_page, name='team_page'),
+    path('team_page/<int:game_id>/', views.team_page, name='team_page'),    
     
     path('game_list', views.game_list, name='game_list'),
     path('game_session/<int:current_game>', views.game_session, name='game_session'),

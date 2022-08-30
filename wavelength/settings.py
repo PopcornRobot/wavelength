@@ -37,6 +37,7 @@ CSRF_TRUSTED_ORIGINS = ''
 INTERNAL_IPS = '127.0.0.1'
 
 INSTALLED_APPS = [
+    'channels',
     'app.apps.AppConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -53,6 +54,7 @@ INSTALLED_APPS = [
     'health_check.storage',
     'health_check.contrib.migrations',
     'health_check.contrib.redis',
+    
 ]
 
 MIDDLEWARE = [
@@ -87,6 +89,16 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'wavelength.wsgi.application'
+ASGI_APPLICATION = 'wavelength.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('127.0.0.1', 6379)],
+        }
+    }
+}
 
 
 # Database
