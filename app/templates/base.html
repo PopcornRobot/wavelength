@@ -44,7 +44,7 @@ Team page
     {% block css %}{% endblock %}
 
     {% url 'app:start_page' as url_start_page %}
-    {% url 'app:game_list\1' as url_game_list %}
+    {% url 'app:game_list' as url_game_list %}
     {% url 'app:team_score' as url_team_score %}
 
     <body>
@@ -61,10 +61,11 @@ Team page
                     <a href={{url_start_page}} class="nav-link">Start Page</a>
                   </li>
                   <li class="nav-item">
-                    <a href={{url_team_score}} class="nav-link">Score</a>
+                    {% comment %} <a href={{url_game_list}} class="nav-link">Game list</a> {% endcomment %}
+                    <a href={{url_game_list}} class="nav-link">Game list</a>
                   </li>
                   <li class="nav-item">
-                    <a href={{url_game_list}} class="nav-link">Game list</a>
+                    <a href={{url_team_score}} class="nav-link">Score</a>
                   </li>
                 </ul>
               </div>
