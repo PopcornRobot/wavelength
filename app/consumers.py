@@ -8,6 +8,7 @@ from .models import Message
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
+        print("room name")
         self.room_group_name = 'chat_%s' % self.room_name
 
     # Join room group
@@ -23,6 +24,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
+            
         )
 
   # Receive message from WebSocket
@@ -31,6 +33,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = data['message']
         username = data['username']
         room = data['room']
+        print('receiving from websocket')
 
         await self.save_message(username, room, message)
 
@@ -48,6 +51,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def chat_message(self, event):
         message = event['message']
         username = event['username']
+        print('receiving from room group')
 
     # Send message to WebSocket
         await self.send(text_data=json.dumps({

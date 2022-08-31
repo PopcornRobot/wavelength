@@ -54,4 +54,20 @@ base.html and static are in development
         <button class="btn btn-primary" >Return to Start Page</button>
     </a>
 </div>
+
+{{ room_name|json_script:'json-roomname' }}
+{{ username|json_script:'json-username' }}
+
+<script>
+    const roomName = JSON.parse(document.getElementById('json-roomname').textContent);
+    const userName = JSON.parse(document.getElementById('json-username').textContent);
+
+          const sessionSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/'
+            + roomName
+            + '/'
+          );
+</script>
 {% endblock %}

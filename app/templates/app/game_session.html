@@ -38,11 +38,13 @@ base.html and static are in development
         Room {{game.id}}
     </div>
     
-    <div class='center'>
-        {% for player in player_list %}
-            <p>{{player.username}}</p>
-        {% endfor %}
+
+        <div class='center'>
+          <div id='player_list' style='max-height: 300px; overflow-y:scroll;'>
+            {% for player in player_list  %} {{ player.username}}<br>{% endfor %}
+          </div>
         </div>
+
         <div style='padding:10px ; text-align:center'>
             <button href="{% url 'app:start_page' %}" >Leave Room</button>
             {% if player.is_host == True %}
@@ -51,5 +53,40 @@ base.html and static are in development
                 </a>
             {% endif %} 
         </div>
+
+        {{ game_id|json_script:'json-game-id' }}
+        {{ username|json_script:'json-username' }}
+
+<script>
+    const gameID = JSON.parse(document.getElementById('json-game-id').textContent);
+    const userName = JSON.parse(document.getElementById('json-username').textContent);
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const sessionSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/game_session/'
+            + gameID
+          );
         
+        sessionSocket.onopen = function(e) {
+            console.log('socket opened!');
+        };
+
+        sessionSocket.onmessage = function(e) {
+            console.log('onmessage');
+            const data = JSON.parse(e.data);
+            console.log(data)
+          
+            if (data.username) {
+              document.querySelector('#player_list').innerHTML += ('<b>' + data.username + '</b>: ' + '</br>');
+              console.log('username added to list');
+            } else {
+              alert('The message was empty!')
+            }
+          };
+
+    });
+          
+</script>
     {% endblock %}

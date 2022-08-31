@@ -161,7 +161,7 @@ def game_session(request, game_id):
     # game_id = request.GET.get('game_id')
     game = Game.objects.get(id=game_id)
     player_list = Player.objects.filter(game=game)
-    context = { 'player_list' : player_list, 'game' : game }
+    context = { 'player_list' : player_list, 'game' : game, 'game_id' : game_id }
     return render(request, 'app/game_session.html', context)
 
 # create a waiting room   
