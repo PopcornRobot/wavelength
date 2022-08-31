@@ -10,6 +10,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         print("room name")
         self.room_group_name = 'chat_%s' % self.room_name
+        
 
     # Join room group
         await self.channel_layer.group_add(
@@ -18,6 +19,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
         await self.accept()
+        # username = event['username']
+        # self.send(text_data=json.dumps({
+        #     'username': username
+        # }))
 
     async def disconnect(self, close_code):
     # Leave room group
