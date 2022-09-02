@@ -154,7 +154,7 @@ def player_game_assignation(request, game_id, player_id):
     # Passes the game id as an argument
     game_id = player_room.id
 
-    return HttpResponseRedirect(reverse('app:game_session', kwargs={'game_id':game_id}))
+    return HttpResponseRedirect(reverse('app:game_session', kwargs={'game_id':game_id, }))#'player_id':player_id}))
 
 # join list of existing room
 def game_session(request, game_id):
