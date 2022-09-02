@@ -1,12 +1,12 @@
-{% comment %} {% extends "base.html" %} {% endcomment %}
+{% extends "base.html" %}
 {% load static %}
 
 {% block body %}
 <center>
     <h1>Wavelength</h1>
     <h1>Tournament</h1>
-    <hr>
-    <img src="{% static '/img/question_clue_spectrum.png' %}">
+
+    <img src='question_clue_spectrum.png' style="position: absolute; top: 30; left: 70;"/>
     <p><b>Timer: 3 minutes</b></p>
     <form action="clue_form" method="post">
         {% csrf_token %}
