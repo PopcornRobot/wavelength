@@ -1,4 +1,8 @@
-{% comment %} {% extend "base.html" %} {% endcomment %}
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Wavelegth {% endblock %}
+{% block page_title %} <center> Wavelegth  </center> {% endblock %}
+
 
 {% block body %}
 <center>
@@ -10,6 +14,13 @@
           <input type="text" name="username">
         </br>
         <br>
+          {% for host in players %}
+            {% if host.username == player_name %}
+              <p>{{host.username}} + ' is already created'</p>
+            {% endif %}
+          {% endfor %}
+        </br>
+        <br>
           <button type="submit">Create Room</button>
         </br>
   </form>
@@ -18,6 +29,13 @@
       <br>
         <label>Name:</label>
         <input type="text" name="username">
+      </br>
+      <br>
+        {% for join_player in players %}
+          {% if join_player.username == player_name %}
+            <p>{{join_player.username}} + ' is already added'</p>
+          {% endif %}
+        {% endfor %}
       </br>
       <br>
        <button type="submit">Join Room</button>

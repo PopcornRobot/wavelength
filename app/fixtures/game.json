@@ -8,5 +8,86 @@
       "created_at": "2022-08-22T08:08:08.472Z",
       "updated_at": "2022-08-22T08:08:08.472Z"
     }
+  },
+  {
+    "model": "app.game",
+    "pk": 2,
+    "fields": {
+      "is_game_waiting": true,
+      "is_game_running": false,
+      "created_at": "2022-08-22T08:08:08.472Z",
+      "updated_at": "2022-08-22T08:08:08.472Z"
+    }
+  },
+  {
+    "model": "app.game",
+    "pk": 3,
+    "fields": {
+      "is_game_waiting": true,
+      "is_game_running": false,
+      "created_at": "2022-08-22T08:08:08.472Z",
+      "updated_at": "2022-08-22T08:08:08.472Z"
+    }
+  },
+  {
+    "model": "app.game",
+    "pk": 4,
+    "fields": {
+      "is_game_waiting": true,
+      "is_game_running": false,
+      "created_at": "2022-08-22T08:08:08.472Z",
+      "updated_at": "2022-08-22T08:08:08.472Z"
+    }
+  },
+  {
+    "model": "app.game",
+    "pk": 5,
+    "fields": {
+      "is_game_waiting": true,
+      "is_game_running": false,
+      "created_at": "2022-08-22T08:08:08.472Z",
+      "updated_at": "2022-08-22T08:08:08.472Z"
+    }
+  },
+  {
+    "model": "app.game",
+    "pk": 6,
+    "fields": {
+      "is_game_waiting": true,
+      "is_game_running": false,
+      "created_at": "2022-08-22T08:08:08.472Z",
+      "updated_at": "2022-08-22T08:08:08.472Z"
+    }
+  },
+  {
+    "model": "app.game",
+    "pk": 8,
+    "fields": {
+      "is_game_waiting": true,
+      "is_game_running": false,
+      "created_at": "2022-08-22T08:08:08.472Z",
+      "updated_at": "2022-08-22T08:08:08.472Z"
+    }
+  },
+  {
+    "model": "app.game",
+    "pk": 9,
+    "fields": {
+      "is_game_waiting": true,
+      "is_game_running": false,
+      "created_at": "2022-08-22T08:08:08.472Z",
+      "updated_at": "2022-08-22T08:08:08.472Z"
+    }
+  },
+  {
+    "model": "app.game",
+    "pk": 10,
+    "fields": {
+      "is_game_waiting": true,
+      "is_game_running": false,
+      "created_at": "2022-08-22T08:08:08.472Z",
+      "updated_at": "2022-08-22T08:08:08.472Z"
+    }
   }
 ]
+

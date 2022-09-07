@@ -1,3 +1,4 @@
+# from asyncio.windows_events import NULL
 from unicodedata import name
 from unittest import expectedFailure
 from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
@@ -133,16 +134,21 @@ def team_page(request, host_id, game_id):
     return render(request, "app/team_page.html",context)
 
 # page with auto-refreshing list of games available for joining
-def game_list(request, player_id):
+def game_list(request, **player_id):
+    received_player = player_id
+    if not player_id:
+        game_list = Game.objects.all()
+        context = { 'game_list':game_list}
+        
+    else:
+        current_player = Player.objects.get(id=received_player['player_id'])
+        game_list = Game.objects.filter(is_game_waiting=True, is_game_running=False)
+        context = { 'game_list':game_list , 'current_player':current_player}
 
-    current_player = Player.objects.get(id=player_id)
-    game_list = Game.objects.filter(is_game_waiting=True, is_game_running=False)
-
-    context = { 'game_list':game_list , 'current_player':current_player}
     return render(request, 'app/game_list.html', context)
 
 # AC: Player-game assignation, this function will assign the players to the game session 
-def player_game_assignation(request, game_id, player_id):
+def player_game_assignation(request, game_id, **player_id):
     # Catches the joining player
     joining_player = Player.objects.get(id=player_id)
     # Gets the current game
@@ -174,29 +180,57 @@ def start_page(request):
     return render(request, "app/start_page.html", context)
 
 def host_player_registration_form(request):
-    #############################################
-    # Needs a condition to avoid repeated names #
-    #############################################
     if request.method == 'POST':
         # Assigns the form input to the players name
         player_name = request.POST['username']
-        new_game = Game.objects.create()
-        host = Player.objects.create(username=player_name,is_host=True,game=new_game)
-        game_id = new_game.id
-        player_id = host.id
+        # check if the player is created, if yes return True, if not create player
+        host, created = Player.objects.get_or_create(username=player_name)
+        # save the player
+        host.save()
+        # store all players from player model
+        players = Player.objects.all()
+        # passing players and form input information into context 
+        context = {"players": players, "player_name": player_name}
+        # check if the player already exist
+        if created is True:
+            # if player not exist, create a game then as a host:
+            new_game = Game.objects.create()
+            # save the new game
+            new_game.save()
+            # assign new game id to game_id
+            game_id = new_game.id
+            # assign is_host field value to the player
+            host.is_host = True
+            # assign game field value to the player
+            host.game = new_game
+            # save the player information
+            host.save()
+        # if the player already exist
+        else:
+            # assign game id to game_id
+            game_id = host.game.id
+            # render start page and pass context to start page
+            return render(request, "app/start_page.html", context)
+    # return response to game_session page, pass game_id key argument to it
     return HttpResponseRedirect(reverse('app:game_session', kwargs={'game_id': game_id}))
 
 def join_player_registration_form(request):
-    #############################################
-    # Needs a condition to avoid repeated names #
-    #############################################
     if request.method == 'POST':
         player_name = request.POST['username']
-        new_player= Player.objects.create(username=player_name, is_host=False)
-        player_id = new_player.id
+        join_player, created = Player.objects.get_or_create(username=player_name)
+        join_player.save()
+        players = Player.objects.all()
+        context = {"players": players, "player_name": player_name}
+        if created == True:
+            join_player.is_host = False
+            player_id = join_player.id
+        else:
+           return render(request, "app/start_page.html", context)
     return HttpResponseRedirect(reverse('app:game_list', kwargs={'player_id':player_id}))
 
 def question_clue_spectrum(request):
+    # team_name = Team.objects.get(name=team_name)
+    # team_member = Player.objects.filter(team=team_name)
     context = {}
     return render(request, "app/question_clue_spectrum.html", context)
 
