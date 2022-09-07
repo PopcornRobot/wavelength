@@ -135,12 +135,13 @@ def team_page(request, host_id, game_id):
 
 # page with auto-refreshing list of games available for joining
 def game_list(request, **player_id):
+    received_player = player_id
     if not player_id:
         game_list = Game.objects.all()
         context = { 'game_list':game_list}
         
     else:
-        current_player = Player.objects.get(id=player_id)
+        current_player = Player.objects.get(id=received_player['player_id'])
         game_list = Game.objects.filter(is_game_waiting=True, is_game_running=False)
         context = { 'game_list':game_list , 'current_player':current_player}
 
