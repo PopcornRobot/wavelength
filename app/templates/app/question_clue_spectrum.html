@@ -5,9 +5,15 @@
 <center>
     <h1>Wavelength</h1>
     <h1>Tournament</h1>
-
-    <img src='question_clue_spectrum.png' style="position: absolute; top: 30; left: 70;"/>
+    <hr>
+    <img src='{% static "img/question_clue_spectrum.png" %}' />
     <p><b>Timer: 3 minutes</b></p>
+    <div>
+      {% for player in team_member %}
+        {% comment %} <p>{{team_name}}</p> {% endcomment %}
+        <p>{{player.username}}</p>
+      {% endfor %}
+    </div>
     <form action="clue_form" method="post">
         {% csrf_token %}
         <br>
