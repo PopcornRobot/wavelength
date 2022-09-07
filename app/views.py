@@ -1,3 +1,4 @@
+# from asyncio.windows_events import NULL
 from unicodedata import name
 from unittest import expectedFailure
 from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
@@ -133,16 +134,20 @@ def team_page(request, host_id, game_id):
     return render(request, "app/team_page.html",context)
 
 # page with auto-refreshing list of games available for joining
-def game_list(request, player_id):
+def game_list(request, **player_id):
+    if not player_id:
+        game_list = Game.objects.all()
+        context = { 'game_list':game_list}
+        
+    else:
+        current_player = Player.objects.get(id=player_id)
+        game_list = Game.objects.filter(is_game_waiting=True, is_game_running=False)
+        context = { 'game_list':game_list , 'current_player':current_player}
 
-    current_player = Player.objects.get(id=player_id)
-    game_list = Game.objects.filter(is_game_waiting=True, is_game_running=False)
-
-    context = { 'game_list':game_list , 'current_player':current_player}
     return render(request, 'app/game_list.html', context)
 
 # AC: Player-game assignation, this function will assign the players to the game session 
-def player_game_assignation(request, game_id, player_id):
+def player_game_assignation(request, game_id, **player_id):
     # Catches the joining player
     joining_player = Player.objects.get(id=player_id)
     # Gets the current game
