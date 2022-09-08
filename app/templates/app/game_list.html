@@ -44,7 +44,7 @@ base.html and static are in development
     {% for game in game_list %}
     <div>
         <p>
-        <a href="{%url 'app:player_game_assignation' game_id=game.id player_id=current_player.id %}?user={{current_player.id}}">
+        <a href="{%url 'app:player_game_assignation' game_id=game.id player_id=current_player.id %}">
             Room {{game.id}} <button class="btn btn-primary" >Join Game</button>
         </a>
         </p>

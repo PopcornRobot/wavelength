@@ -148,7 +148,7 @@ def game_list(request, **player_id):
     return render(request, 'app/game_list.html', context)
 
 # AC: Player-game assignation, this function will assign the players to the game session 
-def player_game_assignation(request, game_id, **player_id):
+def player_game_assignation(request, game_id, player_id):
     # Catches the joining player
     joining_player = Player.objects.get(id=player_id)
     # Gets the current game
@@ -159,15 +159,20 @@ def player_game_assignation(request, game_id, **player_id):
     joining_player.save()
     # Passes the game id as an argument
     game_id = player_room.id
+    # player_id = joining_player.id
 
-    return HttpResponseRedirect(reverse('app:game_session', kwargs={'game_id':game_id,}))#'player_id':player_id}))
+    return HttpResponseRedirect(reverse('app:game_session', kwargs={'game_id':game_id,'player_id':player_id}))
 
 # join list of existing room
-def game_session(request, game_id):
+def game_session(request, game_id, player_id):
     # game_id = request.GET.get('game_id')
     game = Game.objects.get(id=game_id)
+    player = Player.objects.get(id=player_id)
+    print('********')
+    print(player.username)
+    print('********')
     player_list = Player.objects.filter(game=game)
-    context = { 'player_list' : player_list, 'game' : game, 'game_id' : game_id }
+    context = { 'player_list' : player_list, 'game' : game, 'game_id' : game_id, 'player_id' : player_id, 'player':player }
     return render(request, 'app/game_session.html', context)
 
 # create a waiting room   
