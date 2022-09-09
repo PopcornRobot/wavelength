@@ -190,6 +190,7 @@ def host_player_registration_form(request):
         player_name = request.POST['username']
         # check if the player is created, if yes return True, if not create player
         host, created = Player.objects.get_or_create(username=player_name)
+        player_id = host.id
         # save the player
         host.save()
         # store all players from player model
@@ -213,11 +214,11 @@ def host_player_registration_form(request):
         # if the player already exist
         else:
             # assign game id to game_id
-            game_id = host.game.id
+            
             # render start page and pass context to start page
             return render(request, "app/start_page.html", context)
     # return response to game_session page, pass game_id key argument to it
-    return HttpResponseRedirect(reverse('app:game_session', kwargs={'game_id': game_id}))
+    return HttpResponseRedirect(reverse('app:game_session', kwargs={'game_id': game_id, 'player_id':player_id}))
 
 def join_player_registration_form(request):
     if request.method == 'POST':
