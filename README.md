@@ -112,3 +112,17 @@ To initalize testing, run: `pytest` or `pytest -vv` for verbose test outputs.  T
 
 - reset your branch `git reset --hard HEAD`
 - this repo has a release script to help run collect static and migrate. To use, run `chmod u+x ./release.sh` to give permission to run shell script. Then run `./release.sh`
+
+## Changes Details
+
+-make sure to migrate new model
+-if you cannot runserver run pip install -r requirements.txt
+
+## How Has This Been Tested?
+
+run: pipenv shell
+run: sudo -u postgres psql wavelength
+exit postgres
+run: sudo docker run -p 6379:6379 -d redis:5
+run: python manage.py runserver
+go to chatty page create a room then try running the room and chatting as a another user in a separate browser tab

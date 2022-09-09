@@ -165,13 +165,17 @@ def player_game_assignation(request, game_id, **player_id):
     return HttpResponseRedirect(reverse('app:game_session', kwargs={'game_id':game_id, 'player':player}))
 
 # join list of existing room
-def game_session(request, player, game_id):
+def game_session(request, game_id, player_id):
     # game_id = request.GET.get('game_id')
     player_page = Player.objects.get(id=player)
     host_page = Player.objects.get(username='game_1')
     game = Game.objects.get(id=game_id)
+    player = Player.objects.get(id=player_id)
+    print('********')
+    print(player.username + 'from views')
+    print('********')
     player_list = Player.objects.filter(game=game)
-    context = { 'player_list' : player_list, 'game' : game, 'player_page' : player_page }
+    context = { 'player_list' : player_list, 'game' : game, 'game_id' : game_id, 'player_id' : player_id, 'player':player }
     return render(request, 'app/game_session.html', context)
 
 # create a waiting room   
@@ -189,6 +193,7 @@ def host_player_registration_form(request):
         player_name = request.POST['username']
         # check if the player is created, if yes return True, if not create player
         host, created = Player.objects.get_or_create(username=player_name)
+        player_id = host.id
         # save the player
         host.save()
         player = host.id
@@ -216,7 +221,7 @@ def host_player_registration_form(request):
             # render start page and pass context to start page
             return render(request, "app/start_page.html", context)
     # return response to game_session page, pass game_id key argument to it
-    return HttpResponseRedirect(reverse('app:game_session', kwargs={'player':player, 'game_id': game_id }))
+    return HttpResponseRedirect(reverse('app:game_session', kwargs={'game_id': game_id, 'player_id':player_id}))
 
 def join_player_registration_form(request):
     if request.method == 'POST':
