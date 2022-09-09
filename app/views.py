@@ -169,7 +169,7 @@ def game_session(request, game_id, player_id):
     game = Game.objects.get(id=game_id)
     player = Player.objects.get(id=player_id)
     print('********')
-    print(player.username)
+    print(player.username + 'from views')
     print('********')
     player_list = Player.objects.filter(game=game)
     context = { 'player_list' : player_list, 'game' : game, 'game_id' : game_id, 'player_id' : player_id, 'player':player }

@@ -86,16 +86,25 @@ base.html and static are in development
             console.log('onmessage');
             const data = JSON.parse(e.data);
             console.log(data);
-          
             if (data.username != userName) {
               document.querySelector('#player_list').innerHTML += ("<div id='" + data.username + "'>" + data.username + '</div>');
               console.log('username added to list');
-            }
-          };
+            } 
+            if (data.message == 'remove player'){
+              document.getElementById(data.userName).remove();
+              console.error(data.username + ' has left the session');
+            };
+        };
         
-        sessionSocket.onclose = function(e) {
-            document.getElementById(userName).remove();
-            console.error('The socket closed unexpectedly');
+        sessionSocket.onclose = (e) => {
+          message='remove player'
+          sessionSocket.send(JSON.stringify({
+            'message': message,
+            'username': userName,
+            'room': gameID,
+          }));
+          document.getElementById(userName).remove();
+          console.error('The socket closed unexpectedly');
           };
 
     });
