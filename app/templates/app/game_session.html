@@ -39,10 +39,15 @@ base.html and static are in development
         Room {{game.id}}
     </div>
     
-    <div class='center'>
-        {% for player in player_list %}
-            <p>{{player.username}}</p>
+
+        <div class='center'>
+          <div id='player_list' style='max-height: 300px; overflow-y:scroll;'>
+            {% for player in player_list  %}
+              <div id='{{ player.username}}'>{{ player.username}}</div>
+            {% endfor %}
+          </div>
         </div>
+
         <div style='padding:10px ; text-align:center'>
             <button href="{% url 'app:start_page' %}" >Leave Room</button>
             {% if player.is_host == True %}
@@ -51,5 +56,58 @@ base.html and static are in development
                 </a>
             {% endif %} 
         </div>
-        {% endfor %}
+
+        {{ game_id|json_script:'json-game-id' }}
+        {{ player.username|json_script:'json-username' }}
+
+<script>
+    const gameID = JSON.parse(document.getElementById('json-game-id').textContent);
+    const userName = JSON.parse(document.getElementById('json-username').textContent);
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const sessionSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/game_session/'
+            + gameID
+          );
+        
+        sessionSocket.onopen = (e) => {
+            message= '';
+            console.log('socket opened!');
+            sessionSocket.send(JSON.stringify({
+                'message': message,
+                'username': userName,
+                'room': gameID,
+              }));
+        };
+
+        sessionSocket.onmessage = function(e) {
+            console.log('onmessage');
+            const data = JSON.parse(e.data);
+            console.log(data);
+            if (data.username != userName) {
+              document.querySelector('#player_list').innerHTML += ("<div id='" + data.username + "'>" + data.username + '</div>');
+              console.log('username added to list');
+            } 
+            if (data.message == 'remove player'){
+              document.getElementById(data.userName).remove();
+              console.error(data.username + ' has left the session');
+            };
+        };
+        
+        sessionSocket.onclose = (e) => {
+          message='remove player'
+          sessionSocket.send(JSON.stringify({
+            'message': message,
+            'username': userName,
+            'room': gameID,
+          }));
+          document.getElementById(userName).remove();
+          console.error('The socket closed unexpectedly');
+          };
+
+    });
+          
+</script>
     {% endblock %}
