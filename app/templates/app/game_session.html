@@ -37,19 +37,31 @@ base.html and static are in development
     {% block body %} 
     <div class="center">
         Room {{game.id}}
+        Page for {{player_page.username}}
+        is not a host {{player_page.is_host}}
     </div>
-    
+
     <div class='center'>
-        {% for player in player_list %}
-            <p>{{player.username}}</p>
-        </div>
+        {% comment %} {% if player_page.is_host == True %}
+            <a href="{% url 'app:team_creation' player_game=game.id player_id=player_page.id %}">
+                <button type="submit">Start Game</button>
+            </a>
+        {% endif %}  {% endcomment %}
         <div style='padding:10px ; text-align:center'>
-            <button href="{% url 'app:start_page' %}" >Leave Room</button>
-            {% if player.is_host == True %}
-                <a href="{% url 'app:team_creation' player_game=game.id player_id=player.id %}">
-                    <button type="submit">Start Game</button>
-                </a>
-            {% endif %} 
+            {% for player in player_list %}
+                <p>{{player.username}}</p>
+                {% if player.is_host == True %}
+                    <a href="{% url 'app:team_creation' player_game=game.id player_id=player.id %}">
+                        <button type="submit">Start Game</button>
+                    </a>
+                {% endif %} 
+                
+                {% if player_page.username == player.username %}
+                    <button href="{% url 'app:start_page' %}" >Leave Room</button>
+                {% endif %}
+        
+            {% endfor %}
         </div>
-        {% endfor %}
+    </div>
     {% endblock %}
+    

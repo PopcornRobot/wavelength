@@ -10,8 +10,7 @@ import random
 
 teams_placeholder = {}
 
-def index(request):
-    
+def index(request):   
     return render(request, 'app/index.html')
 
 def room(request, room_name):
@@ -51,7 +50,6 @@ def get_teams(team_names, players):
 
 # AC: This function will be enable only by the host
 # NOTE: Create a player joining argument to track who joins and use it as URL #
-
 def team_creation(request, player_game, player_id):
     # Stores the name of all the players
     player_names = []
@@ -149,8 +147,10 @@ def game_list(request, **player_id):
 
 # AC: Player-game assignation, this function will assign the players to the game session 
 def player_game_assignation(request, game_id, **player_id):
+    # Assigns dictionary to current player variable
+    current_player= player_id
     # Catches the joining player
-    joining_player = Player.objects.get(id=player_id)
+    joining_player = Player.objects.get(id=current_player['player_id'])
     # Gets the current game
     player_room = Game.objects.get(id=game_id)
     # Assigns the game to the player
@@ -159,15 +159,19 @@ def player_game_assignation(request, game_id, **player_id):
     joining_player.save()
     # Passes the game id as an argument
     game_id = player_room.id
+    # Passes the game id as an argument
+    player = joining_player.id
 
-    return HttpResponseRedirect(reverse('app:game_session', kwargs={'game_id':game_id}))
+    return HttpResponseRedirect(reverse('app:game_session', kwargs={'game_id':game_id, 'player':player}))
 
 # join list of existing room
-def game_session(request, game_id):
+def game_session(request, player, game_id):
     # game_id = request.GET.get('game_id')
+    player_page = Player.objects.get(id=player)
+    host_page = Player.objects.get(username='game_1')
     game = Game.objects.get(id=game_id)
     player_list = Player.objects.filter(game=game)
-    context = { 'player_list' : player_list, 'game' : game }
+    context = { 'player_list' : player_list, 'game' : game, 'player_page' : player_page }
     return render(request, 'app/game_session.html', context)
 
 # create a waiting room   
@@ -187,6 +191,7 @@ def host_player_registration_form(request):
         host, created = Player.objects.get_or_create(username=player_name)
         # save the player
         host.save()
+        player = host.id
         # store all players from player model
         players = Player.objects.all()
         # passing players and form input information into context 
@@ -205,14 +210,13 @@ def host_player_registration_form(request):
             host.game = new_game
             # save the player information
             host.save()
+            
         # if the player already exist
         else:
-            # assign game id to game_id
-            game_id = host.game.id
             # render start page and pass context to start page
             return render(request, "app/start_page.html", context)
     # return response to game_session page, pass game_id key argument to it
-    return HttpResponseRedirect(reverse('app:game_session', kwargs={'game_id': game_id}))
+    return HttpResponseRedirect(reverse('app:game_session', kwargs={'player':player, 'game_id': game_id }))
 
 def join_player_registration_form(request):
     if request.method == 'POST':

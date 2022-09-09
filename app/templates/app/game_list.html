@@ -40,7 +40,7 @@ base.html and static are in development
     Choose a Game to Join {{current_player.username}}
 </div>
 
-{% for game in game_list %}
+    {% for game in game_list %}
     <div class='center'>
         {% if current_player.id  %}        
             <a href="{%url 'app:player_game_assignation' game_id=game.id player_id=current_player.id %}">
@@ -58,6 +58,6 @@ base.html and static are in development
             </a>
         </div>
     </div>
-{% endfor %}
+    {% endfor %}
 
 {% endblock %}
