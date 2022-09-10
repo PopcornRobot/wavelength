@@ -52,15 +52,15 @@ def get_teams(team_names, players):
 # AC: This function will be enable only by the host
 # NOTE: Create a player joining argument to track who joins and use it as URL #
 
-def team_creation(request, player_game, player_id):
+def team_creation(request, game_id, player_id):
     # Stores the name of all the players
     player_names = []
     # Retrieve host
-    host_player = Player.objects.get(id=player_id)
+    player = Player.objects.get(id=player_id)
     # Number of players in game
-    players = Player.objects.filter(game=player_game)
+    players = Player.objects.filter(game=game_id)
     # Obtain the game instance
-    game_instance = Game.objects.get(id=player_game)
+    game_instance = Game.objects.get(id=game_id)
     # Game instance has started and is no longer waiting for players 
     game_instance.is_game_waiting = False
     # Game is running
@@ -99,7 +99,8 @@ def team_creation(request, player_game, player_id):
         # assigns a random name to name
         name = random_name()
         # appends the names and removes the suffix \n from the raw file
-        team_names.append(name.removesuffix("\n"))
+        # team_names.append(name.removesuffix("\n"))
+        team_names.append(name)
     ##########
 
     # Dictionary with the sorted teams
@@ -109,6 +110,7 @@ def team_creation(request, player_game, player_id):
         # Creating new team
         new_team = Team.objects.create(name=team_name, game=game_instance)
         # Search for the players names inside the team
+        
         for participant in team_mates:
             # Gets the player based on the name and is assigned to team assignation
             team_assignation = players.get(username=participant)
@@ -119,18 +121,20 @@ def team_creation(request, player_game, player_id):
             team_assignation.team = new_team
             team_assignation.save()
             game_id = game_instance.id
-            host_id = host_player.id
+            player_id = player.id
+            team_id = new_team.id
+        
             
-    return HttpResponseRedirect(reverse('app:team_page', kwargs={ 'host_id': host_id, 'game_id' : game_id}))
+    return HttpResponseRedirect(reverse('app:team_page', kwargs={'game_id' : game_id, 'team_id' : team_id, 'player_id': player_id }))
 
-# AC: Team page will print aall the members in the team 
-def team_page(request, host_id, game_id):
+# AC: Team page will print all the members in the team 
+def team_page(request, game_id, team_id, player_id):
 
-    host = Player.objects.get(id=host_id)
-    teams = Team.objects.filter(game=game_id)
-    players = Player.objects.filter(game=host.game)
+    player = Player.objects.get(id=player_id)
+    team = Team.objects.filter(game=game_id)
+    teammates = Player.objects.filter(game=player.game)
 
-    context = {'teams':teams, 'players':players}
+    context = {'team':team, 'player':player, 'teammates':teammates}
     return render(request, "app/team_page.html",context)
 
 # page with auto-refreshing list of games available for joining
@@ -169,10 +173,10 @@ def game_session(request, game_id, player_id):
     game = Game.objects.get(id=game_id)
     player = Player.objects.get(id=player_id)
     print('********')
-    print(player.username + 'from views')
+    print(player.username + ' from views')
     print('********')
     player_list = Player.objects.filter(game=game)
-    context = { 'player_list' : player_list, 'game' : game, 'game_id' : game_id, 'player_id' : player_id, 'player':player }
+    context = { 'player_list' : player_list, 'game' : game, 'game_id' : game_id, 'player':player }
     return render(request, 'app/game_session.html', context)
 
 # create a waiting room   
