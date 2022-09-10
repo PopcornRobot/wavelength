@@ -258,3 +258,7 @@ def team_score(request):
     team_scores = Team.objects.filter(name__startswith=team_name)
     context = {"team_scores": team_scores}
     return HttpResponseRedirect(reverse('app:game_end'))
+
+def scale(request):
+    context = {}
+    return render(request, "app/scale.html", context)
