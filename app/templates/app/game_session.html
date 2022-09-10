@@ -51,9 +51,11 @@ base.html and static are in development
         <div style='padding:10px ; text-align:center'>
             <button href="{% url 'app:start_page' %}" >Leave Room</button>
             <a>
-            <button id='start_game_btn' type="submit" {% if player.is_host == False %}style='display:none'{%endif%}>Sort Teams</button>
+            <button id='sort_teams_btn' type="submit" {% if player.is_host == False %}style='display:none'{%endif%}>Sort Teams</button>
             </a>
         </div>
+
+        <div>Time remaining: <span id="time">1:00</span></div>
 
         {{ game_id|json_script:'json-game-id' }}
         {{ player.username|json_script:'json-username' }}
@@ -61,7 +63,7 @@ base.html and static are in development
 <script>
     const gameID = JSON.parse(document.getElementById('json-game-id').textContent);
     const userName = JSON.parse(document.getElementById('json-username').textContent);
-    const start_game_btn = document.getElementById('start_game_btn');
+    const sort_teams_btn = document.getElementById('sort_teams_btn');
 
     document.addEventListener('DOMContentLoaded', () => {
         const sessionSocket = new WebSocket(
@@ -109,8 +111,8 @@ base.html and static are in development
           console.error('The socket closed unexpectedly');
           };
 
-        const start_game_btn = document.getElementById('start_game_btn');
-        start_game_btn.onclick = (e) =>{
+        const sort_teams_btn = document.getElementById('sort_teams_btn');
+        sort_teams_btn.onclick = (e) =>{
           message='start game'
           sessionSocket.send(JSON.stringify({
             'message': message,
@@ -120,5 +122,33 @@ base.html and static are in development
         };
     });
           
+    function startTimer(duration, display) {
+      var timer = duration, minutes, seconds;
+      setInterval(function () {
+          minutes = parseInt(timer / 60, 10);
+          seconds = parseInt(timer % 60, 10);
+  
+          minutes = minutes < 10 ? + minutes : minutes;
+          seconds = seconds < 10 ? "0" + seconds : seconds;
+  
+          display.textContent = minutes + ":" + seconds;
+  
+          if (--timer < 0) {
+              timer = 0;
+              message="Time's up!"
+              sessionSocket.send(JSON.stringify({
+                'message': message,
+                'username': userName,
+                'room': gameID,
+          }));
+          }
+      }, 1000);
+  }
+  
+    window.onload = function () {
+        var Minutes = 60 * 1,
+            display = document.querySelector('#time');
+        startTimer(Minutes, display);
+    };
 </script>
     {% endblock %}

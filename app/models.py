@@ -10,7 +10,7 @@ class Game(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
+    def __int__(self):
         return self.id
         # return f" is the game open: {self.is_game_waiting}, The game status is: {self.is_game_running}, created: {self.created_at}, updated: {self.updated_at}"
 class Team(models.Model):
