@@ -32,35 +32,36 @@ base.html and static are in development
         border: 3px solid blue;
       }
     {% endblock %}
-    </style>
+</style>
     
-    {% block body %} 
-    <div class="center">
-        Room {{game.id}}
-        Page for {{player_page.username}}
-        is not a host {{player_page.is_host}}
+{% block body %} 
+  <div class="center">
+    
+      <br />
+      Room {{game.id}}
+      <br />
+      Page for {{player_page.username}}
+      <br />
+      {% if player_page.is_host == True %}
+      <a href="{% url 'app:team_creation' game_id=game.id player_id=player_page.id %}">
+        <button type="submit">Start Game</button>
+      </a>
+      {% endif %}
+      <button href="{% url 'app:start_page' %}" >Leave Room</button>
+  </div>
+
+  <div class='center'>
+    <div style='padding:10px ; text-align:center'>
+        {% for player in player_list %}
+        <div id='{{ player.username}}'>{{ player.username}} </div> 
+        {% if player.is_host == True%} <p> -- Host {{player.id}} </p> {% endif %}
+          <br />
+        {% endfor %}
     </div>
-    
+  </div>
 
-        <div class='center'>
-          <div id='player_list' style='max-height: 300px; overflow-y:scroll;'>
-            {% for player in player_list  %}
-              <div id='{{ player.username}}'>{{ player.username}}</div>
-            {% endfor %}
-          </div>
-        </div>
-
-        <div style='padding:10px ; text-align:center'>
-            <button href="{% url 'app:start_page' %}" >Leave Room</button>
-            {% if player.is_host == True %}
-                <a href="{% url 'app:team_creation' player_game=game.id player_id=player.id %}">
-                    <button type="submit">Start Game</button>
-                </a>
-            {% endif %} 
-        </div>
-
-        {{ game_id|json_script:'json-game-id' }}
-        {{ player.username|json_script:'json-username' }}
+  {{ game_id|json_script:'json-game-id' }}
+  {{ player.username|json_script:'json-username' }}
 
 <script>
     const gameID = JSON.parse(document.getElementById('json-game-id').textContent);
@@ -112,4 +113,4 @@ base.html and static are in development
     });
           
 </script>
-    {% endblock %}
+{% endblock %}

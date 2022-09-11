@@ -19,8 +19,26 @@ def room(request, room_name):
 
     context = {'room_name' : room_name, 'username' : username, 'messages' : messages}
     return render(request, 'app/room.html', context)
+# AC: This function opens the file that contains all the questions and outputs them as a list
+def get_questions():
+    left=[]
+    right=[]
+    spectrum_list=[]
+    with open("app/static/txt/spectrum_bank.csv") as f:
+        spectrums = f.readlines()
+        for spectrum in spectrums:
+            spectrum_word = spectrum.split(",")
+            spectrum_list.append(spectrum_word)
+        
+        for i in spectrum_list:
+            left.append(i[0].removesuffix('\t'))
+            right_word= i[1].removesuffix('\n')
+            right_nobasht=right_word.removesuffix('\t')
+            right.append(right_nobasht.removeprefix('\t'))
 
-########################################## JAJA! project starts here ################################################################
+        all_spectrums = list(zip(left, right))
+
+        return all_spectrums
 
 # AC: This function opens a file that stores a list of 250 team names and resturns a random name from the list
 def random_name():
@@ -50,15 +68,15 @@ def get_teams(team_names, players):
 
 # AC: This function will be enable only by the host
 # NOTE: Create a player joining argument to track who joins and use it as URL #
-def team_creation(request, player_game, player_id):
+def team_creation(request, game_id, player_id):
     # Stores the name of all the players
     player_names = []
     # Retrieve host
     host_player = Player.objects.get(id=player_id)
     # Number of players in game
-    players = Player.objects.filter(game=player_game)
+    players = Player.objects.filter(game=game_id)
     # Obtain the game instance
-    game_instance = Game.objects.get(id=player_game)
+    game_instance = Game.objects.get(id=game_id)
     # Game instance has started and is no longer waiting for players 
     game_instance.is_game_waiting = False
     # Game is running
@@ -132,13 +150,19 @@ def team_page(request, host_id, game_id):
     return render(request, "app/team_page.html",context)
 
 # page with auto-refreshing list of games available for joining
+# the ** before the keword argument means that the argument is not required
 def game_list(request, **player_id):
+    # assigns the argument to a variable 
     received_player = player_id
+    # Confirms that the argument was recieved
     if not player_id:
+        # Query all the games
         game_list = Game.objects.all()
+        # assigns all the games to the Context
         context = { 'game_list':game_list}
         
     else:
+        #If the keyword argument is received we get the information of the current player 
         current_player = Player.objects.get(id=received_player['player_id'])
         game_list = Game.objects.filter(is_game_waiting=True, is_game_running=False)
         context = { 'game_list':game_list , 'current_player':current_player}
@@ -149,6 +173,7 @@ def game_list(request, **player_id):
 def player_game_assignation(request, game_id, **player_id):
     # Assigns dictionary to current player variable
     current_player= player_id
+    print(current_player)
     # Catches the joining player
     joining_player = Player.objects.get(id=current_player['player_id'])
     # Gets the current game
@@ -160,22 +185,18 @@ def player_game_assignation(request, game_id, **player_id):
     # Passes the game id as an argument
     game_id = player_room.id
     # Passes the game id as an argument
-    player = joining_player.id
+    player_id = joining_player.id
 
-    return HttpResponseRedirect(reverse('app:game_session', kwargs={'game_id':game_id, 'player':player}))
+    return HttpResponseRedirect(reverse('app:game_session', kwargs={'game_id':game_id, 'player_id':player_id}))
 
 # join list of existing room
 def game_session(request, game_id, player_id):
     # game_id = request.GET.get('game_id')
-    player_page = Player.objects.get(id=player)
+    player_page = Player.objects.get(id=player_id)
     host_page = Player.objects.get(username='game_1')
     game = Game.objects.get(id=game_id)
-    player = Player.objects.get(id=player_id)
-    print('********')
-    print(player.username + 'from views')
-    print('********')
     player_list = Player.objects.filter(game=game)
-    context = { 'player_list' : player_list, 'game' : game, 'game_id' : game_id, 'player_id' : player_id, 'player':player }
+    context = { 'player_list' : player_list, 'game' : game, 'player_page':player_page, 'host_page':host_page }
     return render(request, 'app/game_session.html', context)
 
 # create a waiting room   
@@ -237,7 +258,8 @@ def join_player_registration_form(request):
            return render(request, "app/start_page.html", context)
     return HttpResponseRedirect(reverse('app:game_list', kwargs={'player_id':player_id}))
 
-def question_clue_spectrum(request):
+def question_clue_spectrum(request, game_id, **player_id,):
+
     # team_name = Team.objects.get(name=team_name)
     # team_member = Player.objects.filter(team=team_name)
     context = {}
