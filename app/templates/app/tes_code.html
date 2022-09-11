@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% comment %} 
+
+OBJECTIVE:
+Place Holder for "base.html" and static objects
+{% extends "base.html" %}
+{% load static %} 
+
+STAUTS:
+base.html and static are in development
+
+{% endcomment %}
+
+<style>>
+    {% block style %}
+    .container {
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .item {
+        width: 10em;
+    }
+    
+    .center {
+        margin: auto;
+        width: 60%;
+        padding: 10px;
+        text-align: center;
+        border: 3px solid blue;
+      }
+    {% endblock %}
+    </style>
+    
+    {% block body %} 
+    <div class="center">
+        Room {{game.id}}
+    </div>
+    
+
+        <div class='center'>
+          <div id='player_list' style='max-height: 300px; overflow-y:scroll;'>
+            {% for player in player_list  %}
+              <div id='{{ player.username}}'>{{ player.username}}</div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div style='padding:10px ; text-align:center'>
+            <button href="{% url 'app:start_page' %}" >Leave Room</button>
+            <a>
+            <button id='sort_teams_btn' type="submit" {% if player.is_host == False %}style='display:none'{%endif%}>Sort Teams</button>
+            </a>
+        </div>
+
+        <div>Time remaining: <span id="time">1:00</span></div>
+
+        {{ game_id|json_script:'json-game-id' }}
+        {{ player.username|json_script:'json-username' }}
+
+<script>
+    const gameID = JSON.parse(document.getElementById('json-game-id').textContent);
+    const userName = JSON.parse(document.getElementById('json-username').textContent);
+    const sort_teams_btn = document.getElementById('sort_teams_btn');
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const sessionSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/game_session/'
+            + gameID
+          );
+        
+        sessionSocket.onopen = (e) => {
+            message= '';
+            console.log('socket opened!');
+            sessionSocket.send(JSON.stringify({
+                'message': message,
+                'username': userName,
+                'room': gameID,
+              }));
+        };
+
+        sessionSocket.onmessage = function(e) {
+            console.log('onmessage');
+            const data = JSON.parse(e.data);
+            console.log(data);
+            if (data.message == 'remove player'){
+              document.getElementById(data.userName).remove();
+              console.error(data.username + ' has left the session');
+            } else if (data.message == 'start game'){
+              console.log('game started!')
+              window.location.href = "{% url 'app:team_creation' game_id=game.id player_id=player.id %}";
+            } else if (data.username != userName) {
+              document.querySelector('#player_list').innerHTML += ("<div id='" + data.username + "'>" + data.username + '</div>');
+              console.log(data.username + ' added to list');
+            } 
+            
+        };
+        
+        sessionSocket.onclose = (e) => {
+          message='remove player'
+          sessionSocket.send(JSON.stringify({
+            'message': message,
+            'username': userName,
+            'room': gameID,
+          }));
+          document.getElementById(userName).remove();
+          console.error('The socket closed unexpectedly');
+          };
+
+        const sort_teams_btn = document.getElementById('sort_teams_btn');
+        sort_teams_btn.onclick = (e) =>{
+          message='start game'
+          sessionSocket.send(JSON.stringify({
+            'message': message,
+            'username': userName,
+            'room': gameID,
+          }));
+        };
+    });
+          
+    function startTimer(duration, display) {
+      var timer = duration, minutes, seconds;
+      setInterval(function () {
+          minutes = parseInt(timer / 60, 10);
+          seconds = parseInt(timer % 60, 10);
+  
+          minutes = minutes < 10 ? + minutes : minutes;
+          seconds = seconds < 10 ? "0" + seconds : seconds;
+  
+          display.textContent = minutes + ":" + seconds;
+  
+          if (--timer < 0) {
+              timer = 0;
+              message="Time's up!"
+              sessionSocket.send(JSON.stringify({
+                'message': message,
+                'username': userName,
+                'room': gameID,
+          }));
+          }
+      }, 1000);
+  }
+  
+    window.onload = function () {
+        var Minutes = 60 * 1,
+            display = document.querySelector('#time');
+        startTimer(Minutes, display);
+    };
+</script>
+    {% endblock %}

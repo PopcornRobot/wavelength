@@ -10,9 +10,9 @@ class Game(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return f" is the game open: {self.is_game_waiting}, The game status is: {self.is_game_running}, created: {self.created_at}, updated: {self.updated_at}"
-
+    def __int__(self):
+        return self.id
+        # return f" is the game open: {self.is_game_waiting}, The game status is: {self.is_game_running}, created: {self.created_at}, updated: {self.updated_at}"
 class Team(models.Model):
     """
     This models will store the information of the players , team name and scores
@@ -25,7 +25,8 @@ class Team(models.Model):
     # TODO: consider adding field game_host: player with privilege to start a game
 
     def __str__(self):
-        return f" the team name is: {self.name}, the team's score is:{self.score}, the current game is: {self.game}"
+        return self.name
+        # return f" the team name is: {self.name}, the team's score is:{self.score}, the current game is: {self.game}"
 
 class Player(models.Model):
     """
@@ -41,8 +42,8 @@ class Player(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f" the current player is: {self.username}, is this the host: {self.is_host}, the players team is: {self.team}, the player's game is: {self.game}"
-
+        return self.username
+        # return f" the current player is: {self.username}, is this the host: {self.is_host}, the players team is: {self.team}, the player's game is: {self.game}"
 class Question(models.Model):
     """
     This model stores the left & right spectrums indicators 
@@ -64,8 +65,9 @@ class QuestionHistory(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return f" the player assigned with the question is: {self.player}, used question: {self.question}"
+    def __int__(self):
+        return self.player
+        # return f" the player assigned with the question is: {self.player}, used question: {self.question}"
 
 class GameTurn(models.Model):
     """
@@ -82,7 +84,9 @@ class GameTurn(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f" the team in the room is:{self.team}, the game is: {self.game}, the question is:{self.question}, the clue giver is: {self.clue_giver}, the previous clue is: {self.clue_given}, the current question answer is: {self.question_answer}, the team answer is {self.team_answer}, created: {self.created_at}, updated: {self.updated_at}"
+        return self.game
+        # return f" the team in the room is:{self.team}, the game is: {self.game}, the question is:{self.question}, the clue giver is: {self.clue_giver}, the previous clue is: {self.clue_given}, the current question answer is: {self.question_answer}, the team answer is {self.team_answer}, created: {self.created_at}, updated: {self.updated_at}"
+
 
 class Message(models.Model):
   username = models.CharField(max_length=255)

@@ -30,15 +30,67 @@ base.html and static are in development
       </div>
     </div>
     {% comment %} the teams context will be sorted from the views {% endcomment %}
-        {% for player in players %}
-            <div class="bs-component">  
-                <div  class="row">
-                    <div class="col-1">
-                        <h3> {{ player.username }} </h3>
-                        <h3> {{ player.team.name }} </h3>
-                    </div>
-                </div>
-            </div>    
-        {% endfor %}
+    {% for team_name in team %}
+    <div class="bs-component">  
+        <div  class="row">
+            <div class="col-160">
+              <h4>{{team_name.name}} - {{team_name.id}}</h4>
+              {%for player_name in teammates%}
+                {% if player_name.team.name == team_name.name %}
+                  <p>{{ player_name.username }} - {{ player_name.id }}</p>
+                {% endif %}
+              {%endfor%}
+            </div>
+        </div>
+    </div>    
+    {% endfor %}
 
+        <div style='padding:10px ; text-align:center'>
+            {% comment %} <button href="{% url 'app:start_page' %}" >Leave Room</button> {% endcomment %}
+            <a>
+            <button id='start_game_btn' type="submit" {% if player.is_host == False %}style='display:none'{%endif%}>Start Game!</button>
+            </a>
+        </div>
+
+        {{ game_id|json_script:'json-game-id' }}
+        {{ player.username|json_script:'json-username' }}
+
+<script>
+    const gameID = JSON.parse(document.getElementById('json-game-id').textContent);
+    const userName = JSON.parse(document.getElementById('json-username').textContent);
+    const start_game_btn = document.getElementById('start_game_btn');
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const sessionSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/game_session/'
+            + gameID
+          );
+
+        sessionSocket.onmessage = function(e) {
+            console.log('onmessage');
+            const data = JSON.parse(e.data);
+            console.log(data);            
+            if (data.message == 'start game'){
+              console.log('game started!')
+              {% comment %} window.location.href = "{% url 'app:question_clue_spectrum' game_id=game.id player_id=player.id %}"; {% endcomment %}
+            }            
+        };
+        
+        sessionSocket.onclose = (e) => {
+          console.error('The socket closed unexpectedly');
+          };
+
+        const start_game_btn = document.getElementById('start_game_btn');
+        start_game_btn.onclick = (e) =>{
+          message='start game'
+          sessionSocket.send(JSON.stringify({
+            'message': message,
+            'username': userName,
+            'room': gameID,
+          }));
+        };
+    });
+</script>
 {% endblock %}

@@ -40,8 +40,8 @@ base.html and static are in development
     Choose a Game to Join {{current_player.username}}
 </div>
 
-{% for game in game_list %}
-    <div class='center'>
+<div class='center'>
+    {% for game in game_list %}
         {% if current_player.id  %}        
             <a href="{%url 'app:player_game_assignation' game_id=game.id player_id=current_player.id %}">
                 Room {{game.id}} <button class="btn btn-primary" >Join Game</button>
@@ -51,13 +51,15 @@ base.html and static are in development
                 Room {{game.id}} <button class="btn btn-primary" >Join Game</button>
             </a>   
         {% endif %}
-
         <div style='padding:10px ; text-align:center'>
             <a href= "{% url 'app:start_page' %}">
                 <button class="btn btn-primary" >Return to Start Page</button>
             </a>
         </div>
-    </div>
-{% endfor %}
+    {% endfor %}
+</div>
 
+<script>
+
+</script>
 {% endblock %}

@@ -11,8 +11,7 @@ import re
 
 teams_placeholder = {}
 
-def index(request):
-    
+def index(request):   
     return render(request, 'app/index.html')
 
 def room(request, room_name):
@@ -21,8 +20,6 @@ def room(request, room_name):
 
     context = {'room_name' : room_name, 'username' : username, 'messages' : messages}
     return render(request, 'app/room.html', context)
-
-########################################## JAJA! project starts here ################################################################
 
 # AC: This function opens a file that stores a list of 250 team names and resturns a random name from the list
 def random_name():
@@ -63,15 +60,13 @@ def get_teams(team_names, players):
 # AC: This function will be enable only by the host
 # NOTE: Create a player joining argument to track who joins and use it as URL #
 
-def team_creation(request, player_game, player_id):
+def team_creation(request, game_id, player_id):
     # Stores the name of all the players
     player_names = []
-    # Retrieve host
-    host_player = Player.objects.get(id=player_id)
     # Number of players in game
-    players = Player.objects.filter(game=player_game)
+    players = Player.objects.filter(game=game_id)
     # Obtain the game instance
-    game_instance = Game.objects.get(id=player_game)
+    game_instance = Game.objects.get(id=game_id)
     # Game instance has started and is no longer waiting for players 
     game_instance.is_game_waiting = False
     # Game is running
@@ -79,22 +74,22 @@ def team_creation(request, player_game, player_id):
     game_instance.save()
     
     # Checks for number of players before assigning teams
-    if len(players) > 4:
+    if len(players) >= 4:
         # Calculating the amount of teams and distributions
         # number of players/4 players per team and +1 to round number
-        number_of_teams = int(players.count()/4)+1
-        number_of_team_players = int(len(players)/number_of_teams)
-    else:
+        number_of_teams = int(players.count()/4)
+    elif len(players) > 0 and len(players) < 4:
         # Single team
         number_of_teams = 1
-        number_of_team_players = int(len(players)/number_of_teams)
+    else:
+        pass
 
     print("***************************************************************")
     print(" This is a print for Teams algorithm confirmation only for debugging")
     print("game = " +str(game_instance.id))
     print("players = "+str(len(players)))
     print("teams =" +str(number_of_teams))
-    print("teammates = " +str(number_of_team_players))
+    print("teammates = " +str(int(len(players)/number_of_teams)))
     print("***************************************************************")
 
     # All player names assignation,
@@ -110,48 +105,71 @@ def team_creation(request, player_game, player_id):
         # assigns a random name to name
         name = random_name()
         # appends the names and removes the suffix \n from the raw file
-        team_names.append(name.removesuffix("\n"))
+        # team_names.append(name.removesuffix("\n"))
+        team_names.append(name)
     ##########
 
     # Dictionary with the sorted teams
     teams = get_teams(team_names, player_names)
+    print("***************************************************************")
+    print(team_names)
+    print(teams)
+    print("***************************************************************")
+############################## Works fine in here ########################################
     # List comprehension
-    for team_name, team_mates in teams.items():
+    for teamName, teamMember in teams.items():
         # Creating new team
-        new_team = Team.objects.create(name=team_name, game=game_instance)
-        # Search for the players names inside the team
-        for participant in team_mates:
+        new_team, created_flag = Team.objects.get_or_create(name=teamName, game=game_instance)
+        
+        # # Search for the players names inside the team
+        for participant in teamMember:
             # Gets the player based on the name and is assigned to team assignation
-            team_assignation = players.get(username=participant)
+            team_assignation = Player.objects.get(username=participant)
             # Assigns the team to the player model
-            print("***************************************************************")
-            print('team names = ' + str(new_team.name))
-            print("***************************************************************")
             team_assignation.team = new_team
             team_assignation.save()
-            game_id = game_instance.id
-            host_id = host_player.id
-            
-    return HttpResponseRedirect(reverse('app:team_page', kwargs={ 'host_id': host_id, 'game_id' : game_id}))
+        #     game_id = game_instance.id
+        #     player_id = player.id
+        #     teams_id = new_team.id
 
-# AC: Team page will print aall the members in the team 
-def team_page(request, host_id, game_id):
+    team_id = new_team.id
+    game_id = game_instance.id
+    player_id=player_id
+    team_players= Player.objects.filter(team=new_team)
+    print("***************************************************************")
+    print(game_id)
+    print(team_id)
+    print(player_id)
+    print(team_players)
+    print("***************************************************************")
 
-    host = Player.objects.get(id=host_id)
-    teams = Team.objects.filter(game=game_id)
-    players = Player.objects.filter(game=host.game)
+    return HttpResponseRedirect(reverse('app:team_page', kwargs={'game_id' : game_id, 'team_id' : team_id, 'player_id': player_id }))
 
-    context = {'teams':teams, 'players':players}
+# AC: Team page will print all the members in the team 
+def team_page(request, game_id, team_id, player_id):
+    print(game_id)
+    player = Player.objects.get(id=player_id)
+    team = Team.objects.filter(game=game_id)
+    team_id = Team.objects.get(id=team_id)
+    teammates = Player.objects.filter(game=player.game)
+
+    context = {'team':team, 'player':player, 'teammates':teammates,'team_id': team_id}
     return render(request, "app/team_page.html",context)
 
 # page with auto-refreshing list of games available for joining
+# the ** before the keword argument means that the argument is not required
 def game_list(request, **player_id):
+    # assigns the argument to a variable 
     received_player = player_id
+    # Confirms that the argument was recieved
     if not player_id:
+        # Query all the games
         game_list = Game.objects.all()
+        # assigns all the games to the Context
         context = { 'game_list':game_list}
         
     else:
+        #If the keyword argument is received we get the information of the current player 
         current_player = Player.objects.get(id=received_player['player_id'])
         game_list = Game.objects.filter(is_game_waiting=True, is_game_running=False)
         context = { 'game_list':game_list , 'current_player':current_player}
@@ -160,8 +178,11 @@ def game_list(request, **player_id):
 
 # AC: Player-game assignation, this function will assign the players to the game session 
 def player_game_assignation(request, game_id, **player_id):
+    # Assigns dictionary to current player variable
+    current_player= player_id
+    print(current_player)
     # Catches the joining player
-    joining_player = Player.objects.get(id=player_id)
+    joining_player = Player.objects.get(id=current_player['player_id'])
     # Gets the current game
     player_room = Game.objects.get(id=game_id)
     # Assigns the game to the player
@@ -170,15 +191,21 @@ def player_game_assignation(request, game_id, **player_id):
     joining_player.save()
     # Passes the game id as an argument
     game_id = player_room.id
+    # Passes the game id as an argument
+    player_id = joining_player.id
 
-    return HttpResponseRedirect(reverse('app:game_session', kwargs={'game_id':game_id}))
+    return HttpResponseRedirect(reverse('app:game_session', kwargs={'game_id':game_id, 'player_id':player_id}))
 
 # join list of existing room
-def game_session(request, game_id):
+def game_session(request, game_id, player_id):
     # game_id = request.GET.get('game_id')
     game = Game.objects.get(id=game_id)
+    player = Player.objects.get(id=player_id)
+    print('********')
+    print(player.username + ' from views')
+    print('********')
     player_list = Player.objects.filter(game=game)
-    context = { 'player_list' : player_list, 'game' : game }
+    context = { 'player_list' : player_list, 'game' : game, 'game_id' : game_id, 'player':player }
     return render(request, 'app/game_session.html', context)
 
 # create a waiting room   
@@ -196,8 +223,10 @@ def host_player_registration_form(request):
         player_name = request.POST['username']
         # check if the player is created, if yes return True, if not create player
         host, created = Player.objects.get_or_create(username=player_name)
+        player_id = host.id
         # save the player
         host.save()
+        player = host.id
         # store all players from player model
         players = Player.objects.all()
         # passing players and form input information into context 
@@ -216,14 +245,13 @@ def host_player_registration_form(request):
             host.game = new_game
             # save the player information
             host.save()
+            
         # if the player already exist
         else:
-            # assign game id to game_id
-            game_id = host.game.id
             # render start page and pass context to start page
             return render(request, "app/start_page.html", context)
     # return response to game_session page, pass game_id key argument to it
-    return HttpResponseRedirect(reverse('app:game_session', kwargs={'game_id': game_id}))
+    return HttpResponseRedirect(reverse('app:game_session', kwargs={'game_id': game_id, 'player_id':player_id}))
 
 def join_player_registration_form(request):
     if request.method == 'POST':
