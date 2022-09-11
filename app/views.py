@@ -65,7 +65,7 @@ def team_creation(request, game_id, player_id):
     game_instance.save()
     
     # Checks for number of players before assigning teams
-    if len(players) > 4:
+    if len(players) >= 4:
         # Calculating the amount of teams and distributions
         # number of players/4 players per team and +1 to round number
         number_of_teams = int(players.count()/4)
@@ -122,8 +122,9 @@ def team_creation(request, game_id, player_id):
             team_assignation.save()
             game_id = game_instance.id
             player_id = player.id
-            team_id = new_team.id
+            teams_id = new_team.id
 
+    team_id = teams_id
     print("***************************************************************")
     print(team_id)
     print("***************************************************************")
