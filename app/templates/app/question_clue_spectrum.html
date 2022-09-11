@@ -6,7 +6,13 @@
     <h1>Wavelength</h1>
     <h1>Tournament</h1>
     <hr>
-    <img src='{% static "img/question_clue_spectrum.png" %}' />
+    <img src='{% static "img/question_clue_spectrum.png" %}' alt="Left Right" />
+    <p style="text-align:left; width: 450px;">
+      {{left_spectrum}}
+      <span style="float:right;">
+          {{right_spectrum}}
+      </span>
+    </p>
     <p><b>Timer: 3 minutes</b></p>
     <div>
       {% for player in team_member %}
@@ -14,16 +20,41 @@
         <p>{{player.username}}</p>
       {% endfor %}
     </div>
-    <form action="clue_form" method="post">
+    <form action="clue_form_one" method="post">
         {% csrf_token %}
         <br>
-          <label for="clue">Clue:</label>
-          <input id="clue" type="text" name="clue">
+          <label for="clue1">Clue1:</label>
+          <input id="clue1" type="text" name="clue1">
         </br>
         <br>
-          <button><a href="question_clue_spectrum">New Clue</a></button>
-          <input type="submit" value="Submit">
+        <input type="submit" value="Submit" >
+        {% comment %} onclick="this.disabled=true" {% endcomment %}
         </br>
     </from>
+    <hr>
+    <img src='{% static "img/question_clue_spectrum.png" %}' alt="Left Right" />
+    <p style="text-align:left; width: 450px;">
+      {{left_spectrum}}
+      <span style="float:right;">
+          {{right_spectrum}}
+      </span>
+    </p>
+    <p><b>Timer: 3 minutes</b></p>
+    <div>
+      {% for player in team_member %}
+        {% comment %} <p>{{team_name}}</p> {% endcomment %}
+        <p>{{player.username}}</p>
+      {% endfor %}
+    </div>
+    <form action="clue_form_two" method="post">
+      {% csrf_token %}
+      <br>
+        <label for="clue2">Clue2:</label>
+        <input id="clue2" type="text" name="clue2">
+      </br>
+      <br>
+      <input type="submit" value="Submit" >
+      </br>
+  </from>
 </center>
 {% endblock %}
