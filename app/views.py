@@ -52,8 +52,6 @@ def get_teams(team_names, players):
 def team_creation(request, game_id, player_id):
     # Stores the name of all the players
     player_names = []
-    # Retrieve host
-    player = Player.objects.get(id=player_id)
     # Number of players in game
     players = Player.objects.filter(game=game_id)
     # Obtain the game instance
@@ -69,7 +67,6 @@ def team_creation(request, game_id, player_id):
         # Calculating the amount of teams and distributions
         # number of players/4 players per team and +1 to round number
         number_of_teams = int(players.count()/4)
-        number_of_team_players = int(len(players)/number_of_teams)
     elif len(players) > 0 and len(players) < 4:
         # Single team
         number_of_teams = 1
@@ -107,32 +104,39 @@ def team_creation(request, game_id, player_id):
     print(team_names)
     print(teams)
     print("***************************************************************")
-
+############################## Works fine in here ########################################
     # List comprehension
-    for team_name, team_mates in teams.items():
+    for teamName, teamMember in teams.items():
         # Creating new team
-        new_team = Team.objects.create(name=team_name, game=game_instance)
-        # Search for the players names inside the team
+        new_team, created_flag = Team.objects.get_or_create(name=teamName, game=game_instance)
         
-        for participant in team_mates:
+        # # Search for the players names inside the team
+        for participant in teamMember:
             # Gets the player based on the name and is assigned to team assignation
-            team_assignation = players.get(username=participant)
+            team_assignation = Player.objects.get(username=participant)
             # Assigns the team to the player model
             team_assignation.team = new_team
             team_assignation.save()
-            game_id = game_instance.id
-            player_id = player.id
-            teams_id = new_team.id
+        #     game_id = game_instance.id
+        #     player_id = player.id
+        #     teams_id = new_team.id
 
-    team_id = teams_id
+    team_id = new_team.id
+    game_id = game_instance.id
+    player_id=player_id
+    team_players= Player.objects.filter(team=new_team)
     print("***************************************************************")
+    print(game_id)
     print(team_id)
+    print(player_id)
+    print(team_players)
     print("***************************************************************")
 
     return HttpResponseRedirect(reverse('app:team_page', kwargs={'game_id' : game_id, 'team_id' : team_id, 'player_id': player_id }))
 
 # AC: Team page will print all the members in the team 
 def team_page(request, game_id, team_id, player_id):
+    print(game_id)
     player = Player.objects.get(id=player_id)
     team = Team.objects.filter(game=game_id)
     team_id = Team.objects.get(id=team_id)
