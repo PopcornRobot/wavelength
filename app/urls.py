@@ -9,7 +9,7 @@ urlpatterns = [
     # AC
     path('team_creation/<int:game_id>/<int:player_id>', views.team_creation, name='team_creation'),
     # AC
-    path('team_page/<int:host_id>/<int:game_id>', views.team_page, name='team_page'),
+    path('team_page/<int:game_id>/<int:team_id>/<int:player_id>/', views.team_page, name='team_page'),
     path('player_game_assignation/<int:game_id>', views.player_game_assignation, name='player_game_assignation'),
     path('player_game_assignation/<int:game_id>/<int:player_id>', views.player_game_assignation, name='player_game_assignation'),
     
@@ -25,5 +25,6 @@ urlpatterns = [
     path("game_end", views.game_end, name="game_end"),
     path("team_score", views.team_score, name='team_score'),
     path("waiting_room/<host>", views.waiting_room, name="waiting_room"),
+    path("scale", views.scale, name="scale"),
 
 ]
