@@ -34,21 +34,33 @@ base.html and static are in development
         border: 3px solid blue;
       }
     {% endblock %}
-    </style>
+</style>
     
-    {% block body %} 
-    <div class="center">
-        Room {{game.id}}
-    </div>
+{% block body %} 
+  <div class="center">
     
+      <br />
+      Room {{game.id}}
+      <br />
+      Page for {{player_page.username}}
+      <br />
+      {% if player_page.is_host == True %}
+      <a href="{% url 'app:team_creation' game_id=game.id player_id=player_page.id %}">
+        <button type="submit">Start Game</button>
+      </a>
+      {% endif %}
+      <button href="{% url 'app:start_page' %}" >Leave Room</button>
+  </div>
 
-        <div class='center'>
-          <div id='player_list' style='max-height: 300px; overflow-y:scroll;'>
-            {% for player in player_list  %}
-              <div id='{{ player.username}}'>{{ player.username}}</div>
-            {% endfor %}
-          </div>
-        </div>
+  <div class='center'>
+    <div style='padding:10px ; text-align:center'>
+        {% for player in player_list %}
+        <div id='{{ player.username}}'>{{ player.username}} </div> 
+        {% if player.is_host == True%} <p> -- Host {{player.id}} </p> {% endif %}
+          <br />
+        {% endfor %}
+    </div>
+  </div>
 
         <div style='padding:10px ; text-align:center'>
             <button href="{% url 'app:start_page' %}" >Leave Room</button>
@@ -118,11 +130,11 @@ base.html and static are in development
         };
 
         sessionSocket.onmessage = function(e) {
-            console.log('onmessage');
+            console.log('message received');
             const data = JSON.parse(e.data);
             console.log(data);
             if (data.message == 'remove player'){
-              document.getElementById(data.userName).remove();
+              //document.getElementById(data.userName).remove();
               console.error(data.username + ' has left the session');
             } else if (data.message == 'start game'){
               console.log('game started!')
@@ -210,7 +222,7 @@ base.html and static are in development
   
           display.textContent = minutes + ":" + seconds;
   
-          if (--timer < 0) {
+          if (--timer == 0) {
               timer = 0;
               message="Time's up!"
               sessionSocket.send(JSON.stringify({
@@ -223,9 +235,9 @@ base.html and static are in development
   }
   
     window.onload = function () {
-        var Minutes = 60 * 1,
+        var Minutes = 60 * 0.2,
             display = document.querySelector('#time');
         startTimer(Minutes, display);
     };
 </script>
-    {% endblock %}
+{% endblock %}

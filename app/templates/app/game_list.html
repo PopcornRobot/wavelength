@@ -42,21 +42,22 @@ base.html and static are in development
 
 <div class='center'>
     {% for game in game_list %}
-    <div>
-        <p>
-        <a href="{%url 'app:player_game_assignation' game_id=game.id player_id=current_player.id %}">
-            Room {{game.id}} <button class="btn btn-primary" >Join Game</button>
-        </a>
-        </p>
-    </div>
+        {% if current_player.id  %}        
+            <a href="{%url 'app:player_game_assignation' game_id=game.id player_id=current_player.id %}">
+                Room {{game.id}} <button class="btn btn-primary" >Join Game</button>
+            </a>   
+        {% else %}
+            <a href="{%url 'app:player_game_assignation' game_id=game.id%}">
+                Room {{game.id}} <button class="btn btn-primary" >Join Game</button>
+            </a>   
+        {% endif %}
+        <div style='padding:10px ; text-align:center'>
+            <a href= "{% url 'app:start_page' %}">
+                <button class="btn btn-primary" >Return to Start Page</button>
+            </a>
+        </div>
     {% endfor %}
 </div>
-<div style='padding:10px ; text-align:center'>
-    <a href= "{% url 'app:start_page' %}">
-        <button class="btn btn-primary" >Return to Start Page</button>
-    </a>
-</div>
-
 
 <script>
 

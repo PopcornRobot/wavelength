@@ -129,3 +129,9 @@ go to chatty page create a room then try running the room and chatting as a anot
 
 ## Coding Conventions
 urls/views should request/provide game data (where relevant) in the order: game_id/team_id/player_id
+
+## Questions bank
+To populate the "Question" model:
+1. Open a Bash shell terminal
+2. Execute: `export DJANGO_SETTINGS_MODULE=wavelength.settings`
+3. Execute: `python question_creator.py`
