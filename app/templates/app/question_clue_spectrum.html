@@ -3,27 +3,43 @@
 
 {% block body %}
 <center>
-    <h1>Wavelength</h1>
-    <h1>Tournament</h1>
-    <hr>
-    <img src='{% static "img/question_clue_spectrum.png" %}' />
-    <p><b>Timer: 3 minutes</b></p>
-    <div>
-      {% for player in team_member %}
-        {% comment %} <p>{{team_name}}</p> {% endcomment %}
-        <p>{{player.username}}</p>
-      {% endfor %}
-    </div>
-    <form action="clue_form" method="post">
-        {% csrf_token %}
-        <br>
-          <label for="clue">Clue:</label>
-          <input id="clue" type="text" name="clue">
+    <h2> Clue Giving </h2>
+    <h4> 
+      Wavelength is all about wildly creative clues. 
+      Firm Rules
+        1. A clue shouldn't combine multiple ideas or give a lot of explanatory context.
+        2. The clue must exist as a thing in the universe outside of you giving the clue.
+        3. You aren't allowed to use one side as a double meaning, e.g. "hot" meaning attractive-though
+        4. You can't use numbers, percentages, ratios, or anything numeric to sneakily suggest the location of the target.
+      
+      Suggestions:
+        1. Be concise: Try to use five words or fewer
+        2. No modifiers: Words like "but", "very", "almost", "slightly", 
+           and "kind of" nearly always makes a team weigh the thing itself versus the qualifier used
+        3. Use proper nouns
+    </h4>
+           
+    <form action="clue_form"  method="post">
+      {% csrf_token %}
+          <button type="submit">Create Room</button>
         </br>
-        <br>
-          <button><a href="question_clue_spectrum">New Clue</a></button>
-          <input type="submit" value="Submit">
-        </br>
-    </from>
+  </form>
+  <form action="host_player_registration_form" method="post">
+    {% csrf_token %}
+      <br>
+        <label>Name:</label>
+        <input type="text" name="username">
+      </br>
+      <br>
+        {% for host in players %}
+          {% if host.username == player_name %}
+            <p>{{host.username}} + ' is already created'</p>
+          {% endif %}
+        {% endfor %}
+      </br>
+      <br>
+        <button type="submit">Create Room</button>
+      </br>
+    </form>
 </center>
 {% endblock %}
