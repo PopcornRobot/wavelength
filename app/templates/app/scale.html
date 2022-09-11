@@ -12,12 +12,17 @@
             <div class="control">
                 <div class="temp_outside">0</div>
                 <div class="temp_right">10</div>
-                <!-- <div class="room">Bedroom</div> -->
+                <div class="room">Bedroom</div>
             </div>
         </div>
         <div class="instructions">
             <h4>Drag the handle, click at the number you want, or directly type your number in <i class="fas fa-heart"></i></h4>
         </div>
+
+        {{ game_id|json_script:'json-game-id' }}
+        {{ player.username|json_script:'json-username' }}
+    
+
     </div>
 
     <script src = "https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -34,8 +39,33 @@
             value: 50,
                 handleSize: "+10",
                 min: 0,
-                max: 100,
+                max: 100,   
         });
+
+        const gameID = JSON.parse(document.getElementById('json-game-id').textContent);
+        const userName = JSON.parse(document.getElementById('json-username').textContent);
+        const sliderValue = $("#slider").data("roundSlider").getValue()
+
+        document.addEventListener('DOMContentLoaded', () => {
+        
+            const sessionSocket = new WebSocket(
+                'ws://'
+                + window.location.host
+                + '/ws/game_session/'
+                + gameID
+            );
+
+        }); //event close  
+
+        sessionSocket.onmessage = function(e) {
+            console.log('onmessage');
+            const data = JSON.parse(e.data);
+            console.log(data);
+            window.location.href = "{% url 'app:scale' game_id=game.id team_id=team.id player_id=player.id %}";
+        };
+
+        print(team_id + " this is team_id")
+
     </script>
 
 {% endblock %}

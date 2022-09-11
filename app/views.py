@@ -259,6 +259,11 @@ def team_score(request):
     context = {"team_scores": team_scores}
     return HttpResponseRedirect(reverse('app:game_end'))
 
-def scale(request):
-    context = {}
+def scale(request, game_id, player_id, team_id):
+    game = Game.objects.get(id=game_id)
+    player = Player.objects.get(id=player_id)
+    team = Team.objects.get(id=team_id)
+
+    context = {'game': game, 'player': player, 'team': team}
+    
     return render(request, "app/scale.html", context)

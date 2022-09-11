@@ -179,3 +179,18 @@ body {
 		transform: scale(.9);
 	}
 }
+
+.slider2 .rs-handle {
+  background-color: #f3f3f3;
+  box-shadow: 0px 0px 4px 0px #000;
+}
+.slider2 .rs-tooltip-text {
+  font-size: 25px;
+  font-weight: bold;
+}
+.row {
+    display: flex;
+    justify-content: space-between;
+    max-width: 550px;
+    text-align: center;
+}
