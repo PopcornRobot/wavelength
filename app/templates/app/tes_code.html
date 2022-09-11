@@ -84,11 +84,11 @@ base.html and static are in development
         };
 
         sessionSocket.onmessage = function(e) {
-            console.log('message received');
+            console.log('onmessage');
             const data = JSON.parse(e.data);
             console.log(data);
             if (data.message == 'remove player'){
-              //document.getElementById(data.userName).remove();
+              document.getElementById(data.userName).remove();
               console.error(data.username + ' has left the session');
             } else if (data.message == 'start game'){
               console.log('game started!')
@@ -133,7 +133,7 @@ base.html and static are in development
   
           display.textContent = minutes + ":" + seconds;
   
-          if (--timer == 0) {
+          if (--timer < 0) {
               timer = 0;
               message="Time's up!"
               sessionSocket.send(JSON.stringify({
@@ -146,7 +146,7 @@ base.html and static are in development
   }
   
     window.onload = function () {
-        var Minutes = 60 * 0.2,
+        var Minutes = 60 * 1,
             display = document.querySelector('#time');
         startTimer(Minutes, display);
     };
