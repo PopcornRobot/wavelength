@@ -19,26 +19,6 @@ def room(request, room_name):
 
     context = {'room_name' : room_name, 'username' : username, 'messages' : messages}
     return render(request, 'app/room.html', context)
-# AC: This function opens the file that contains all the questions and outputs them as a list
-def get_questions():
-    left=[]
-    right=[]
-    spectrum_list=[]
-    with open("app/static/txt/spectrum_bank.csv") as f:
-        spectrums = f.readlines()
-        for spectrum in spectrums:
-            spectrum_word = spectrum.split(",")
-            spectrum_list.append(spectrum_word)
-        
-        for i in spectrum_list:
-            left.append(i[0].removesuffix('\t'))
-            right_word= i[1].removesuffix('\n')
-            right_nobasht=right_word.removesuffix('\t')
-            right.append(right_nobasht.removeprefix('\t'))
-
-        all_spectrums = list(zip(left, right))
-
-        return all_spectrums
 
 # AC: This function opens a file that stores a list of 250 team names and resturns a random name from the list
 def random_name():
@@ -88,19 +68,20 @@ def team_creation(request, game_id, player_id):
     if len(players) > 4:
         # Calculating the amount of teams and distributions
         # number of players/4 players per team and +1 to round number
-        number_of_teams = int(players.count()/4)+1
+        number_of_teams = int(players.count()/4)
         number_of_team_players = int(len(players)/number_of_teams)
-    else:
+    elif len(players) > 0 and len(players) < 4:
         # Single team
         number_of_teams = 1
-        number_of_team_players = int(len(players)/number_of_teams)
+    else:
+        pass
 
     print("***************************************************************")
     print(" This is a print for Teams algorithm confirmation only for debugging")
     print("game = " +str(game_instance.id))
     print("players = "+str(len(players)))
     print("teams =" +str(number_of_teams))
-    print("teammates = " +str(number_of_team_players))
+    print("teammates = " +str(int(len(players)/number_of_teams)))
     print("***************************************************************")
 
     # All player names assignation,
@@ -122,6 +103,11 @@ def team_creation(request, game_id, player_id):
 
     # Dictionary with the sorted teams
     teams = get_teams(team_names, player_names)
+    print("***************************************************************")
+    print(team_names)
+    print(teams)
+    print("***************************************************************")
+
     # List comprehension
     for team_name, team_mates in teams.items():
         # Creating new team
@@ -132,26 +118,26 @@ def team_creation(request, game_id, player_id):
             # Gets the player based on the name and is assigned to team assignation
             team_assignation = players.get(username=participant)
             # Assigns the team to the player model
-            print("***************************************************************")
-            print('team names = ' + str(new_team.name))
-            print("***************************************************************")
             team_assignation.team = new_team
             team_assignation.save()
             game_id = game_instance.id
             player_id = player.id
             team_id = new_team.id
-        
-            
+
+    print("***************************************************************")
+    print(team_id)
+    print("***************************************************************")
+
     return HttpResponseRedirect(reverse('app:team_page', kwargs={'game_id' : game_id, 'team_id' : team_id, 'player_id': player_id }))
 
 # AC: Team page will print all the members in the team 
 def team_page(request, game_id, team_id, player_id):
-
     player = Player.objects.get(id=player_id)
     team = Team.objects.filter(game=game_id)
+    team_id = Team.objects.get(id=team_id)
     teammates = Player.objects.filter(game=player.game)
 
-    context = {'team':team, 'player':player, 'teammates':teammates}
+    context = {'team':team, 'player':player, 'teammates':teammates,'team_id': team_id}
     return render(request, "app/team_page.html",context)
 
 # page with auto-refreshing list of games available for joining
@@ -265,10 +251,9 @@ def join_player_registration_form(request):
            return render(request, "app/start_page.html", context)
     return HttpResponseRedirect(reverse('app:game_list', kwargs={'player_id':player_id}))
 
-def question_clue_spectrum(request, game_id, **player_id,):
+def question_clue_spectrum(request, game_id, team_id, player_id):
 
-    # team_name = Team.objects.get(name=team_name)
-    # team_member = Player.objects.filter(team=team_name)
+    
     context = {}
     return render(request, "app/question_clue_spectrum.html", context)
 
