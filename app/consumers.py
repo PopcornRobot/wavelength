@@ -53,6 +53,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = data['message']
         username = data['username']
         room = data['room']
+        # value = data.get('value')
+        # print(value)
         print('receiving from websocket')
 
         await self.save_message(username, room, message)
@@ -71,23 +73,27 @@ class ChatConsumer(AsyncWebsocketConsumer):
         print('disc')
         message = event['message']
         username = event['username']
+        value = event.get('value')
 
     # Send message to WebSocket
         await self.send(text_data=json.dumps({
             'message': message,
-            'username': username
+            'username': username,
+            'value' : value,
         }))
 
 # Receive message from room group
     async def chat_message(self, event):
         message = event['message']
         username = event['username']
+        value = event.get('value')
         print('receiving from room group')
 
     # Send message to WebSocket
         await self.send(text_data=json.dumps({
             'message': message,
-            'username': username
+            'username': username,
+            'value' : value,
         }))
     
     @sync_to_async
