@@ -105,7 +105,9 @@ base.html and static are in development
               console.error(data.username + ' has left the session');
             } else if (data.message == 'start game'){
               console.log('game started!')
-              window.location.href = "{% url 'app:team_creation' game_id=game.id player_id=player.id %}";
+              //setInterval(function () {
+                window.location.href = "{% url 'app:team_creation' game_id=game.id player_id=player.id %}";
+              //}, 0);
             } else if (data.username != userName) {
               document.querySelector('#player_list').innerHTML += ("<div id='" + data.username + "'>" + data.username + '</div>');
               console.log(data.username + ' added to list');
@@ -126,6 +128,7 @@ base.html and static are in development
 
         const sort_teams_btn = document.getElementById('sort_teams_btn');
         sort_teams_btn.onclick = (e) =>{
+        window.location.href = "{% url 'app:team_creation' game_id=game.id player_id=player.id %}";
           message='start game'
           sessionSocket.send(JSON.stringify({
             'message': message,
