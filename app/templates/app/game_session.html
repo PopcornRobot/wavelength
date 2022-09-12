@@ -51,7 +51,7 @@ base.html and static are in development
   </div>
 
   <div class='center'>
-    <div style='padding:10px ; text-align:center'>
+    <div id='player_list' style='padding:10px ; text-align:center'>
         {% for player in player_list %}
         <div id='{{ player.username}}'>{{ player.username}} </div> 
         {% if player.is_host == True%} <p> -- Host {{player.id}} </p> {% endif %}
@@ -76,16 +76,14 @@ base.html and static are in development
     const gameID = JSON.parse(document.getElementById('json-game-id').textContent);
     const userName = JSON.parse(document.getElementById('json-username').textContent);
     const sort_teams_btn = document.getElementById('sort_teams_btn');
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const sessionSocket = new WebSocket(
+    const sessionSocket = new WebSocket(
             'ws://'
             + window.location.host
             + '/ws/game_session/'
             + gameID
           );
-        
-        sessionSocket.onopen = (e) => {
+
+          sessionSocket.onopen = (e) => {
             message= '';
             console.log('socket opened!');
             sessionSocket.send(JSON.stringify({
@@ -94,6 +92,9 @@ base.html and static are in development
                 'room': gameID,
               }));
         };
+
+    document.addEventListener('DOMContentLoaded', () => {
+        
 
         sessionSocket.onmessage = function(e) {
             console.log('message received');
@@ -134,7 +135,7 @@ base.html and static are in development
         };
     });
           
-    function startTimer(duration, display) {
+    {% comment %} function startTimer(duration, display) {
       var timer = duration, minutes, seconds;
       setInterval(function () {
           minutes = parseInt(timer / 60, 10);
@@ -161,6 +162,32 @@ base.html and static are in development
         var Minutes = 60 * 0.2,
             display = document.querySelector('#time');
         startTimer(Minutes, display);
+    }; {% endcomment %}
+
+    window.onload = function() {
+
+      var display = document.querySelector('#time'),
+          timer = new CountDownTimer(5);
+    
+      timer.onTick(format).onTick(restart).start();
+    
+      function restart() {
+        if (this.expired()) {
+          setTimeout(function() { timer.start(); }, 1000);
+          message="Time's up!"
+          sessionSocket.send(JSON.stringify({
+            'message': message,
+            'username': userName,
+            'room': gameID,
+      }));
+        }
+      }
+    
+      function format(minutes, seconds) {
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+        display.textContent = minutes + ':' + seconds;
+      }
     };
 </script>
 {% endblock %}
