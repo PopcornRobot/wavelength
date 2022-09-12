@@ -3,43 +3,58 @@
 
 {% block body %}
 <center>
-    <h2> Clue Giving </h2>
-    <h4> 
-      Wavelength is all about wildly creative clues. 
-      Firm Rules
-        1. A clue shouldn't combine multiple ideas or give a lot of explanatory context.
-        2. The clue must exist as a thing in the universe outside of you giving the clue.
-        3. You aren't allowed to use one side as a double meaning, e.g. "hot" meaning attractive-though
-        4. You can't use numbers, percentages, ratios, or anything numeric to sneakily suggest the location of the target.
-      
-      Suggestions:
-        1. Be concise: Try to use five words or fewer
-        2. No modifiers: Words like "but", "very", "almost", "slightly", 
-           and "kind of" nearly always makes a team weigh the thing itself versus the qualifier used
-        3. Use proper nouns
-    </h4>
-           
-    <form action="clue_form"  method="post">
-      {% csrf_token %}
-          <button type="submit">Create Room</button>
+    <h1>Wavelength</h1>
+    <h1>Tournament</h1>
+    <hr>
+    <img src='{% static "img/question_clue_spectrum.png" %}' alt="Left Right" />
+    <p style="text-align:left; width: 450px;">
+      {{left_spectrum}}
+      <span style="float:right;">
+          {{right_spectrum}}
+      </span>
+    </p>
+    <p><b>Timer: 3 minutes</b></p>
+    <div>
+      {% for player in team_member %}
+        {% comment %} <p>{{team_name}}</p> {% endcomment %}
+        <p>{{player.username}}</p>
+      {% endfor %}
+    </div>
+    <form action="clue_form_one" method="post">
+        {% csrf_token %}
+        <br>
+          <label for="clue1">Clue1:</label>
+          <input id="clue1" type="text" name="clue1">
         </br>
-  </form>
-  <form action="host_player_registration_form" method="post">
-    {% csrf_token %}
+        <br>
+        <input type="submit" value="Submit" >
+        {% comment %} onclick="this.disabled=true" {% endcomment %}
+        </br>
+    </from>
+    <hr>
+    <img src='{% static "img/question_clue_spectrum.png" %}' alt="Left Right" />
+    <p style="text-align:left; width: 450px;">
+      {{left_spectrum2}}
+      <span style="float:right;">
+          {{right_spectrum2}}
+      </span>
+    </p>
+    <p><b>Timer: 3 minutes</b></p>
+    <div>
+      {% for player in team_member %}
+        {% comment %} <p>{{team_name}}</p> {% endcomment %}
+        <p>{{player.username}}</p>
+      {% endfor %}
+    </div>
+    <form action="clue_form_two" method="post">
+      {% csrf_token %}
       <br>
-        <label>Name:</label>
-        <input type="text" name="username">
+        <label for="clue2">Clue2:</label>
+        <input id="clue2" type="text" name="clue2">
       </br>
       <br>
-        {% for host in players %}
-          {% if host.username == player_name %}
-            <p>{{host.username}} + ' is already created'</p>
-          {% endif %}
-        {% endfor %}
+      <input type="submit" value="Submit" >
       </br>
-      <br>
-        <button type="submit">Create Room</button>
-      </br>
-    </form>
+  </from>
 </center>
 {% endblock %}
