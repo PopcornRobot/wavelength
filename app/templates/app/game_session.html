@@ -53,7 +53,7 @@ base.html and static are in development
   </div>
 
   <div class='center'>
-    <div style='padding:10px ; text-align:center'>
+    <div id="player_list" style='padding:10px ; text-align:center'>
         {% for player in player_list %}
         <div id='{{ player.username}}'>{{ player.username}} </div> 
         {% if player.is_host == True%} <p> -- Host {{player.id}} </p> {% endif %}

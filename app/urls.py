@@ -21,11 +21,16 @@ urlpatterns = [
     path("host_player_registration_form", views.host_player_registration_form, name='host_player_registration_form'),
     path("join_player_registration_form", views.join_player_registration_form, name='join_player_registration_form'),
     path("question_clue_spectrum", views.question_clue_spectrum, name='question_clue_spectrum'),
-    path("clue_form", views.clue_form , name="clue_form"),
+    path("clue_form_one", views.clue_form_one, name="clue_form_one"),
+    path("clue_form_two", views.clue_form_two, name="clue_form_two"),
     path("game_end", views.game_end, name="game_end"),
     path("team_score", views.team_score, name='team_score'),
     path("waiting_room/<host>", views.waiting_room, name="waiting_room"),
     path("scale/<int:game_id>/<int:team_id>/<int:player_id>", views.scale, name="scale"),
     path("tutorial", views.tutorial, name="tutorial"),
+    path("game_turn", views.game_turn, name="game_turn"),
+    path("question_response_form", views.question_response_form, name="question_response_form"),
+    path("question_save", views.question_save, name="question_save"),
+    path("scale", views.scale, name="scale"),
 
 ]
