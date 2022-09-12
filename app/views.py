@@ -7,6 +7,8 @@ from django.shortcuts import render
 from django.urls import reverse
 from .models import *
 import random
+import re
+from random import choice
 
 teams_placeholder = {}
 
@@ -31,6 +33,16 @@ def random_name():
     # Returns a new randome name
     return new_name
 
+def random_spectrum():
+    # open the spectrum csv file
+    with open("app/static/txt/spectrum.csv") as f:
+        # Assigns all the lines
+        spectrum_list = f.readlines()
+        # Random assignation of a single spectrum from the list
+        spectrum_name = spectrum_list[random.randint(0,len(spectrum_list))]
+    # Returns a spectrum name
+    return spectrum_name
+    
 # AC: This function assignes the players to the teams, taking the number of possible teams and the amount of players as arguments
 def get_teams(team_names, players):
     # randomly shuffles all the players
@@ -256,15 +268,39 @@ def join_player_registration_form(request):
            return render(request, "app/start_page.html", context)
     return HttpResponseRedirect(reverse('app:game_list', kwargs={'player_id':player_id}))
 
-def question_clue_spectrum(request, game_id, team_id, player_id):
-
-    
-    context = {}
+def question_clue_spectrum(request):
+    # team_name = Team.objects.get(name=team_name)
+    # team_member = Player.objects.filter(team=team_name)
+    # spectrum = random_spectrum()
+    # sign_spectrum = re.findall('"([^"]*)"', spectrum)
+    questions = Question.objects.all()
+    random_question = choice(questions)
+    random_question2 = choice(questions)
+    # check if random_question == random_question2
+    if random_question == random_question2:
+        random_question = choice(questions)
+        if random_question == random_question2:
+            random_question = choice(questions)                                                                                                                                        
+    left_spectrum = random_question.left_spectrum
+    right_spectrum = random_question.right_spectrum
+    left_spectrum2 = random_question2.left_spectrum
+    right_spectrum2 = random_question2.right_spectrum
+    context = {"left_spectrum": left_spectrum, "right_spectrum": right_spectrum, "left_spectrum2": left_spectrum2, "right_spectrum2": right_spectrum2}
     return render(request, "app/question_clue_spectrum.html", context)
+    
+# clue form function
+def clue_form_one(request):
+    player_clue1 = request.POST['clue1']
+    print("00000000000000000000000000000000000000000000000")
+    print(player_clue1)
+    print("00000000000000000000000000000000000000000000000")
+    return HttpResponseRedirect(reverse('app:question_clue_spectrum'))
 
-def clue_form(request):
-    if request.method == 'Post':
-        player_clue = request.POST['clue']
+def clue_form_two(request):
+    player_clue2 = request.POST['clue2']
+    print("00000000000000000000000000000000000000000000000")
+    print(player_clue2)
+    print("00000000000000000000000000000000000000000000000")
     return HttpResponseRedirect(reverse('app:question_clue_spectrum'))
 
 def game_end(request):
@@ -277,6 +313,43 @@ def team_score(request):
     context = {"team_scores": team_scores}
     return HttpResponseRedirect(reverse('app:game_end'))
 
+def game_turn(request):
+    # check if spectrum already be used
+
+    questions = Question.objects.all()
+    random_question = choice(questions)                                                                                                                                                   
+    left_spectrum = random_question.left_spectrum
+    right_spectrum = random_question.right_spectrum
+  
+    # pass player clue to game_trun page
+    # clue = player_clue
+    # give left and right spectrum as context
+    context = {"left_spectrum": left_spectrum, "right_spectrum": right_spectrum}
+    question = Question.objects.create(left_spectrum=left_spectrum, right_spectrum=right_spectrum)
+    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+    print(question)
+    print(left_spectrum)
+    print(right_spectrum)
+    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+    # render game_turn page
+    return render(request, "app/game_turn.html", context)
+
+# save the already used spectrum into a dictionary
+def question_save(request, left_spectrum, right_spectrum):
+    question = Question.objects.create(left_spectrum=left_spectrum, right_spectrum=right_spectrum)
+    print("000000000000000000000000000000000")
+    print(question)
+    print("000000000000000000000000000000000")
+    return HttpResponseRedirect(reverse('app:game_turn'))
+
+def question_response_form(request):
+    question_response = request.POST['question_response']
+    print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
+    print(question_response)
+    print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
+    return HttpResponseRedirect(reverse('app:game_turn'))
+
+ 
 def scale(request):
     context = {}
     return render(request, "app/scale.html", context)
