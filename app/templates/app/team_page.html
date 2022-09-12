@@ -74,7 +74,7 @@ base.html and static are in development
             console.log(data);            
             if (data.message == 'start game'){
               console.log('game started!')
-              {% comment %} window.location.href = "{% url 'app:question_clue_spectrum' game_id=game.id player_id=player.id %}"; {% endcomment %}
+              window.location.href = "{% url 'app:question_clue_spectrum' game_id=game_id team_id=team_id player_id=player.id %}";
             }            
         };
         
