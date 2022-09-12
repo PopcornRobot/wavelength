@@ -132,6 +132,8 @@ urls/views should request/provide game data (where relevant) in the order: game_
 
 ## Questions bank
 To populate the "Question" model:
-1. Open a Bash shell terminal
-2. Execute: `export DJANGO_SETTINGS_MODULE=wavelength.settings`
-3. Execute: `python question_creator.py`
+1.  Open a Bash shell terminal
+2.  On Bash: `export DJANGO_SETTINGS_MODULE=wavelength.settings`
+    On PowerShell: `set DJANGO_SETTINGS_MODULE=wavelength.settings`
+3.  On Linux: `python question_creator_linux.py`
+    On Windows: `python question_creator.py`
