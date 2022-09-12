@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block body %}
+<center>
+    <h1>Wavelength</h1>
+    <h1>Tournament</h1>
+    <hr>
+    <h6>Question:</h6>
+    <p>Which is correct?</p>
+    {% comment %} Need to display a given clue by player {% endcomment %}
+    <h6>This is the clue:</h6>
+    <p>{{clue}}</p>
+    <form action="question_response_form" method="post">
+        {% csrf_token %}
+        <br>
+            <label for="response">Response: </label>
+        </br>
+        <br>
+            <input id="response" type="text" name="question_response" placeholder="Enter your response"/>
+        </br>
+        <br>
+        <input type="submit" value="Submit">
+        </br>
+    </form>
+    <img src='{% static "img/question_clue_spectrum.png" %}' alt="Left Right" />
+    <p style="text-align:left; width: 500px;">
+        {{left_spectrum}}
+        <span style="float:right;">
+            {{right_spectrum}}
+        </span>
+    </p>
+</center>
+{% endblock %}
