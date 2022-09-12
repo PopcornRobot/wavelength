@@ -29,5 +29,6 @@ urlpatterns = [
     path("game_turn", views.game_turn, name="game_turn"),
     path("question_response_form", views.question_response_form, name="question_response_form"),
     path("question_save", views.question_save, name="question_save"),
+    path("scale", views.scale, name="scale"),
 
 ]

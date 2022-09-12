@@ -8,6 +8,7 @@ from django.urls import reverse
 from .models import *
 import random
 import re
+from random import choice
 
 teams_placeholder = {}
 
@@ -270,11 +271,21 @@ def join_player_registration_form(request):
 def question_clue_spectrum(request):
     # team_name = Team.objects.get(name=team_name)
     # team_member = Player.objects.filter(team=team_name)
-    spectrum = random_spectrum()
-    sign_spectrum = re.findall('"([^"]*)"', spectrum)
-    left_spectrum = sign_spectrum[0]
-    right_spectrum = sign_spectrum[1]
-    context = {"left_spectrum": left_spectrum, "right_spectrum": right_spectrum}
+    # spectrum = random_spectrum()
+    # sign_spectrum = re.findall('"([^"]*)"', spectrum)
+    questions = Question.objects.all()
+    random_question = choice(questions)
+    random_question2 = choice(questions)
+    # check if random_question == random_question2
+    if random_question == random_question2:
+        random_question = choice(questions)
+        if random_question == random_question2:
+            random_question = choice(questions)                                                                                                                                        
+    left_spectrum = random_question.left_spectrum
+    right_spectrum = random_question.right_spectrum
+    left_spectrum2 = random_question2.left_spectrum
+    right_spectrum2 = random_question2.right_spectrum
+    context = {"left_spectrum": left_spectrum, "right_spectrum": right_spectrum, "left_spectrum2": left_spectrum2, "right_spectrum2": right_spectrum2}
     return render(request, "app/question_clue_spectrum.html", context)
     
 # clue form function
@@ -303,22 +314,13 @@ def team_score(request):
     return HttpResponseRedirect(reverse('app:game_end'))
 
 def game_turn(request):
-    # generates a spectrum from random_spectrum function
-    spectrum = random_spectrum()
-    # save used spectrum in a list
-    spectrum_list = []
-    spectrum_list.append(spectrum)
-    print("******************************")
-    print(spectrum_list)
-    print("******************************")
     # check if spectrum already be used
 
-    # find a word or sentence between quotation marks and get all of them 
-    test = re.findall('"([^"]*)"', spectrum)
-    # get the first word or sentence as the left spectrum
-    left_spectrum = test[0]
-    # get the second word or sentence as the right spectrum
-    right_spectrum = test[1]
+    questions = Question.objects.all()
+    random_question = choice(questions)                                                                                                                                                   
+    left_spectrum = random_question.left_spectrum
+    right_spectrum = random_question.right_spectrum
+  
     # pass player clue to game_trun page
     # clue = player_clue
     # give left and right spectrum as context
@@ -326,8 +328,6 @@ def game_turn(request):
     question = Question.objects.create(left_spectrum=left_spectrum, right_spectrum=right_spectrum)
     print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
     print(question)
-    print(spectrum)
-    print(test)
     print(left_spectrum)
     print(right_spectrum)
     print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
@@ -348,3 +348,8 @@ def question_response_form(request):
     print(question_response)
     print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
     return HttpResponseRedirect(reverse('app:game_turn'))
+
+ 
+def scale(request):
+    context = {}
+    return render(request, "app/scale.html", context)
