@@ -83,31 +83,23 @@ base.html and static are in development
               <div class="control">
                   <div class="temp_outside">0</div>
                   <div class="temp_right">10</div>
-                  <div class="room">Bedroom</div>
               </div>
           </div>
           <div class="instructions">
               <h4>Drag the handle, click at the number you want, or directly type your number in <i class="fas fa-heart"></i></h4>
           </div>
       </div>
-
-      <div class="col">
-          <h3>Slider with startValue</h3>
-          <div id="slider2"></div>
-        </div>
-      </div>
-  
-      <script src = "https://code.jquery.com/jquery-3.4.1.min.js"></script>
-      <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+      
       <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>                            
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/roundSlider/1.3.2/roundslider.min.js"></script>  
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/roundSlider/1.6.1/roundslider.min.js" integrity="sha512-OztPUuNsmM+BUn6NOM5EVZED6aFf/0P4V+cVwcf5iR5T58hGyIJ8XtWFd5ctuOpGytfCsxy4/9JqxeTLliXrBA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script>
     const gameID = JSON.parse(document.getElementById('json-game-id').textContent);
     const userName = JSON.parse(document.getElementById('json-username').textContent);
     const sort_teams_btn = document.getElementById('sort_teams_btn');
-    const sliderValue = $("#slider").data("roundSlider").getValue()
-
+    var sliderValue = 0
+    // console.log(globalSliderValue)
+  
     document.addEventListener('DOMContentLoaded', () => {
         const sessionSocket = new WebSocket(
             'ws://'
@@ -136,6 +128,9 @@ base.html and static are in development
             } else if (data.message == 'start game'){
               console.log('game started!')
               window.location.href = "{% url 'app:team_creation' game_id=game.id player_id=player.id %}";
+            } else if (data.message == "value change") {
+              console.log(data.value + "this is data.value")
+              $("#slider").data("roundSlider").setValue(data.value) 
             } else if (data.username != userName) {
               document.querySelector('#player_list').innerHTML += ("<div id='" + data.username + "'>" + data.username + '</div>');
               console.log(data.username + ' added to list');
@@ -144,21 +139,31 @@ base.html and static are in development
         };
 
         $("#slider").roundSlider({
-            radius: 150,
+            radius: 75,
             circleShape: "half-top",
           sliderType: "min-range",
             mouseScrollAction: true,
-          value: 50,
-            handleSize: "+10",
+          value: 20,
+            handleSize: "+5",
             min: 0,
-            max: 100,
-          svgMode: true
+            max: 40,
 
-          valueChange: function (e) {
-              var color = e.isInvertedRange ? "#FF5722" : "#8BC34A"
-          ;}
-             
-        });
+          drag: function (e) {
+            var sliderValue = $("#slider").data("roundSlider").getValue()
+            // sliderValue = globalSliderValue 
+            message="value change"
+    	      sessionSocket.send(JSON.stringify({
+              'message': message,
+              'username': userName,
+              'room': gameID,
+              'value': sliderValue,
+            }));
+
+          } //end of valueChange
+
+          
+
+        }); //eof
 
         sessionSocket.onclose = (e) => {
           message='remove player'
@@ -182,33 +187,33 @@ base.html and static are in development
         };
     });
           
-    function startTimer(duration, display) {
-      var timer = duration, minutes, seconds;
-      setInterval(function () {
-          minutes = parseInt(timer / 60, 10);
-          seconds = parseInt(timer % 60, 10);
+  //   function startTimer(duration, display) {
+  //     var timer = duration, minutes, seconds;
+  //     setInterval(function () {
+  //         minutes = parseInt(timer / 60, 10);
+  //         seconds = parseInt(timer % 60, 10);
   
-          minutes = minutes < 10 ? + minutes : minutes;
-          seconds = seconds < 10 ? "0" + seconds : seconds;
+  //         minutes = minutes < 10 ? + minutes : minutes;
+  //         seconds = seconds < 10 ? "0" + seconds : seconds;
   
-          display.textContent = minutes + ":" + seconds;
+  //         display.textContent = minutes + ":" + seconds;
   
-          if (--timer == 0) {
-              timer = 0;
-              message="Time's up!"
-              sessionSocket.send(JSON.stringify({
-                'message': message,
-                'username': userName,
-                'room': gameID,
-          }));
-          }
-      }, 1000);
-  }
+  //         if (--timer == 0) {
+  //             timer = 0;
+  //             message="Time's up!"
+  //             sessionSocket.send(JSON.stringify({
+  //               'message': message,
+  //               'username': userName,
+  //               'room': gameID,
+  //         }));
+  //         }
+  //     }, 1000);
+  // }
   
-    window.onload = function () {
-        var Minutes = 60 * 0.2,
-            display = document.querySelector('#time');
-        startTimer(Minutes, display);
-    };
+    // window.onload = function () {
+    //     var Minutes = 60 * 0.2,
+    //         display = document.querySelector('#time');
+    //     startTimer(Minutes, display);
+    // };
 </script>
 {% endblock %}

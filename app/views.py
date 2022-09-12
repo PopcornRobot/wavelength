@@ -285,3 +285,10 @@ def scale(request, game_id, player_id, team_id):
     context = {'game': game, 'player': player, 'team': team}
     
     return render(request, "app/scale.html", context)
+
+def tutorial(request):
+    context = {}
+    return  render(request, 'app/tutorial.html', context)
+
+
+

@@ -53,8 +53,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = data['message']
         username = data['username']
         room = data['room']
-        # value = data.get('value')
-        # print(value)
+        value = data.get('value')
+        print(value)
         print('receiving from websocket')
 
         await self.save_message(username, room, message)
@@ -65,7 +65,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
             {
                 'type': 'chat_message',
                 'message': message,
-                'username': username
+                'username': username,
+                'value': value,
             }
         )
 # Receive message from room group
@@ -74,6 +75,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = event['message']
         username = event['username']
         value = event.get('value')
+        
 
     # Send message to WebSocket
         await self.send(text_data=json.dumps({
@@ -81,6 +83,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'username': username,
             'value' : value,
         }))
+        
 
 # Receive message from room group
     async def chat_message(self, event):
@@ -95,6 +98,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'username': username,
             'value' : value,
         }))
+        print(str(value) + " this is message from send message to web")
     
     @sync_to_async
     def save_message(self, username, room, message):
