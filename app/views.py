@@ -269,13 +269,12 @@ def join_player_registration_form(request):
     return HttpResponseRedirect(reverse('app:game_list', kwargs={'player_id':player_id}))
 
 def question_clue_spectrum(request):
-    # team_name = Team.objects.get(name=team_name)
-    # team_member = Player.objects.filter(team=team_name)
-    # spectrum = random_spectrum()
-    # sign_spectrum = re.findall('"([^"]*)"', spectrum)
+   
+
     questions = Question.objects.all()
     random_question = choice(questions)
     random_question2 = choice(questions)
+   
     # check if random_question == random_question2
     if random_question == random_question2:
         random_question = choice(questions)
@@ -285,6 +284,13 @@ def question_clue_spectrum(request):
     right_spectrum = random_question.right_spectrum
     left_spectrum2 = random_question2.left_spectrum
     right_spectrum2 = random_question2.right_spectrum
+    # save the generated question into QuestionHistory
+    players = Player.objects.all()
+    player = choice(players)
+    question_history = QuestionHistory.objects.create(player=player, question=random_question)
+    print("1111111111111111111111111111111111111")
+    print(question_history)
+    print("1111111111111111111111111111111111111")
     context = {"left_spectrum": left_spectrum, "right_spectrum": right_spectrum, "left_spectrum2": left_spectrum2, "right_spectrum2": right_spectrum2}
     return render(request, "app/question_clue_spectrum.html", context)
     
@@ -294,14 +300,17 @@ def clue_form_one(request):
     print("00000000000000000000000000000000000000000000000")
     print(player_clue1)
     print("00000000000000000000000000000000000000000000000")
-    return HttpResponseRedirect(reverse('app:question_clue_spectrum'))
+    return HttpResponseRedirect(reverse('app:game_turn'))
 
 def clue_form_two(request):
     player_clue2 = request.POST['clue2']
     print("00000000000000000000000000000000000000000000000")
     print(player_clue2)
     print("00000000000000000000000000000000000000000000000")
-    return HttpResponseRedirect(reverse('app:question_clue_spectrum'))
+    return HttpResponseRedirect(reverse('app:game_turn'))
+
+# save all the clues populated for player_clue1 and player_clue2 into clue_given filed
+
 
 def game_end(request):
     context = {}
@@ -314,7 +323,12 @@ def team_score(request):
     return HttpResponseRedirect(reverse('app:game_end'))
 
 def game_turn(request):
+    # game_turn spectrum has to be from team members
+    
+    
     # check if spectrum already be used
+    # current_question = GameTurn.objects.get(question=)
+
 
     questions = Question.objects.all()
     random_question = choice(questions)                                                                                                                                                   
@@ -347,7 +361,7 @@ def question_response_form(request):
     print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
     print(question_response)
     print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
-    return HttpResponseRedirect(reverse('app:game_turn'))
+    return HttpResponseRedirect(reverse('app:game_end'))
 
  
 def scale(request):
