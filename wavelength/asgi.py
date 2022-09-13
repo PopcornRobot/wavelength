@@ -18,8 +18,6 @@ import app.routing
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'wavelength.settings')
 django.setup()
 
-# application = get_asgi_application()
-
 application = ProtocolTypeRouter({
   "http": get_asgi_application(),
   "websocket": AuthMiddlewareStack(
