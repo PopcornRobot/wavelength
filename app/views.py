@@ -336,8 +336,11 @@ def tutorial(request):
     context = {}
     return render(request, "app/tutorial.html", context)
 
-def game_turn(request):
+def game_turn(request, game_id, player_id):
     # check if spectrum already be used
+
+    game = Game.objects.get(id=game_id)
+    player = Player.objects.get(id=player_id)
 
     questions = Question.objects.all()
     random_question = choice(questions)                                                                                                                                                   
@@ -347,7 +350,7 @@ def game_turn(request):
     # pass player clue to game_trun page
     # clue = player_clue
     # give left and right spectrum as context
-    context = {"left_spectrum": left_spectrum, "right_spectrum": right_spectrum}
+    context = {"left_spectrum": left_spectrum, "right_spectrum": right_spectrum, 'game': game, 'player': player}
     question = Question.objects.create(left_spectrum=left_spectrum, right_spectrum=right_spectrum)
     print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
     print(question)
