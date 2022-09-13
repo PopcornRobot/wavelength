@@ -17,6 +17,8 @@ note: you may use whichever method you are most comfortable with.
 - install JS dependencies: `yarn`
 - migrate to postgres DB: `python manage.py migrate`
 - start server: `python manage.py runserver_plus`
+- run redis/docker for websockets: `docker run -p 6379:6379 -d redis:5`
+
 
 ## Deploy on Heroku
 
