@@ -20,10 +20,10 @@ def get_questions():
             spectrum_list.append(spectrum_word)
         
         for i in spectrum_list:
-            left.append(i[0].removesuffix('\t'))
-            right_word= i[1].removesuffix('\n')
-            right_nobasht=right_word.removesuffix('\t')
-            right.append(right_nobasht.removeprefix('\t'))
+            left.append(i[0])
+            # right_word= i[1].removesuffix('\n')
+            # right_nobasht=right_word.removesuffix('\t')
+            right.append(i[1])
 
         all_spectrums = list(zip(left, right))
 
