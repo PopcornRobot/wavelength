@@ -12,7 +12,7 @@
             <div class="control">
                 <div class="temp_outside">0</div>
                 <div class="temp_right">10</div>
-                <div class="room">Bedroom</div>
+                <!-- <div class="room">Number</div> -->
             </div>
         </div>
         <div class="instructions">
@@ -21,14 +21,14 @@
 
         {{ game_id|json_script:'json-game-id' }}
         {{ player.username|json_script:'json-username' }}
-    
-
     </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>                            
     <script src="https://cdnjs.cloudflare.com/ajax/libs/roundSlider/1.6.1/roundslider.min.js" integrity="sha512-OztPUuNsmM+BUn6NOM5EVZED6aFf/0P4V+cVwcf5iR5T58hGyIJ8XtWFd5ctuOpGytfCsxy4/9JqxeTLliXrBA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
+        const gameID = JSON.parse(document.getElementById('json-game-id').textContent);
+        const userName = JSON.parse(document.getElementById('json-username').textContent);
 
         document.addEventListener('DOMContentLoaded', () => {
             const sessionSocket = new WebSocket(
@@ -40,7 +40,7 @@
         
             sessionSocket.onmessage = function(e) {
                 const data = JSON.parse(e.data);
-                if (data.username != userName) {
+                if (data.message == "value change") {
                     $("#slider").data("roundSlider").setValue(data.value) 
                 }
             };

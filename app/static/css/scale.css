@@ -66,7 +66,7 @@ body {
     font-size: 1rem;
   }
 
-/* .thermostat .control .temp_room {
+.thermostat .control .temp_room {
   position: absolute;
   top: 34px;
   left: 0;
@@ -82,7 +82,7 @@ body {
   opacity: 1;
   transform: translateX(0);
   transition: all .5s ease-in-out;
-}  */
+} 
 
 .thermostat .control .temp_room span {
   position: absolute;
@@ -95,7 +95,7 @@ body {
   color: #3d228e;
 }
 
-/* .room {
+.room {
   position: absolute;
   bottom: 18px;
   left: 0;
@@ -103,7 +103,7 @@ body {
   text-align: center;
   font-weight: 300;
   font-size: 1rem;
-} */
+}
 
 .thermostat .ring {
   position: absolute;
@@ -178,11 +178,11 @@ body {
 	text-align: center;
 }
 
-/* .fas {
+.fas {
 	animation: pulse 1s infinite;
 }
 @keyframes pulse {
 	50% {
 		transform: scale(.9);
 	}
-} */
+}

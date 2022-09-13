@@ -294,7 +294,7 @@ def clue_form_one(request):
     print("00000000000000000000000000000000000000000000000")
     print(player_clue1)
     print("00000000000000000000000000000000000000000000000")
-    return HttpResponseRedirect(reverse('app:question_clue_spectrum'))
+    return HttpResponseRedirect(reverse('app:game_turn'))
 
 def clue_form_two(request):
     player_clue2 = request.POST['clue2']
@@ -323,6 +323,9 @@ def scale(request, game_id, player_id, team_id):
     return render(request, "app/scale.html", context)
 
 def tutorial(request):
+    context = {}
+    return render(request, "app/tutorial.html", context)
+
 def game_turn(request):
     # check if spectrum already be used
 
@@ -357,12 +360,12 @@ def question_response_form(request):
     print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
     print(question_response)
     print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
-    return HttpResponseRedirect(reverse('app:game_turn'))
+    return HttpResponseRedirect(reverse('app:game_end'))
 
  
 def scale(request):
     context = {}
-    return  render(request, 'app/tutorial.html', context)
+    return  render(request, 'app/scale.html', context)
 
 
 
