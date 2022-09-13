@@ -53,7 +53,7 @@ base.html and static are in development
   </div>
 
   <div class='center'>
-    <div id="player_list" style='padding:10px ; text-align:center'>
+    <div id='player_list' style='padding:10px ; text-align:center'>
         {% for player in player_list %}
         <div id='{{ player.username}}'>{{ player.username}} </div> 
         {% if player.is_host == True%} <p> -- Host {{player.id}} </p> {% endif %}
@@ -97,9 +97,14 @@ base.html and static are in development
     const gameID = JSON.parse(document.getElementById('json-game-id').textContent);
     const userName = JSON.parse(document.getElementById('json-username').textContent);
     const sort_teams_btn = document.getElementById('sort_teams_btn');
+<<<<<<< HEAD
     var sliderValue = 0
     // console.log(globalSliderValue)
   
+=======
+
+
+>>>>>>> master
     document.addEventListener('DOMContentLoaded', () => {
         const sessionSocket = new WebSocket(
             'ws://'
@@ -127,10 +132,16 @@ base.html and static are in development
               console.error(data.username + ' has left the session');
             } else if (data.message == 'start game'){
               console.log('game started!')
+<<<<<<< HEAD
               window.location.href = "{% url 'app:team_creation' game_id=game.id player_id=player.id %}";
             } else if (data.message == "value change") {
               console.log(data.value + "this is data.value")
               $("#slider").data("roundSlider").setValue(data.value) 
+=======
+              //setInterval(function () {
+                window.location.href = "{% url 'app:team_creation' game_id=game.id player_id=player.id %}";
+              //}, 0);
+>>>>>>> master
             } else if (data.username != userName) {
               document.querySelector('#player_list').innerHTML += ("<div id='" + data.username + "'>" + data.username + '</div>');
               console.log(data.username + ' added to list');
@@ -178,6 +189,7 @@ base.html and static are in development
 
         const sort_teams_btn = document.getElementById('sort_teams_btn');
         sort_teams_btn.onclick = (e) =>{
+        window.location.href = "{% url 'app:team_creation' game_id=game.id player_id=player.id %}";
           message='start game'
           sessionSocket.send(JSON.stringify({
             'message': message,
