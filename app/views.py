@@ -306,14 +306,14 @@ def clue_form_one(request):
     print("00000000000000000000000000000000000000000000000")
     print(player_clue1)
     print("00000000000000000000000000000000000000000000000")
-    return HttpResponseRedirect(reverse('app:question_clue_spectrum'))
+    return HttpResponse(status=204)
 
 def clue_form_two(request):
     player_clue2 = request.POST['clue2']
     print("00000000000000000000000000000000000000000000000")
     print(player_clue2)
     print("00000000000000000000000000000000000000000000000")
-    return HttpResponseRedirect(reverse('app:question_clue_spectrum'))
+    return HttpResponse(status=204)
 
 def game_end(request):
     context = {}

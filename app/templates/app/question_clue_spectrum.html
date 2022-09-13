@@ -2,6 +2,180 @@
 {% load static %}
 
 {% block body %}
+ 
+<center>
+    <h1>Wavelength</h1>
+    <h1>Tournament</h1>
+    <div><h4>Time remaining to enter clue: <span id="time">1:00</span></h4></div>
+
+    <hr>
+
+    <div id='question_1'>
+    <img src='/static/img/question_clue_spectrum.png' alt="Left Right" />
+    <p style="text-align:left; width: 450px;">
+        {{left_spectrum}}
+        <span style="float:right;">
+            {{right_spectrum}}
+        </span>
+    </p>
+    <p><b>Timer: 3 minutes</b></p>
+    <div>
+    {% for player in team_member %}
+        {% comment %} <p>{{team_name}}</p> {% endcomment %}
+        <p>{{player.username}}</p>
+    {% endfor %}
+    </div>
+
+    <form action="{% url 'app:clue_form_one' %}" method="post">
+        {% csrf_token %}
+        <br>
+            <label for="clue1">Clue1:</label>
+            <input id="clue1" type="text" name="clue1">
+        </br>
+    <br>
+    <input id='submit_clue_1' type="submit" value="Submit">
+    {% comment %} onclick="this.disabled=true" {% endcomment %}
+    </br>
+    </form>
+</div>
+
+    <hr>
+
+
+    <div id='question_2' style='display:none'>
+    <img src='/static/img/question_clue_spectrum.png' alt="Left Right" />
+    <p style="text-align:left; width: 450px;">
+        {{left_spectrum2}}
+        <span style="float:right;">
+            {{right_spectrum2}}
+        </span>
+    </p>
+    <p><b>Timer: 3 minutes</b></p>
+    <div>
+        {% for player in team_member %}
+        {% comment %} <p>{{team_name}}</p> {% endcomment %}
+        <p>{{player.username}}</p>
+      {% endfor %}
+    </div>
+    <form action="{% url 'app:clue_form_two' %}" method="post">
+        {% csrf_token %}
+    <br>
+        <label for="clue2">Clue2:</label>
+        <input id="clue2" type="text" name="clue2">
+    </br>
+    <br>
+    <input id='submit_clue_2' type="submit" value="Submit" >
+    </br>
+    </form>
+    </div>
+
+    <div id='please_wait' style='display:none'>
+        <h1>Waiting for other teammates to submit their clues....</h1>
+    </div>
+</center>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', () => {
+    const question_1 = document.getElementById('question_1');
+    const question_2 = document.getElementById('question_2');
+    const submit_clue_1_btn = document.getElementById('submit_clue_1');
+    const submit_clue_2_btn = document.getElementById('submit_clue_2');
+    const please_wait = document.getElementById('please_wait');
+    
+    submit_clue_1_btn.onclick = (e) =>{
+        question_1.style.display = 'none';
+        question_2.style.display = 'block';
+    };
+
+    submit_clue_2_btn.onclick = (e) =>{
+        question_2.style.display = 'none';
+        please_wait.style.display = 'block';
+
+    };
+
+    //Countdown Timer
+    window.onload = function() {
+
+    var display = document.querySelector('#time'),
+    timer = new CountDownTimer(10);
+
+    timer.onTick(format).start();
+
+    function restart() {
+        if (this.expired()) {
+        setTimeout(function() { timer.start(); }, 1000);
+        message="Time's up!"
+        sessionSocket.send(JSON.stringify({
+            'message': message,
+            'username': userName,
+            'room': gameID,
+        }));
+        }
+    }
+
+    function format(minutes, seconds) {
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+        display.textContent = minutes + ':' + seconds;
+    }
+    };
+    });
+
+    function CountDownTimer(duration, granularity) {
+        this.duration = duration;
+        this.granularity = granularity || 1000;
+        this.tickFtns = [];
+        this.running = false;
+    }
+
+    CountDownTimer.prototype.start = function() {
+        if (this.running) {
+            return;
+        }
+        this.running = true;
+        var start = Date.now(),
+        that = this,
+        diff, obj;
+
+        (function timer() {
+            diff = that.duration - (((Date.now() - start) / 1000) | 0);
+
+            if (diff > 0) {
+                setTimeout(timer, that.granularity);
+            } else {
+                diff = 0;
+                that.running = false;
+            }
+
+            obj = CountDownTimer.parse(diff);
+            that.tickFtns.forEach(function(ftn) {
+                ftn.call(this, obj.minutes, obj.seconds);
+            }, that);
+        }());
+    };
+
+    CountDownTimer.prototype.onTick = function(ftn) {
+        if (typeof ftn === 'function') {
+            this.tickFtns.push(ftn);
+        }
+        return this;
+    };
+
+    CountDownTimer.prototype.expired = function() {
+        return !this.running;
+    };
+
+    CountDownTimer.parse = function(seconds) {
+        return {
+            'minutes': (seconds / 60) | 0,
+            'seconds': (seconds % 60) | 0
+        };
+    };
+
+</script>
+{% endblock %}
+
 <center>
     <h1>Wavelength</h1>
     <h1>Tournament</h1>
@@ -57,4 +231,3 @@
       </br>
   </from>
 </center>
-{% endblock %}
