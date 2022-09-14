@@ -1,17 +1,18 @@
 {% extends "base.html" %}
+{% load static %} 
 {% comment %} 
 
 OBJECTIVE:
 Place Holder for "base.html" and static objects
 {% extends "base.html" %}
-{% load static %} 
+
 
 STAUTS:
 base.html and static are in development
 
 {% endcomment %}
 
-<style>>
+<style>
     {% block style %}
     .container {
         height: 200px;
@@ -105,7 +106,7 @@ base.html and static are in development
             } else if (data.message == 'sort teams'){
               console.log('sort teams')              
               setTimeout(() => {
-                console.log("Delayed for 1 second.");
+                console.log("Sort delayed for 1 second.");
                 window.location.href = "{% url 'app:team_creation' game_id=game.id player_id=player.id %}";
               }, 1000)                          
             } else if (data.username != userName) {
