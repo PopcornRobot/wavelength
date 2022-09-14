@@ -76,7 +76,7 @@ base.html and static are in development
     const userName = JSON.parse(document.getElementById('json-username').textContent);
     const sort_teams_btn = document.getElementById('sort_teams_btn');
     const sessionSocket = new WebSocket(
-            'wss://'
+            'ws://'
             + window.location.host
             + '/ws/game_session/'
             + gameID
@@ -102,7 +102,7 @@ base.html and static are in development
             if (data.message == 'remove player'){
               //document.getElementById(data.userName).remove();
               console.error(data.username + ' has left the session');
-            } else if (data.message == 'start game'){
+            } else if (data.message == 'sort teams'){
               console.log('sort teams')              
               setTimeout(() => {
                 console.log("Delayed for 1 second.");
