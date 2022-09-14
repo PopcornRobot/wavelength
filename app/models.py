@@ -83,8 +83,8 @@ class GameTurn(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return self.game
+    def __int__(self):
+        return self.id
         # return f" the team in the room is:{self.team}, the game is: {self.game}, the question is:{self.question}, the clue giver is: {self.clue_giver}, the previous clue is: {self.clue_given}, the current question answer is: {self.question_answer}, the team answer is {self.team_answer}, created: {self.created_at}, updated: {self.updated_at}"
 
 
