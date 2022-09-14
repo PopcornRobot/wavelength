@@ -281,14 +281,11 @@ def join_player_registration_form(request):
     # return HttpResponseRedirect(reverse('app:game_list', kwargs={'player_id':player_id}))
     return HttpResponse("form success")
 
-def question_clue_spectrum(request, game_id, team_id, player_id):
-    # team_name = Team.objects.get(name=team_name)
-    # team_member = Player.objects.filter(team=team_name)
-    # spectrum = random_spectrum()
-    # sign_spectrum = re.findall('"([^"]*)"', spectrum)
+def question_clue_spectrum(request):
     questions = Question.objects.all()
     random_question = choice(questions)
     random_question2 = choice(questions)
+   
     # check if random_question == random_question2
     if random_question == random_question2:
         random_question = choice(questions)
@@ -298,6 +295,13 @@ def question_clue_spectrum(request, game_id, team_id, player_id):
     right_spectrum = random_question.right_spectrum
     left_spectrum2 = random_question2.left_spectrum
     right_spectrum2 = random_question2.right_spectrum
+    # save the generated question into QuestionHistory
+    players = Player.objects.all()
+    player = choice(players)
+    question_history = QuestionHistory.objects.create(player=player, question=random_question)
+    print("1111111111111111111111111111111111111")
+    print(question_history)
+    print("1111111111111111111111111111111111111")
     context = {"left_spectrum": left_spectrum, "right_spectrum": right_spectrum, "left_spectrum2": left_spectrum2, "right_spectrum2": right_spectrum2}
     return render(request, "app/question_clue_spectrum.html", context)
     
@@ -326,8 +330,13 @@ def team_score(request):
     context = {"team_scores": team_scores}
     return HttpResponseRedirect(reverse('app:game_end'))
 
-def game_turn(request, game_id, team_id, player_id):
+def game_turn(request):
+    # game_turn spectrum has to be from team members
+    
+    
     # check if spectrum already be used
+    # current_question = GameTurn.objects.get(question=)
+
 
     questions = Question.objects.all()
     random_question = choice(questions)                                                                                                                                                   
@@ -360,7 +369,7 @@ def question_response_form(request):
     print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
     print(question_response)
     print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
-    return HttpResponseRedirect(reverse('app:game_turn'))
+    return HttpResponseRedirect(reverse('app:game_end'))
 
  
 def scale(request):
