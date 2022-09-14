@@ -146,7 +146,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # print(value)
         
 
-        await self.save_message(username, room, message)
+        # await self.save_message(username, room, message)
 
         # Send message to room group
         await self.channel_layer.group_send(
