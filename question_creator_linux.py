@@ -21,22 +21,13 @@ def get_questions():
         
         for i in spectrum_list:
             left.append(i[0])
-            # right_word= i[1].removesuffix('\n')
-            # right_nobasht=right_word.removesuffix('\t')
             right.append(i[1])
-
         all_spectrums = list(zip(left, right))
-
         return all_spectrums
 
-# print(get_questions())
 data = get_questions()
-
 for spectrum in data:
-    # print(spectrum[0])
-    # print(spectrum[1])
     Question.objects.create(left_spectrum= spectrum[0], right_spectrum=spectrum[1])
-
 if Question.objects.all().exists():
     print("Objects have been created")
 else:
