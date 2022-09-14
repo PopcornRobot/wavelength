@@ -279,6 +279,7 @@ def join_player_registration_form(request):
         else:
            return render(request, "app/start_page.html", context)
     return HttpResponseRedirect(reverse('app:game_list', kwargs={'player_id':player_id}))
+    # return HttpResponse("form success")
 
 def question_clue_spectrum(request, game_id, team_id, player_id):
     # team_name = Team.objects.get(name=team_name)
