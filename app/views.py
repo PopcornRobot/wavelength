@@ -273,13 +273,13 @@ def join_player_registration_form(request):
         join_player.save()
         players = Player.objects.all()
         context = {"players": players, "player_name": player_name}
-        # if created == True:
-        #     join_player.is_host = False
-        #     player_id = join_player.id
-        # else:
-        #    return render(request, "app/start_page.html", context)
-    # return HttpResponseRedirect(reverse('app:game_list', kwargs={'player_id':player_id}))
-    return HttpResponse("form success")
+        if created == True:
+            join_player.is_host = False
+            player_id = join_player.id
+        else:
+           return render(request, "app/start_page.html", context)
+    return HttpResponseRedirect(reverse('app:game_list', kwargs={'player_id':player_id}))
+    # return HttpResponse("form success")
 
 def question_clue_spectrum(request):
     questions = Question.objects.all()

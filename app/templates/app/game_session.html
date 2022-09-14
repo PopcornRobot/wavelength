@@ -76,7 +76,7 @@ base.html and static are in development
     const userName = JSON.parse(document.getElementById('json-username').textContent);
     const sort_teams_btn = document.getElementById('sort_teams_btn');
     const sessionSocket = new WebSocket(
-            'wss://'
+            'ws://'
             + window.location.host
             + '/ws/game_session/'
             + gameID
@@ -102,11 +102,12 @@ base.html and static are in development
             if (data.message == 'remove player'){
               //document.getElementById(data.userName).remove();
               console.error(data.username + ' has left the session');
-            } else if (data.message == 'start game'){
-              console.log('start game')
-              //setInterval(function () {
+            } else if (data.message == 'sort teams'){
+              console.log('sort teams')              
+              setTimeout(() => {
+                console.log("Delayed for 1 second.");
                 window.location.href = "{% url 'app:team_creation' game_id=game.id player_id=player.id %}";
-              //}, 0);
+              }, 1000)                          
             } else if (data.username != userName) {
               document.querySelector('#player_list').innerHTML += ("<div id='" + data.username + "'>" + data.username + '</div>');
               console.log(data.username + ' added to list');
@@ -128,7 +129,7 @@ base.html and static are in development
         const sort_teams_btn = document.getElementById('sort_teams_btn');
         sort_teams_btn.onclick = (e) =>{
         
-          message='start game'
+          message='sort teams'
           sessionSocket.send(JSON.stringify({
             'message': message,
             'username': userName,
@@ -138,61 +139,6 @@ base.html and static are in development
           }));
           window.location.href = "{% url 'app:team_creation' game_id=game.id player_id=player.id %}";
         };
-    });
-          
-    {% comment %} function startTimer(duration, display) {
-      var timer = duration, minutes, seconds;
-      setInterval(function () {
-          minutes = parseInt(timer / 60, 10);
-          seconds = parseInt(timer % 60, 10);
-  
-          minutes = minutes < 10 ? + minutes : minutes;
-          seconds = seconds < 10 ? "0" + seconds : seconds;
-  
-          display.textContent = minutes + ":" + seconds;
-  
-          if (--timer == 0) {
-              timer = 0;
-              message="Time's up!"
-              sessionSocket.send(JSON.stringify({
-                'message': message,
-                'username': userName,
-                'room': gameID,
-          }));
-          }
-      }, 1000);
-  }
-  
-    window.onload = function () {
-        var Minutes = 60 * 0.2,
-            display = document.querySelector('#time');
-        startTimer(Minutes, display);
-    }; {% endcomment %}
-
-    window.onload = function() {
-
-      var display = document.querySelector('#time'),
-          timer = new CountDownTimer(5);
-    
-      timer.onTick(format).onTick(restart).start();
-    
-      function restart() {
-        if (this.expired()) {
-          setTimeout(function() { timer.start(); }, 1000);
-          message="Time's up!"
-          sessionSocket.send(JSON.stringify({
-            'message': message,
-            'username': userName,
-            'room': gameID,
-      }));
-        }
-      }
-    
-      function format(minutes, seconds) {
-        minutes = minutes < 10 ? "0" + minutes : minutes;
-        seconds = seconds < 10 ? "0" + seconds : seconds;
-        display.textContent = minutes + ':' + seconds;
-      }
-    };
+    });          
 </script>
 {% endblock %}
