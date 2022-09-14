@@ -33,7 +33,7 @@ DEBUG = int(os.environ.get('DEBUG', default=0))
 
 # validations
 ALLOWED_HOSTS = ['*', 'pr6-wavelength-staging.herokuapp.com']
-CSRF_TRUSTED_ORIGINS = ''
+CSRF_TRUSTED_ORIGINS = ['https://pr6-wavelength-staging.herokuapp.com']
 INTERNAL_IPS = '127.0.0.1'
 
 INSTALLED_APPS = [
@@ -95,7 +95,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            'hosts': [('127.0.0.1', 6379)],
+            'hosts': [os.environ.get('REDIS_URL')],
         }
     }
 }

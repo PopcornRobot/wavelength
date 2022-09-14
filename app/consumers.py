@@ -146,7 +146,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # print(value)
         
 
-        await self.save_message(username, room, message)
+        # await self.save_message(username, room, message)
 
         # Send message to room group
         await self.channel_layer.group_send(
@@ -185,8 +185,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'value' : value,
         }))
     
-    @sync_to_async
-    def save_message(self, username, room, message):
-        Message.objects.create(username=username, room=room, content=message)
+    # @sync_to_async
+    # def save_message(self, username, room, message):
+    #     Message.objects.create(username=username, room=room, content=message)
     
     
