@@ -453,3 +453,33 @@ def scale(request):
 #     game_id = game_instance.id
 #     player_id=player_id
 #     team_players= Player.objects.filter(team=new_team)
+
+def dashboard(request):
+    context = { }
+
+    return render(request, "app/dashboard.html", context)
+
+def dashboard_games(request):
+    context = { }
+
+    return render(request, "app/dashboard_games.html", context)
+
+def dashboard_players(request):
+    context = { }
+
+    return render(request, "app/dashboard_players.html", context)
+
+def dashboard_teams(request):
+    context = { }
+
+    return render(request, "app/dashboard_teams.html", context)
+
+def dashboard_questions(request):
+    context = { }
+
+    return render(request, "app/dashboard_questions.html", context)
+
+def dashboard_player_clues(request):
+    context = { }
+
+    return render(request, "app/dashboard_player_clues.html", context)
