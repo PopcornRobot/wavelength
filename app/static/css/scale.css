@@ -5,6 +5,16 @@ body {
 
 /* use only the available space inside the 400x400 frame */
 
+.confirm {
+  border-radius: 10px;
+  background: blue;
+  padding: 20px; 
+  width: 100px;
+  height: 25px;
+  text-align: center;  
+  vertical-align: center;
+}
+
 .frame {
   position: absolute;
   top: 50%;
