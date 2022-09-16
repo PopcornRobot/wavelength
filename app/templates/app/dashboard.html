@@ -1,20 +1,28 @@
 {% extends "base_dashboard.html" %}
 
 {% block body %}
-<h1>This is the admin dashboard</h1>
+<div class="navbar">
+    <a href="#dashboard">Dashboard</a>
+    <a href="#games">Games</a>
+    <a href="#players">Players</a>
+    <a href="#teams">Teams</a>
+    <a href="#questions">Questions</a>
+    <a href="#player_clues">Player Clues</a>
+</div>
+<h1>Dashboard</h1>
 <div>
-    games session
+    <p> Game Count: game.count </p>
 </div>
 <div>
-    players session
+    <p> Player Count: player.count </p>
 </div>
 <div>
-    teams session
+    <p> Team Count: team.count </p>
 </div>
 <div>
-    questions session
+    <p> Question Count: question.count </p>
 </div>
 <div>
-    player clues session
+    <p> Player Clue: player.count </p>
 </div>
 {% endblock %}
