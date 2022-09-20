@@ -23,6 +23,7 @@ note: you may use whichever method you are most comfortable with.
 - Navigate to the root of wavelength
 - Run `docker-compose up`. This will spin both Redis and Postgres up for you
 - Postgres defaults will be: Database: postgres, username: postgres, password: postgres
+- Make sure to change Postgres keys in .env file. 
 - migrate to postgres DB: `python manage.py migrate`
 - start server: `python manage.py runserver_plus`
 
