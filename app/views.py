@@ -282,6 +282,7 @@ def join_player_registration_form(request):
     # return HttpResponse("form success")
 
 def question_clue_spectrum(request, game_id, team_id, player_id):
+    player = Player.objects.get(id=player_id)
     questions = Question.objects.all()
     random_question = choice(questions)
     random_question2 = choice(questions)
@@ -298,11 +299,11 @@ def question_clue_spectrum(request, game_id, team_id, player_id):
     # save the generated question into QuestionHistory
     players = Player.objects.all()
     player = choice(players)
-    question_history = QuestionHistory.objects.create(player=player, question=random_question)
+    # question_history = QuestionHistory.objects.create(player=player, question=random_question)
     print("1111111111111111111111111111111111111")
-    print(question_history)
+    # print(question_history)
     print("1111111111111111111111111111111111111")
-    context = {"left_spectrum": left_spectrum, "right_spectrum": right_spectrum, "left_spectrum2": left_spectrum2, "right_spectrum2": right_spectrum2}
+    context = {"left_spectrum": left_spectrum, "right_spectrum": right_spectrum, "left_spectrum2": left_spectrum2, "right_spectrum2": right_spectrum2, 'team_id' : team_id, 'player_id' : player_id, 'player' : player}
     return render(request, "app/question_clue_spectrum.html", context)
     
 # clue form function
