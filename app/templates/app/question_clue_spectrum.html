@@ -37,10 +37,10 @@
             <input id="clue1" type="text" name="clue1">
         <br>
     <br>
-    <input id='submit_clue_1' type="submit" value="Submit">
+    <button id='submit_clue_1' type="button" value="Submit"> Submit</button>
     {% comment %} onclick="this.disabled=true" {% endcomment %}
     <br>
-    </form>
+    
 </div>
 
     <hr>
@@ -55,8 +55,6 @@
         </span>
     </p>
     <p><b>Timer: 3 minutes</b></p>
-    <form action="{% url 'app:clue_form_two' %}" method="post">
-        {% csrf_token %}
     <br>
         <label for="clue2">Clue2:</label>
         <input id="clue2" type="text" name="clue2">
