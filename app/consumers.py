@@ -4,9 +4,9 @@ from channels.generic.websocket import AsyncWebsocketConsumer # The class we're 
 from asgiref.sync import sync_to_async # Implement later
 
 from .models import *
-# from .views import consumerView
+from .views import clue_form_one
 
-class ChatConsumer(AsyncWebsocketConsumer):
+class WavelengthConsumer(AsyncWebsocketConsumer):
 
 
     async def connect(self):
@@ -56,12 +56,19 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         data = json.loads(text_data)
-        message = data['message']
-        username = data['username']
-        room = data['room']
+        message = data.get('message')
+        username = data.get('username')
+        room = data.get('room')
         value = data.get('value')
         playerID = data.get('player_id')
         admin = data.get('admin')
+        clue1 = data.get('clue1')
+        action = data.get('action')
+        team = data.get('team')
+        # print(data)
+        if (action == 'clue1 update'):
+            clue_form_one(data)
+            
         print('receiving from websocket')
         # if (admin == 'admin'):
         #     print('message received!!')
@@ -155,8 +162,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'type': 'chat_message',
                 'message': message,
                 'username': username
-            }
+            }        
         )
+        print('sending message to room group')
+
 # Receive message from room group
     async def disc(self, event):
         print('disc')

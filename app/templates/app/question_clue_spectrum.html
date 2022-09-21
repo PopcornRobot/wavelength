@@ -30,8 +30,8 @@
     </p>
     <p><b>Timer: 3 minutes</b></p>
 
-    <form action="{% url 'app:clue_form_one' %}" method="post">
-        {% csrf_token %}
+    {% comment %} <form action="{% url 'app:clue_form_one' %}" method="post">
+        {% csrf_token %} {% endcomment %}
         <br>
             <label for="clue1">Clue1:</label>
             <input id="clue1" type="text" name="clue1">
@@ -40,7 +40,7 @@
     <button id='submit_clue_1' type="button" value="Submit"> Submit</button>
     {% comment %} onclick="this.disabled=true" {% endcomment %}
     <br>
-    
+
 </div>
 
     <hr>
@@ -62,7 +62,7 @@
     <br>
     <input id='submit_clue_2' type="submit" value="Submit" >
 </br>
-    </form>
+    {% comment %} </form> {% endcomment %}
     </div>
 
     <div id='please_wait' style='display:none'>
@@ -71,11 +71,14 @@
     <br>
 </center>
 
-{{ team_id|json_script:'json-game-id' }}
+{{ game_id|json_script:'json-game-id' }}
+{{ team_id|json_script:'json-team-id' }}
 {{ player.username|json_script:'json-username' }}
 
+
 <script>
-    const teamID = JSON.parse(document.getElementById('json-game-id').textContent);
+    const gameID = JSON.parse(document.getElementById('json-game-id').textContent);
+    const teamID = JSON.parse(document.getElementById('json-team-id').textContent);
     const userName = JSON.parse(document.getElementById('json-username').textContent);
     const sessionSocket = new WebSocket(
         'ws://'
@@ -92,8 +95,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const please_wait = document.getElementById('please_wait');
     
     submit_clue_1_btn.onclick = (e) =>{
+        let clue1 = document.getElementById('clue1').value;
         question_1.style.display = 'none';
-        question_2.style.display = 'block';        
+        question_2.style.display = 'block';
+        console.log(clue1);
+        sessionSocket.send(JSON.stringify({
+            'clue1': clue1,
+            'username': userName,
+            'team': teamID,
+            'action': 'clue1 update',
+        }));
+        return false;
     };
 
     submit_clue_2_btn.onclick = (e) =>{

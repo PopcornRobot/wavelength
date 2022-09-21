@@ -297,8 +297,8 @@ def question_clue_spectrum(request, game_id, team_id, player_id):
     left_spectrum2 = random_question2.left_spectrum
     right_spectrum2 = random_question2.right_spectrum
     # save the generated question into QuestionHistory
-    players = Player.objects.all()
-    player = choice(players)
+    # players = Player.objects.all()
+    # player = choice(players)
     # question_history = QuestionHistory.objects.create(player=player, question=random_question)
     print("1111111111111111111111111111111111111")
     # print(question_history)
@@ -308,11 +308,16 @@ def question_clue_spectrum(request, game_id, team_id, player_id):
     
 # clue form function
 def clue_form_one(request):
-    player_clue1 = request.POST['clue1']
+    # player_clue1 = request.POST['clue1']
+    print(request)
+    print(request.get('username'))
     print("00000000000000000000000000000000000000000000000")
-    print(player_clue1)
+    # print(player_clue1)
     print("00000000000000000000000000000000000000000000000")
-    return HttpResponse(status=204)
+    # return HttpResponse(status=204)
+
+# def clue1(data):
+#     print("00000000000000000000000000000000000000000000000")
 
 def clue_form_two(request):
     player_clue2 = request.POST['clue2']
