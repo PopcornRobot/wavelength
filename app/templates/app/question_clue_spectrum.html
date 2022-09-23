@@ -37,7 +37,7 @@
             <input id="clue1" type="text" name="clue1">
         <br>
     <br>
-    <button id='submit_clue_1' type="button" value="Submit"> Submit</button>
+    <button id='submit_clue_1' href= '#!' type="button" value="Submit"> Submit</button>
     {% comment %} onclick="this.disabled=true" {% endcomment %}
     <br>
 
@@ -71,15 +71,22 @@
     <br>
 </center>
 
+{% comment %} transfers context data to javascript {% endcomment %}
 {{ game_id|json_script:'json-game-id' }}
 {{ team_id|json_script:'json-team-id' }}
 {{ player.username|json_script:'json-username' }}
+{{ random_question.id|json_script:'json-random-question' }}
+{{ random_question2.id|json_script:'json-random-question2' }}
 
 
 <script>
     const gameID = JSON.parse(document.getElementById('json-game-id').textContent);
+    console.log('game id is ' + gameID)
     const teamID = JSON.parse(document.getElementById('json-team-id').textContent);
     const userName = JSON.parse(document.getElementById('json-username').textContent);
+    const question1 = JSON.parse(document.getElementById('json-random-question').textContent);
+    const question2 = JSON.parse(document.getElementById('json-random-question2').textContent);
+    console.log('question1 is ' + question1)
     const sessionSocket = new WebSocket(
         'ws://'
         + window.location.host
@@ -100,25 +107,30 @@ document.addEventListener('DOMContentLoaded', () => {
         question_2.style.display = 'block';
         console.log(clue1);
         sessionSocket.send(JSON.stringify({
-            'clue1': clue1,
-            'username': userName,
+            'action': 'submit clue',
+            'question': question1,
+            'clue': clue1,
+            'game' : gameID,
             'team': teamID,
-            'action': 'clue1 update',
+            'username': userName,
         }));
         return false;
     };
 
     submit_clue_2_btn.onclick = (e) =>{
+        let clue2 = document.getElementById('clue2').value;
         question_2.style.display = 'none';
         please_wait.style.display = 'block';
-        message='clue_submitted';
+        console.log('submitting ' + clue2);
         sessionSocket.send(JSON.stringify({
-            'message': message,
+            'action': 'submit clue',
+            'question': question2,
+            'clue': clue2,
+            'game' : gameID,
+            'team': teamID,
             'username': userName,
-            'room': teamID,
         }));
-        console.log('submit check')
-    
+        return false;
     };
 
     const confirm_1 = document.getElementById('confirm_1');
@@ -151,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
         sessionSocket.send(JSON.stringify({
             'message': message,
             'username': userName,
-            'room': gameID,
+            'game': gameID,
         }));
         }
     }

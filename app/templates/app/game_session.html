@@ -89,7 +89,7 @@ base.html and static are in development
             sessionSocket.send(JSON.stringify({
                 'message': message,
                 'username': userName,
-                'room': gameID,
+                'game': gameID,
               }));
         };
 
@@ -121,7 +121,7 @@ base.html and static are in development
           sessionSocket.send(JSON.stringify({
             'message': message,
             'username': userName,
-            'room': gameID,
+            'game': gameID,
           }));
           document.getElementById(userName).remove();
           console.error('The socket closed unexpectedly');
@@ -134,7 +134,7 @@ base.html and static are in development
           sessionSocket.send(JSON.stringify({
             'message': message,
             'username': userName,
-            'room': gameID,
+            'game': gameID,
             //'admin' : 'admin',
             //'player_id': {{player.id}},
           }));

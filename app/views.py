@@ -297,24 +297,34 @@ def question_clue_spectrum(request, game_id, team_id, player_id):
     left_spectrum2 = random_question2.left_spectrum
     right_spectrum2 = random_question2.right_spectrum
     # save the generated question into QuestionHistory
-    # players = Player.objects.all()
-    # player = choice(players)
-    # question_history = QuestionHistory.objects.create(player=player, question=random_question)
+    question_history = QuestionHistory.objects.create(player=player, question=random_question)
+    question_history2 = QuestionHistory.objects.create(player=player, question=random_question2)
     print("1111111111111111111111111111111111111")
     # print(question_history)
     print("1111111111111111111111111111111111111")
-    context = {"left_spectrum": left_spectrum, "right_spectrum": right_spectrum, "left_spectrum2": left_spectrum2, "right_spectrum2": right_spectrum2, 'team_id' : team_id, 'player_id' : player_id, 'player' : player}
+    context = {"left_spectrum": left_spectrum, "right_spectrum": right_spectrum, "left_spectrum2": left_spectrum2, "right_spectrum2": right_spectrum2, 'team_id' : team_id, 'player_id' : player_id, 'player' : player, 'game_id' : game_id, 'random_question' : random_question, 'random_question2' : random_question2}
     return render(request, "app/question_clue_spectrum.html", context)
     
-# clue form function
-def clue_form_one(request):
+# submit clue and create new GameTurn object
+def clue_form(request):
     # player_clue1 = request.POST['clue1']
     print(request)
-    print(request.get('username'))
-    print("00000000000000000000000000000000000000000000000")
-    # print(player_clue1)
-    print("00000000000000000000000000000000000000000000000")
-    # return HttpResponse(status=204)
+    team_id = request.get('team')
+    team = Team.objects.get(id=team_id)
+    game_id = request.get('game')
+    game = Game.objects.get(id=game_id)
+    question_id = request.get('question')
+    question = Question.objects.get(id=question_id)
+    # print(question)
+    player_name = request.get('username')
+    player = Player.objects.get(username=player_name)
+    # print(player)
+    clue = request.get('clue')
+    # print(clue)
+
+    new_game_turn = GameTurn.objects.create(team=team, game=game, question=question, player=player, clue_given=clue )
+    print('created GameTurn ' + str(new_game_turn))
+
 
 # def clue1(data):
 #     print("00000000000000000000000000000000000000000000000")
@@ -324,7 +334,6 @@ def clue_form_two(request):
     print("00000000000000000000000000000000000000000000000")
     print(player_clue2)
     print("00000000000000000000000000000000000000000000000")
-    return HttpResponse(status=204)
 
 def game_end(request):
     context = {}
