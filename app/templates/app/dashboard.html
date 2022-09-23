@@ -1,14 +1,27 @@
 {% extends "base_dashboard.html" %}
 
 {% block body %}
-<div class="navbar">
+{% comment %} <div class="navbar">
     <a href="#dashboard">Dashboard</a>
     <a href="#games">Games</a>
     <a href="#players">Players</a>
     <a href="#teams">Teams</a>
     <a href="#questions">Questions</a>
     <a href="#player_clues">Player Clues</a>
-</div>
+</div> {% endcomment %}
+{% comment %} <div class="navbar">
+    <a href="dashboard">Dashboard</a>
+    <div class="dropdown">
+      <button class="dropbtn">Dashboard</button>
+      <div class="dropdown-content">
+        <a href="{% url "app:dashboard_games" %}">Games</a>
+        <a href="{% url "app:dashboard_players" %}">Players</a>
+        <a href="{% url "app:dashboard_teams" %}">Teams</a>
+        <a href="{% url "app:dashboard_questions" %}">Questions</a>
+        <a href="{% url "app:dashboard_player_clues" %}">Player Clues</a>
+      </div>
+    </div>
+  </div> {% endcomment %}
 <h1>Dashboard</h1>
 <div>
     <p> Game Count: game.count </p>
