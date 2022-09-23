@@ -1,13 +1,23 @@
 {% extends "base.html" %}
 {% load static %}
 
+<style>
+    {% block style %}    
+    {% endblock %}
+</style>
+
 {% block body %}
  
 <center>
     <h1>Wavelength</h1>
     <h1>Tournament</h1>
     <div><h4>Time remaining to enter clue: <span id="time">1:00</span></h4></div>
-
+<br>
+    <button id='confirm_1' type="button" class="btn btn-primary">Click Me</button>
+    <button id='confirm_2' type="button" class="btn btn-success">Click Me</button>
+    <button id='confirm_3' type="button" class="btn btn-danger">Click Me</button>
+    <button id='confirm_4' type="button" class="btn btn-warning">Click Me</button>
+<br>
     <hr>
 
     <div id='question_1'>
@@ -25,12 +35,12 @@
         <br>
             <label for="clue1">Clue1:</label>
             <input id="clue1" type="text" name="clue1">
-        </br>
+        <br>
     <br>
-    <input id='submit_clue_1' type="submit" value="Submit">
+    <button id='submit_clue_1' type="button" value="Submit"> Submit</button>
     {% comment %} onclick="this.disabled=true" {% endcomment %}
-    </br>
-    </form>
+    <br>
+    
 </div>
 
     <hr>
@@ -45,24 +55,34 @@
         </span>
     </p>
     <p><b>Timer: 3 minutes</b></p>
-    <form action="{% url 'app:clue_form_two' %}" method="post">
-        {% csrf_token %}
     <br>
         <label for="clue2">Clue2:</label>
         <input id="clue2" type="text" name="clue2">
     </br>
     <br>
     <input id='submit_clue_2' type="submit" value="Submit" >
-    </br>
+</br>
     </form>
     </div>
 
     <div id='please_wait' style='display:none'>
         <h1>Waiting for other teammates to submit their clues....</h1>
     </div>
+    <br>
 </center>
 
+{{ team_id|json_script:'json-game-id' }}
+{{ player.username|json_script:'json-username' }}
+
 <script>
+    const teamID = JSON.parse(document.getElementById('json-game-id').textContent);
+    const userName = JSON.parse(document.getElementById('json-username').textContent);
+    const sessionSocket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/team_session/'
+        + teamID
+      );
 
 document.addEventListener('DOMContentLoaded', () => {
     const question_1 = document.getElementById('question_1');
@@ -73,13 +93,35 @@ document.addEventListener('DOMContentLoaded', () => {
     
     submit_clue_1_btn.onclick = (e) =>{
         question_1.style.display = 'none';
-        question_2.style.display = 'block';
+        question_2.style.display = 'block';        
     };
 
     submit_clue_2_btn.onclick = (e) =>{
         question_2.style.display = 'none';
         please_wait.style.display = 'block';
+        message='clue_submitted';
+        sessionSocket.send(JSON.stringify({
+            'message': message,
+            'username': userName,
+            'room': teamID,
+        }));
+        console.log('submit check')
+    
+    };
 
+    const confirm_1 = document.getElementById('confirm_1');
+    const confirm_2 = document.getElementById('confirm_2');
+    const confirm_3 = document.getElementById('confirm_3');
+    const confirm_4 = document.getElementById('confirm_4');
+
+    sessionSocket.onmessage = function(e) {
+        console.log('message received');
+        const data = JSON.parse(e.data);
+        console.log(data);
+        if (data.message == 'clue submitted'){
+            console.log(data.username + ' submitted their clue');
+
+        }        
     };
 
     //Countdown Timer
