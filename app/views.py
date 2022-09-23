@@ -309,6 +309,7 @@ def question_clue_spectrum(request, game_id, team_id, player_id):
 # clue form function
 def clue_form_one(request):
     player_clue1 = request.POST['clue1']
+    gameturn = GameTurn.objects.create(clue_given=player_clue1)
     print("00000000000000000000000000000000000000000000000")
     print(player_clue1)
     print("00000000000000000000000000000000000000000000000")
@@ -316,6 +317,7 @@ def clue_form_one(request):
 
 def clue_form_two(request):
     player_clue2 = request.POST['clue2']
+    gameturn = GameTurn.objects.create(clue_given=player_clue2)
     print("00000000000000000000000000000000000000000000000")
     print(player_clue2)
     print("00000000000000000000000000000000000000000000000")
@@ -461,26 +463,36 @@ def dashboard(request):
     return render(request, "app/dashboard.html", context)
 
 def dashboard_games(request):
-    context = { }
+    games = Game.objects.all()
+    context = { "games":games }
 
     return render(request, "app/dashboard_games.html", context)
 
 def dashboard_players(request):
-    context = { }
+    players = Player.objects.all()
+    context = { "players":players }
 
     return render(request, "app/dashboard_players.html", context)
 
 def dashboard_teams(request):
-    context = { }
+    teams = Team.objects.all()
+    context = { "teams":teams }
 
     return render(request, "app/dashboard_teams.html", context)
 
 def dashboard_questions(request):
-    context = { }
+    questions = Question.objects.all()
+    context = { "questions":questions }
 
     return render(request, "app/dashboard_questions.html", context)
 
+# Need to add data into player_clue to avoid error:
 def dashboard_player_clues(request):
-    context = { }
+    player_clues = []
+    gameturn = GameTurn.objects.all()
+    for clue in gameturn:
+        player_clue = clue['clue_given']
+    player_clues.append(player_clue)
+    context = { "player_clues":player_clues }
 
     return render(request, "app/dashboard_player_clues.html", context)
