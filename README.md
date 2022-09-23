@@ -11,12 +11,18 @@ NOTE: when using remote containers method for development, make sure to turn off
 - [install Docker desktop](https://docs.docker.com/desktop/)
 - [install Microsoft VS Code](https://code.visualstudio.com/download)
 - [install VS Code extenstion: Remote - Containers by Microsoft](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
-- make sure local postgres and redis are turned off as they use the same ports
+- make sure local postgres and redis are TURNED OFF as they will conflict with exposed container ports
 - copy a good working `.env` file or follow `.env.sample` file
 - inside `.env` file, set `USE_REMOTE_CONTAINER=True` note: if this is not set, the default is True inside settings
 - open menu by pressing F1 and typing in `Remote-Containers: Rebuild and Reopen in Container` or  `Remote-Containers: Rebuild` if container is already opened. Note: this takes time to build and any adjustments to Dockerfiles or setting will need to be rebuilt
 - open terminal, run `python manage.py runserver_plus`
-- load up database by running: ``
+TODO: This will eventually be moved to a postCreateCommand
+- load up database by running: `python manage.py loaddata game team player question question-history game-turn`
+- use npx for any commits (commitizen not installed globally): `npx cz`
+- spike into hosting in codespace
+
+TIPS:
+- check PORTS tab to check that all ports are running and networked together
 
 ## Installation (Local Development)
 
