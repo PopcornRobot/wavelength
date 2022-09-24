@@ -2,6 +2,28 @@
 
 Wavelegnth is a project developed by Popcorn Robot team
 
+## Remote Container (Docker)
+
+The easiest way to get this project running with zero setup time with a local machine is to use [VS Code's Docker Remote Containers](https://code.visualstudio.com/docs/remote/remote-overview). This is essentially creating a Docker container that can be version ocntrolled inside GitHub and will allow you to SSH into that container to develop in.
+
+NOTE: when using remote containers method for development, make sure to turn off local Postgres and Redis (port conflicts) as you will be using Docker Postgres container. Otherwise you will get a postgres user error
+
+- [install Docker desktop](https://docs.docker.com/desktop/)
+- [install Microsoft VS Code](https://code.visualstudio.com/download)
+- [install VS Code extenstion: Remote - Containers by Microsoft](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+- make sure local postgres and redis are TURNED OFF as they will conflict with exposed container ports
+- copy a good working `.env` file or follow `.env.sample` file
+- inside `.env` file, set `USE_REMOTE_CONTAINER=True` note: if this is not set, the default is True inside settings
+- open menu by pressing F1 and typing in `Remote-Containers: Rebuild and Reopen in Container` or  `Remote-Containers: Rebuild` if container is already opened. Note: this takes time to build and any adjustments to Dockerfiles or setting will need to be rebuilt
+- open terminal, run `python manage.py runserver_plus`
+TODO: This will eventually be moved to a postCreateCommand
+- load up database by running: `python manage.py loaddata game team player question question-history game-turn`
+- use npx for any commits (commitizen not installed globally): `npx cz`
+- spike into hosting in codespace
+
+TIPS:
+- check PORTS tab to check that all ports are running and networked together
+
 ## Installation (Local Development)
 
 note: you may use whichever method you are most comfortable with.
@@ -20,10 +42,11 @@ note: you may use whichever method you are most comfortable with.
 - run redis/docker for websockets: `docker run -p 6379:6379 -d redis:5`
 
 ## Installation Using Docker-Compose
+
 - Navigate to the root of wavelength
 - Run `docker-compose up`. This will spin both Redis and Postgres up for you
 - Postgres defaults will be: Database: postgres, username: postgres, password: postgres
-- Make sure to change Postgres keys in .env file. 
+- Make sure to change Postgres keys in .env file.
 - migrate to postgres DB: `python manage.py migrate`
 - start server: `python manage.py runserver_plus`
 
@@ -137,12 +160,15 @@ run: python manage.py runserver
 go to chatty page create a room then try running the room and chatting as a another user in a separate browser tab
 
 ## Coding Conventions
+
 urls/views should request/provide game data (where relevant) in the order: game_id/team_id/player_id
 
 ## Questions bank
+
 To populate the "Question" model:
-1.  Open a Bash shell terminal
-2.  On Bash: `export DJANGO_SETTINGS_MODULE=wavelength.settings`
-    On PowerShell: `set DJANGO_SETTINGS_MODULE=wavelength.settings`
-3.  On Linux: `python question_creator_linux.py`
+
+1. Open a Bash shell terminal
+2. On Bash: `export DJANGO_SETTINGS_MODULE=wavelength.settings`
+   On PowerShell: `set DJANGO_SETTINGS_MODULE=wavelength.settings`
+3. On Linux: `python question_creator_linux.py`
     On Windows: `python question_creator.py`
