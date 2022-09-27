@@ -150,7 +150,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = JSON.parse(e.data);
         console.log(data);
         if (data.message == 'clue submitted'){
-            //if (data.username == confirm_1)
             if (data.username == confirm_1.innerHTML){
                 confirm_1.removeAttribute('disabled');
             } else if (data.username == confirm_2.innerHTML){
@@ -159,11 +158,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 confirm_3.removeAttribute('disabled');
             } else if (data.username == confirm_4.innerHTML){
                 confirm_4.removeAttribute('disabled');
-            } 
+            };
             submit_count += 1;
             console.log(data.username + ' submitted their clues');
             if (submit_count == team_size){
                 console.log('everyone has submitted!')
+                //insert windows.location.href here
             };
         };        
     };
