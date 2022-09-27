@@ -333,13 +333,16 @@ def team_score(request):
     context = {"team_scores": team_scores}
     return HttpResponseRedirect(reverse('app:game_end'))
 
-def game_turn(request):
+def game_turn(request, game_id, team_id, player_id):
     # game_turn spectrum has to be from team members
-    
+
     
     # check if spectrum already be used
     # current_question = GameTurn.objects.get(question=)
 
+    game = Game.objects.get(id=game_id)
+    team = Team.objects.get(id=team_id)
+    player = Player.objects.get(id=player_id)
 
     questions = Question.objects.all()
     random_question = choice(questions)                                                                                                                                                   
@@ -349,7 +352,7 @@ def game_turn(request):
     # pass player clue to game_trun page
     # clue = player_clue
     # give left and right spectrum as context
-    context = {"left_spectrum": left_spectrum, "right_spectrum": right_spectrum}
+    context = {"left_spectrum": left_spectrum, "right_spectrum": right_spectrum, 'game': game, 'team': team, 'player': player}
     question = Question.objects.create(left_spectrum=left_spectrum, right_spectrum=right_spectrum)
     print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
     print(question)

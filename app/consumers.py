@@ -63,6 +63,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         playerID = data.get('player_id')
         admin = data.get('admin')
         print('receiving from websocket')
+        
         # if (admin == 'admin'):
         #     print('message received!!')
         #     # def consumerView(game_id, player_id):
