@@ -349,7 +349,7 @@ def team_score(request):
     context = {"team_scores": team_scores}
     return HttpResponseRedirect(reverse('app:game_end'))
 
-def game_turn(request):
+def game_turn(request, game_id, team_id, player_id):
     # game_turn spectrum has to be from team members
     
     
