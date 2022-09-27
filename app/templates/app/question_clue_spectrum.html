@@ -163,9 +163,9 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(data.username + ' submitted their clues');
             if (submit_count == team_size){
                 console.log('everyone has submitted!')
-                //insert windows.location.href here
-            };
-        };        
+                //insert windows.location.href to GameTurn page here
+            };        
+        }
     };
 
     //Countdown Timer
@@ -174,17 +174,15 @@ document.addEventListener('DOMContentLoaded', () => {
     var display = document.querySelector('#time'),
     timer = new CountDownTimer(10);
 
-    timer.onTick(format).start();
+    timer.onTick(format).onTick(timesUp).start();
 
-    function restart() {
+    function timesUp() {
         if (this.expired()) {
-        setTimeout(function() { timer.start(); }, 1000);
-        message="Time's up!"
-        sessionSocket.send(JSON.stringify({
-            'message': message,
-            'username': userName,
-            'game': gameID,
-        }));
+            console.log('Times up!')
+            //setTimeout(function() { timer.start(); }, 1000); //reset function, not used
+
+            //send player to GameTurn page
+            //insert windows.location.href to GameTurn page here
         }
     }
 
