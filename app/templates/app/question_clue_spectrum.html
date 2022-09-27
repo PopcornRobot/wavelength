@@ -13,9 +13,9 @@
     <div><h4>Time remaining to enter clue: <span id="time">1:00</span></h4></div>
 <br>
     <button id='confirm_1' type="button" class="btn btn-primary" disabled>{{ team_members.0 }}</button>
-    <button id='confirm_2' type="button" class="btn btn-success" disabled style={% if team_members.count > 1 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.1 }}</button>
-    <button id='confirm_3' type="button" class="btn btn-danger" disabled style={% if team_members.count > 2 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.2 }}</button>
-    <button id='confirm_4' type="button" class="btn btn-warning" disabled style={% if team_members.count > 3 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.3 }}</button>
+    <button id='confirm_2' type="button" class="btn btn-success" disabled style= {% if team_members.count > 1 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.1 }}</button>
+    <button id='confirm_3' type="button" class="btn btn-danger" disabled style= {% if team_members.count > 2 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.2 }}</button>
+    <button id='confirm_4' type="button" class="btn btn-warning" disabled style= {% if team_members.count > 3 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.3 }}</button>
     {% comment %} team size is {{ team_members.count }} {% endcomment %}
 <br>
     <hr>
