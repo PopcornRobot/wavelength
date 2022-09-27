@@ -9,14 +9,14 @@
 {% block body %}
  
 <center>
-    <h1>Wavelength</h1>
-    <h1>Tournament</h1>
+    <h1>Wavelength Tournament</h1>
     <div><h4>Time remaining to enter clue: <span id="time">1:00</span></h4></div>
 <br>
-    <button id='confirm_1' type="button" class="btn btn-primary">Click Me</button>
-    <button id='confirm_2' type="button" class="btn btn-success">Click Me</button>
-    <button id='confirm_3' type="button" class="btn btn-danger">Click Me</button>
-    <button id='confirm_4' type="button" class="btn btn-warning">Click Me</button>
+    <button id='confirm_1' type="button" class="btn btn-primary" disabled>{{ team_members.0 }}</button>
+    <button id='confirm_2' type="button" class="btn btn-success" disabled style={% if team_members.count > 1 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.1 }}</button>
+    <button id='confirm_3' type="button" class="btn btn-danger" disabled style={% if team_members.count > 2 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.2 }}</button>
+    <button id='confirm_4' type="button" class="btn btn-warning" disabled style={% if team_members.count > 3 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.3 }}</button>
+    {% comment %} team size is {{ team_members.count }} {% endcomment %}
 <br>
     <hr>
 
@@ -77,6 +77,7 @@
 {{ player.username|json_script:'json-username' }}
 {{ random_question.id|json_script:'json-random-question' }}
 {{ random_question2.id|json_script:'json-random-question2' }}
+{{ team_members.count|json_script:'json-team-size' }}
 
 
 <script>
@@ -86,7 +87,9 @@
     const userName = JSON.parse(document.getElementById('json-username').textContent);
     const question1 = JSON.parse(document.getElementById('json-random-question').textContent);
     const question2 = JSON.parse(document.getElementById('json-random-question2').textContent);
-    console.log('question1 is ' + question1)
+    const team_size = JSON.parse(document.getElementById('json-team-size').textContent);
+    console.log('team size is ' + team_size);
+    
     const sessionSocket = new WebSocket(
         'ws://'
         + window.location.host
@@ -124,6 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('submitting ' + clue2);
         sessionSocket.send(JSON.stringify({
             'action': 'submit clue',
+            'message': 'clue submitted',
             'question': question2,
             'clue': clue2,
             'game' : gameID,
@@ -133,19 +137,35 @@ document.addEventListener('DOMContentLoaded', () => {
         return false;
     };
 
-    const confirm_1 = document.getElementById('confirm_1');
-    const confirm_2 = document.getElementById('confirm_2');
-    const confirm_3 = document.getElementById('confirm_3');
-    const confirm_4 = document.getElementById('confirm_4');
+    let submit_count = 0;
+    console.log(confirm_1.innerHTML)
 
     sessionSocket.onmessage = function(e) {
+        const confirm_1 = document.getElementById('confirm_1');
+        const confirm_2 = document.getElementById('confirm_2');
+        const confirm_3 = document.getElementById('confirm_3');
+        const confirm_4 = document.getElementById('confirm_4');
+        submit_count = 0;
         console.log('message received');
         const data = JSON.parse(e.data);
         console.log(data);
         if (data.message == 'clue submitted'){
-            console.log(data.username + ' submitted their clue');
-
-        }        
+            //if (data.username == confirm_1)
+            if (data.username == confirm_1.innerHTML){
+                confirm_1.removeAttribute('disabled');
+            } else if (data.username == confirm_2.innerHTML){
+                confirm_2.removeAttribute('disabled');
+            } else if (data.username == confirm_3.innerHTML){
+                confirm_3.removeAttribute('disabled');
+            } else if (data.username == confirm_4.innerHTML){
+                confirm_4.removeAttribute('disabled');
+            } 
+            submit_count += 1;
+            console.log(data.username + ' submitted their clues');
+            if (submit_count == team_size){
+                console.log('everyone has submitted!')
+            };
+        };        
     };
 
     //Countdown Timer
