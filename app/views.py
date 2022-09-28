@@ -1,15 +1,12 @@
 # from asyncio.windows_events import NULL
-import time
 from unicodedata import name
 from unittest import expectedFailure
+from django.http import HttpResponseRedirect
 from xml.dom import UserDataHandler
-from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
-from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.urls import reverse
-from .models import *
+from .models import Game, Team, Player, Question, QuestionHistory, GameTurn, Message
 import random
-import re
 from random import choice
 
 teams_placeholder = {}
@@ -24,7 +21,7 @@ def room(request, room_name):
     context = {'room_name' : room_name, 'username' : username, 'messages' : messages}
     return render(request, 'app/room.html', context)
 
-# AC: This function opens a file that stores a list of 250 team names and resturns a random name from the list
+# This function opens a file that stores a list of 250 team names and resturns a random name from the list
 def random_name():
     # open the file
     with open("app/static/txt/team_names.csv") as f:
@@ -45,7 +42,7 @@ def random_spectrum():
     # Returns a spectrum name
     return spectrum_name
     
-# AC: This function assignes the players to the teams, taking the number of possible teams and the amount of players as arguments
+# This function assignes the players to the teams, taking the number of possible teams and the amount of players as arguments
 def get_teams(team_names, players):
     # randomly shuffles all the players
     randomly_ordered_players = random.sample(players, len(players))
@@ -66,11 +63,8 @@ def get_teams(team_names, players):
 def team_creation(request, game_id, player_id):
     print(player_id)
     current_player = Player.objects.get(id=player_id)
-    print('--------------------------------start--------------------------------')
+
     if current_player.team is None and current_player.is_host == True:
-        # print(current_player.team.id)
-        print("****************************if************************************")
-        print(current_player.team)
         # Stores the name of all the players
         player_names = []
         # empty list that will store all the team names
@@ -91,26 +85,10 @@ def team_creation(request, game_id, player_id):
         if len(players) > 5:
             # Calculating the amount of teams and distributions
             # number of players/4 players per team and +1 to round number
-            print("***************************************************************")
-            print("Multiple teams")
             number_of_teams = int(players.count()/4)+1
-            print(number_of_teams)
-            print("***************************************************************")
         else: 
-            # Single team
-            print("***************************************************************")
-            print("Single team")
+            # Single team")
             number_of_teams = 1
-            print(number_of_teams)
-            print("***************************************************************")
-
-        print("***************************************************************")
-        print(" This is a print for Teams algorithm confirmation only for debugging")
-        print("game = " +str(game_instance.id))
-        print("players = "+str(len(players)))
-        print("teams =" +str(number_of_teams))
-        print("teammates = " +str(int(len(players)/number_of_teams)))
-        print("***************************************************************")
 
         ########### this can improve into the same random_name function. TBD ##########
         # All player names assignation,
@@ -127,30 +105,21 @@ def team_creation(request, game_id, player_id):
 
         # Dictionary with the sorted teams
         teams = get_teams(team_names, player_names)
-        print("***************************************************************")
-        print(teams)
-        print("***************************************************************")
         ###############################################################################
         
         # List comprehension
         for key, value in teams.items():
-            print(key)
             create_team = Team.objects.create(name=key, game=game_instance)
-            print(create_team)
             for member in value:
                 team_member = Player.objects.get(username=member)
-                print(team_member.id)
                 team_member.team=create_team
                 team_member.save()
-                print("***************************************************************")
             
             usr=Player.objects.get(id=player_id)
             game_id=usr.game.id
             team_id=usr.team.id
 
     else:
-        print("****************************else************************************")
-        print('begin tread')
         game_id=current_player.game.id
         team_id=current_player.team.id
 
@@ -158,12 +127,8 @@ def team_creation(request, game_id, player_id):
 
 # AC: Team page will print all the members in the team 
 def team_page(request, game_id, team_id, player_id):
-    print(game_id)
-    # game_id = Game.objects.get(id=game_id).id
-    # print(game)
     player = Player.objects.get(id=player_id)
     team = Team.objects.filter(game=game_id)
-    # team_id = Team.objects.get(id=team_id)
     teammates = Player.objects.filter(game=player.game)
 
     context = {'team':team, 'player':player, 'teammates':teammates,'team_id': team_id, 'game_id' : game_id}
@@ -189,11 +154,10 @@ def game_list(request, **player_id):
 
     return render(request, 'app/game_list.html', context)
 
-# AC: Player-game assignation, this function will assign the players to the game session 
+# Player-game assignation, this function will assign the players to the game session 
 def player_game_assignation(request, game_id, **player_id):
     # Assigns dictionary to current player variable
     current_player= player_id
-    print(current_player)
     # Catches the joining player
     joining_player = Player.objects.get(id=current_player['player_id'])
     # Gets the current game
@@ -214,9 +178,6 @@ def game_session(request, game_id, player_id):
     # game_id = request.GET.get('game_id')
     game = Game.objects.get(id=game_id)
     player = Player.objects.get(id=player_id)
-    print('********')
-    print(player.username + ' from views')
-    print('********')
     player_list = Player.objects.filter(game=game)
     context = { 'player_list' : player_list, 'game' : game, 'game_id' : game_id, 'player':player }
     return render(request, 'app/game_session.html', context)
@@ -283,6 +244,9 @@ def join_player_registration_form(request):
 
 def question_clue_spectrum(request, game_id, team_id, player_id):
     player = Player.objects.get(id=player_id)
+    team = Team.objects.get(id=team_id)
+    team_members = Player.objects.filter(team=team)
+    print(team_members[1])
     questions = Question.objects.all()
     random_question = choice(questions)
     random_question2 = choice(questions)
@@ -297,32 +261,37 @@ def question_clue_spectrum(request, game_id, team_id, player_id):
     left_spectrum2 = random_question2.left_spectrum
     right_spectrum2 = random_question2.right_spectrum
     # save the generated question into QuestionHistory
-    players = Player.objects.all()
-    player = choice(players)
-    # question_history = QuestionHistory.objects.create(player=player, question=random_question)
-    print("1111111111111111111111111111111111111")
-    # print(question_history)
-    print("1111111111111111111111111111111111111")
-    context = {"left_spectrum": left_spectrum, "right_spectrum": right_spectrum, "left_spectrum2": left_spectrum2, "right_spectrum2": right_spectrum2, 'team_id' : team_id, 'player_id' : player_id, 'player' : player}
+    question_history = QuestionHistory.objects.create(player=player, question=random_question)
+    question_history2 = QuestionHistory.objects.create(player=player, question=random_question2)
+
+    context = {"left_spectrum": left_spectrum, "right_spectrum": right_spectrum, "left_spectrum2": left_spectrum2, "right_spectrum2": right_spectrum2, 'team_id' : team_id, 'player_id' : player_id, 'player' : player, 'game_id' : game_id, 'random_question' : random_question, 'random_question2' : random_question2, 'team_members' : team_members}
     return render(request, "app/question_clue_spectrum.html", context)
     
-# clue form function
-def clue_form_one(request):
-    player_clue1 = request.POST['clue1']
-    gameturn = GameTurn.objects.create(clue_given=player_clue1)
-    print("00000000000000000000000000000000000000000000000")
-    print(player_clue1)
-    print("00000000000000000000000000000000000000000000000")
-    return HttpResponse(status=204)
+# submit clue and create new GameTurn object
+def clue_form(request):
+    print(request)
+    team_id = request.get('team')
+    team = Team.objects.get(id=team_id)
+    game_id = request.get('game')
+    game = Game.objects.get(id=game_id)
+    question_id = request.get('question')
+    question = Question.objects.get(id=question_id)
+    # print(question)
+    player_name = request.get('username')
+    player = Player.objects.get(username=player_name)
+    # print(player)
+    clue = request.get('clue')
+    # print(clue)
 
+    new_game_turn = GameTurn.objects.create(team=team, game=game, question=question, player=player, clue_given=clue )
+    print('created GameTurn ' + str(new_game_turn))
+
+
+# obsoleted by clue_form function
 def clue_form_two(request):
     player_clue2 = request.POST['clue2']
     gameturn = GameTurn.objects.create(clue_given=player_clue2)
-    print("00000000000000000000000000000000000000000000000")
-    print(player_clue2)
-    print("00000000000000000000000000000000000000000000000")
-    return HttpResponse(status=204)
-
+    
 def game_end(request):
     team1 = Team.objects.get(name="")
     team2 = Team.objects.get(name="")
@@ -335,13 +304,13 @@ def game_end(request):
 #     context = {"team_scores": team_scores}
 #     return HttpResponseRedirect(reverse('app:game_end'))
 
-def game_turn(request):
+def game_turn(request, game_id, team_id, player_id):
     # game_turn spectrum has to be from team members
-    
-    
     # check if spectrum already be used
-    # current_question = GameTurn.objects.get(question=)
 
+    game = Game.objects.get(id=game_id)
+    team = Team.objects.get(id=team_id)
+    player = Player.objects.get(id=player_id)
 
     questions = Question.objects.all()
     random_question = choice(questions)                                                                                                                                                   
@@ -349,31 +318,22 @@ def game_turn(request):
     right_spectrum = random_question.right_spectrum
   
     # pass player clue to game_trun page
-    # clue = player_clue
     # give left and right spectrum as context
-    context = {"left_spectrum": left_spectrum, "right_spectrum": right_spectrum}
+    context = {"left_spectrum": left_spectrum, "right_spectrum": right_spectrum, 'game': game, 'team': team, 'player': player}
     question = Question.objects.create(left_spectrum=left_spectrum, right_spectrum=right_spectrum)
-    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-    print(question)
-    print(left_spectrum)
-    print(right_spectrum)
-    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+
     # render game_turn page
     return render(request, "app/game_turn.html", context)
 
 # save the already used spectrum into a dictionary
 def question_save(request, left_spectrum, right_spectrum):
     question = Question.objects.create(left_spectrum=left_spectrum, right_spectrum=right_spectrum)
-    print("000000000000000000000000000000000")
-    print(question)
-    print("000000000000000000000000000000000")
+
     return HttpResponseRedirect(reverse('app:game_turn'))
 
 def question_response_form(request):
     question_response = request.POST['question_response']
-    print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
-    print(question_response)
-    print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
+
     return HttpResponseRedirect(reverse('app:game_end'))
 
  
@@ -381,83 +341,6 @@ def scale(request):
     context = {}
     return render(request, "app/scale.html", context)
 
-# def consumerView(game_id, player_id):
-#     print('consumerView engaged!')
-#     # Stores the name of all the players
-#     player_names = []
-#     # Number of players in game
-#     players = Player.objects.filter(game=game_id)
-#     # Obtain the game instance
-#     game_instance = Game.objects.get(id=game_id)
-#     # Game instance has started and is no longer waiting for players 
-#     game_instance.is_game_waiting = False
-#     # Game is running
-#     game_instance.is_game_running = True
-#     game_instance.save()
-    
-#     # Checks for number of players before assigning teams
-#     if len(players) >= 4:
-#         # Calculating the amount of teams and distributions
-#         # number of players/4 players per team and +1 to round number
-#         number_of_teams = int(players.count()/4)
-#     elif len(players) > 0 and len(players) < 4:
-#         # Single team
-#         number_of_teams = 1
-#     else:
-#         pass
-
-#     print("***************************************************************")
-#     print(" This is a print for Teams algorithm confirmation only for debugging")
-#     print("game = " +str(game_instance.id))
-#     print("players = "+str(len(players)))
-#     print("teams =" +str(number_of_teams))
-#     print("teammates = " +str(int(len(players)/number_of_teams)))
-#     print("***************************************************************")
-
-#     # All player names assignation,
-#     for player in players:
-#         # appends the players name
-#         player_names.append(player.username)
-    
-#     ########### this can improve into the same random_name function. TBD ##########
-#     # empty list that will store all the team names
-#     team_names=[]
-#     # appends the team names based on the number of teams
-#     for i in range(0,number_of_teams):
-#         # assigns a random name to name
-#         name = random_name()
-#         # appends the names and removes the suffix \n from the raw file
-#         # team_names.append(name.removesuffix("\n"))
-#         team_names.append(name)
-#     ##########
-
-#     # Dictionary with the sorted teams
-#     teams = get_teams(team_names, player_names)
-#     print("***************************************************************")
-#     print(team_names)
-#     print(teams)
-#     print("***************************************************************")
-# ############################## Works fine in here ########################################
-#     # List comprehension
-#     for teamName, teamMember in teams.items():
-#         # Creating new team
-#         new_team, created_flag = Team.objects.get_or_create(name=teamName, game=game_instance)
-        
-#         # # Search for the players names inside the team
-#         for participant in teamMember:
-#             # Gets the player based on the name and is assigned to team assignation
-#             team_assignation = Player.objects.get(username=participant)
-#             # Assigns the team to the player model
-#             team_assignation.team = new_team
-#             team_assignation.save()
-#         #     game_id = game_instance.id
-#         #     player_id = player.id
-#         #     teams_id = new_team.id
-
-#     team_id = new_team.id
-#     game_id = game_instance.id
-#     player_id=player_id
-#     team_players= Player.objects.filter(team=new_team)
 
 def dashboard(request):
     context = { }
@@ -498,3 +381,5 @@ def dashboard_player_clues(request):
     context = { "player_clues":player_clues }
 
     return render(request, "app/dashboard_player_clues.html", context)
+
+##########################################################################################

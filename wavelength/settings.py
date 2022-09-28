@@ -11,12 +11,15 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 import os
-import dj_database_url
 from pathlib import Path
+import dj_database_url
 from dotenv import load_dotenv
 
 # load .env file
 load_dotenv()
+
+# use Docker remote containers
+USE_REMOTE_CONTAINERS = bool(os.environ.get('USE_REMOTE_CONTAINERS', default=True))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -45,16 +48,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_extensions',                    # https://django-extensions.readthedocs.io/en/latest/
-    'debug_toolbar',                        # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html
-    # db health checks
-    'health_check',                         # https://django-health-check.readthedocs.io/en/latest/readme.html
+    'django_extensions',
+    'debug_toolbar',
+    'health_check',
     'health_check.db',
     'health_check.cache',
     'health_check.storage',
     'health_check.contrib.migrations',
     'health_check.contrib.redis',
-    
 ]
 
 MIDDLEWARE = [
@@ -107,9 +108,9 @@ CHANNEL_LAYERS = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'NAME': 'postgres' if USE_REMOTE_CONTAINERS else os.environ.get('DB_NAME'),
+        'USER': 'postgres' if USE_REMOTE_CONTAINERS else os.environ.get('DB_USER'),
+        'PASSWORD': 'postgres' if USE_REMOTE_CONTAINERS else os.environ.get('DB_PASSWORD'),
         'HOST': os.environ.get('DB_HOST'),
         'PORT': os.environ.get('DB_PORT'),
     }
@@ -117,7 +118,9 @@ DATABASES = {
 
 # Change 'default' database configuration with $DATABASE_URL.
 DATABASE_URL = os.environ.get('DATABASE_URL')
-DATABASES['default'].update(dj_database_url.config(default=DATABASE_URL, conn_max_age=500, ssl_require=True))
+DATABASES['default'].update(dj_database_url.config(
+    default=DATABASE_URL, conn_max_age=500, ssl_require=True
+))
 
 # Redis URL
 REDIS_URL = os.environ.get('REDIS_URL')
