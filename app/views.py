@@ -324,14 +324,16 @@ def clue_form_two(request):
     return HttpResponse(status=204)
 
 def game_end(request):
-    context = {}
+    team1 = Team.objects.get(name="")
+    team2 = Team.objects.get(name="")
+    context = { "team1": team1, "team2": team2 }
     return render(request, "app/game_end.html", context)
 
-def team_score(request):
-    team_name = request.GET['team_name']
-    team_scores = Team.objects.filter(name__startswith=team_name)
-    context = {"team_scores": team_scores}
-    return HttpResponseRedirect(reverse('app:game_end'))
+# def team_score(request):
+#     team_name = request.GET['team_name']
+#     team_scores = Team.objects.filter(name__startswith=team_name)
+#     context = {"team_scores": team_scores}
+#     return HttpResponseRedirect(reverse('app:game_end'))
 
 def game_turn(request):
     # game_turn spectrum has to be from team members

@@ -5,18 +5,14 @@
   <h1>Wavelength</h1>
   <h1>Tournament</h1>
   <hr>
-  {% comment %} need to work on the if statement later {% endcomment %}
   {% if team1.score > team2.score %}
     <p>Congratuations! You win!</p>
   {% elif team1.score < team2.score %}
     <p>Sorry, you lose!</p>
   {% endif %}
-  {% comment %} check models {% endcomment %}
-  {% comment %} {% for team in %}
-    <p>Team1:{{team1.score}}</p>
-    <p>Team2:{{team2.score}}</p>
-  {% endfor %} {% endcomment %}
-  <p>Opponent: Team2</p>
+  <p>{{team1.name}}:{{team1.score}}</p>
+  <p>{{team2.name}}:{{team2.score}}</p>
+  <p>Opponent: {{team2.name}}</p>
   <a href="join_player_registration_form"><button>Join New Game</button></a>
   <a href="host_player_registration_form"><button>Start New Game</button></a>
 </center>
