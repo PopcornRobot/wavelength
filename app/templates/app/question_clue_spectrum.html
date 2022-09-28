@@ -145,7 +145,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const confirm_2 = document.getElementById('confirm_2');
         const confirm_3 = document.getElementById('confirm_3');
         const confirm_4 = document.getElementById('confirm_4');
-        submit_count = 0;
         console.log('message received');
         const data = JSON.parse(e.data);
         console.log(data);
@@ -161,9 +160,10 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             submit_count += 1;
             console.log(data.username + ' submitted their clues');
+            console.log(submit_count + ' players are ready')
             if (submit_count == team_size){
                 console.log('everyone has submitted!')
-                //insert windows.location.href to GameTurn page here
+                window.location.href = "{% url 'app:game_turn' game_id=game_id team_id=team_id player_id=player.id %}"
             };        
         }
     };
