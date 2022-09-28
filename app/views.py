@@ -63,7 +63,7 @@ def get_teams(team_names, players):
 def team_creation(request, game_id, player_id):
     print(player_id)
     current_player = Player.objects.get(id=player_id)
-    print('--------------------------------start--------------------------------')
+
     if current_player.team is None and current_player.is_host == True:
         # Stores the name of all the players
         player_names = []
