@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_two.html" %}
 {% load static %}
 
 {% block body %}
@@ -10,7 +10,9 @@
     <p>Which is correct?</p>
     {% comment %} Need to display a given clue by player {% endcomment %}
     <h6>This is the clue:</h6>
+
     <p>{{clue}}</p>
+
     <form action="question_response_form" method="post">
         {% csrf_token %}
         <br>
@@ -23,12 +25,82 @@
         <input type="submit" value="Submit">
         </br>
     </form>
-    <img src='{% static "img/question_clue_spectrum.png" %}' alt="Left Right" />
-    <p style="text-align:left; width: 500px;">
-        {{left_spectrum}}
-        <span style="float:right;">
-            {{right_spectrum}}
-        </span>
-    </p>
+
+    <div class="row">
+        <div class="col">
+            <h3>Slider with Two</h3>
+            <div class="center" id="slider"></div>
+            <br>
+            <div id="gameValue">50</div>
+        </div>
+    </div>
+
+    {{ game_id|json_script:'json-game-id' }}
+    {{ player.username|json_script:'json-username' }}
+
 </center>
+
+<script>
+    const gameID = JSON.parse(document.getElementById('json-game-id').textContent);
+    const userName = JSON.parse(document.getElementById('json-username').textContent);
+    // var sliderValue = 0
+
+    const sessionSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/game_session/'
+            + gameID
+    );
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+        sessionSocket.onmessage = function(e) {
+            console.log('message received in game_turn')
+            const data = JSON.parse(e.data);
+            console.log(data)
+            if  (data.message == 'value change') {
+                console.log('data.message == value change | SUCCESS')
+                $("#slider").data("roundSlider").setValue(data.value)      
+                console.log(data.value + " this is data.value in game_turn websockets after function")       
+            } 
+        };
+
+        function updateGameValue(sliderValue) {
+            var gameValue = document.getElementById('gameValue')
+            gameValue.innerHTML = sliderValue    
+        } //eof
+
+        $("#slider").roundSlider({
+            sliderType: "min-range",
+            radius: 130,
+            width: 16,
+            value: 50,
+            handleSize: 0,
+            handleShape: "square",
+            circleShape: "half-top",
+            min: 0,
+            max: 100,
+
+            drag: function (e) {
+                var sliderValue = $("#slider").data("roundSlider").getValue()
+                console.log(sliderValue + " || this is arlene")
+                updateGameValue(sliderValue)
+                message="value change"
+                sessionSocket.send(JSON.stringify({
+                    'message': message,
+                    'username': userName,
+                    'room': gameID,
+                    'value': sliderValue,
+                })); //end of sessionSocket
+            } //end of drag function
+        
+        }); //end of .roundSlider 
+    
+    }); //end of page load
+
+</script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>                            
+<script src="https://cdnjs.cloudflare.com/ajax/libs/roundSlider/1.6.1/roundslider.min.js" integrity="sha512-OztPUuNsmM+BUn6NOM5EVZED6aFf/0P4V+cVwcf5iR5T58hGyIJ8XtWFd5ctuOpGytfCsxy4/9JqxeTLliXrBA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 {% endblock %}
