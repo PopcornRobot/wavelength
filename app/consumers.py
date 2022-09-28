@@ -71,7 +71,8 @@ class WavelengthConsumer(AsyncWebsocketConsumer):
         if (action == 'submit clue'):
             await self.create_gameturn(data)
 
-        print('receiving from websocket')    
+        print('receiving from websocket')
+        print(value)    
         
         # await self.save_message(username, room, message)
 
@@ -81,7 +82,8 @@ class WavelengthConsumer(AsyncWebsocketConsumer):
             {
                 'type': 'broadcast',
                 'message': message,
-                'username': username
+                'username': username,
+                'value' : value,
             }        
         )
         print('sending message to room group')
@@ -92,25 +94,26 @@ class WavelengthConsumer(AsyncWebsocketConsumer):
         clue_form(data)  
 
 # Receive message from room group
-    async def disc(self, event):
-        print('disc')
-        message = event.get('message')
-        username = event.get('username')
-        value = event.get('value')
+    # async def disc(self, event):
+    #     print('disc')
+    #     message = event.get('message')
+    #     username = event.get('username')
+    #     value = event.get('value')
 
-    # Send message to WebSocket
-        await self.send(text_data=json.dumps({
-            'message': message,
-            'username': username,
-            'value' : value,
-        }))
+    # # Send message to WebSocket
+    #     await self.send(text_data=json.dumps({
+    #         'message': message,
+    #         'username': username,
+    #         'value' : value,
+    #     }))
 
 # Receive message from room group
     async def broadcast(self, event):
         message = event.get('message')
         username = event.get('username')
         value = event.get('value')
-        print('receiving from room group')
+        print('receiving from broadcast')
+        print('value is ' + str(event))
 
     # Send message to WebSocket
         await self.send(text_data=json.dumps({
