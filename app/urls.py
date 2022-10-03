@@ -15,7 +15,8 @@ urlpatterns = [
     path("dashboard/teams", views.dashboard_teams, name="dashboard_teams"),
     path("dashboard/questions", views.dashboard_questions, name="dashboard_questions"),
     path("dashboard/player_clues", views.dashboard_player_clues, name="dashboard_player_clues"),
-    path("game_end", views.game_end, name="game_end"),
+    # path("game_end", views.game_end, name="game_end"),
+    path("game_end/<int:game_id>", views.game_end, name="game_end"),
     path('game_list', views.game_list, name='game_list'),
     path('game_list/<int:player_id>', views.game_list, name='game_list'),
     path('game_session/<int:game_id>/<int:player_id>', views.game_session, name='game_session'),
@@ -30,6 +31,6 @@ urlpatterns = [
     path("scale", views.scale, name="scale"),
     path('team_creation/<int:game_id>/<int:player_id>', views.team_creation, name='team_creation'),
     path('team_page/<int:game_id>/<int:team_id>/<int:player_id>', views.team_page, name='team_page'),
-    path("team_score", views.team_score, name='team_score'),
+    # path("team_score", views.team_score, name='team_score'),
     path("waiting_room/<host>", views.waiting_room, name="waiting_room"),
 ]

@@ -292,10 +292,13 @@ def clue_form_two(request):
     player_clue2 = request.POST['clue2']
     gameturn = GameTurn.objects.create(clue_given=player_clue2)
     
-def game_end(request):
-    team1 = Team.objects.get(name="")
-    team2 = Team.objects.get(name="")
-    context = { "team1": team1, "team2": team2 }
+def game_end(request, game_id):
+    
+    game = Game.objects.get(id=game_id)
+    teams = Team.objects.filter(game = game).order_by('-score')
+    win_team = Team.objects.filter(game = game).order_by('-score').first()
+
+    context = { "teams": teams, "win_team": win_team }
     return render(request, "app/game_end.html", context)
 
 # def team_score(request):
@@ -332,10 +335,11 @@ def question_save(request, left_spectrum, right_spectrum):
     return HttpResponseRedirect(reverse('app:game_turn'))
 
 def question_response_form(request):
+  
     question_response = request.POST['question_response']
-
+    # context = { "team_id": team_id }
+    
     return HttpResponseRedirect(reverse('app:game_end'))
-
  
 def scale(request):
     context = {}
@@ -343,7 +347,7 @@ def scale(request):
 
 
 def dashboard(request):
-    context = { }
+    context = {}
 
     return render(request, "app/dashboard.html", context)
 
