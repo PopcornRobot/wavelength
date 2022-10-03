@@ -57,9 +57,8 @@ def get_teams(team_names, players):
         for i in range(number_of_teams)
     }
 
-# AC: This function will be enable only by the host
+# This function will be enable only by the host
 # NOTE: Create a player joining argument to track who joins and use it as URL #
-
 def team_creation(request, game_id, player_id):
     print(player_id)
     current_player = Player.objects.get(id=player_id)
@@ -125,7 +124,7 @@ def team_creation(request, game_id, player_id):
 
     return HttpResponseRedirect(reverse('app:team_page', kwargs={'game_id' : game_id, 'team_id' : team_id, 'player_id': player_id }))
 
-# AC: Team page will print all the members in the team 
+# Team page will print all the members in the team 
 def team_page(request, game_id, team_id, player_id):
     player = Player.objects.get(id=player_id)
     team = Team.objects.filter(game=game_id)
@@ -242,19 +241,27 @@ def join_player_registration_form(request):
     return HttpResponseRedirect(reverse('app:game_list', kwargs={'player_id':player_id}))
 
 def question_clue_spectrum(request, game_id, team_id, player_id):
+    all_question_history = QuestionHistory.objects.all()
     player = Player.objects.get(id=player_id)
     team = Team.objects.get(id=team_id)
     team_members = Player.objects.filter(team=team)
-    print(team_members[1])
     questions = Question.objects.all()
+
     random_question = choice(questions)
     random_question2 = choice(questions)
-   
-    # check if random_question == random_question2
-    if random_question == random_question2:
+
+    # Checks if the values exist and avoids repetead values withing the different teams
+    if QuestionHistory.objects.filter(question=random_question).exists() or QuestionHistory.objects.filter(question=random_question2).exists(): 
         random_question = choice(questions)
-        if random_question == random_question2:
-            random_question = choice(questions)                                                                                                                                        
+        random_question2 = choice(questions)
+        while random_question == random_question2:
+            random_question = choice(questions)
+            random_question2 = choice(questions)
+    else:
+        while random_question == random_question2:
+            random_question = choice(questions)
+            random_question2 = choice(questions)
+        
     left_spectrum = random_question.left_spectrum
     right_spectrum = random_question.right_spectrum
     left_spectrum2 = random_question2.left_spectrum
@@ -263,28 +270,24 @@ def question_clue_spectrum(request, game_id, team_id, player_id):
     question_history = QuestionHistory.objects.create(player=player, question=random_question)
     question_history2 = QuestionHistory.objects.create(player=player, question=random_question2)
 
+
     context = {"left_spectrum": left_spectrum, "right_spectrum": right_spectrum, "left_spectrum2": left_spectrum2, "right_spectrum2": right_spectrum2, 'team_id' : team_id, 'player_id' : player_id, 'player' : player, 'game_id' : game_id, 'random_question' : random_question, 'random_question2' : random_question2, 'team_members' : team_members}
     return render(request, "app/question_clue_spectrum.html", context)
     
 # submit clue and create new GameTurn object
 def clue_form(request):
-    print(request)
     team_id = request.get('team')
     team = Team.objects.get(id=team_id)
     game_id = request.get('game')
     game = Game.objects.get(id=game_id)
     question_id = request.get('question')
     question = Question.objects.get(id=question_id)
-    # print(question)
     player_name = request.get('username')
     player = Player.objects.get(username=player_name)
-    # print(player)
     clue = request.get('clue')
-    # print(clue)
 
     new_game_turn = GameTurn.objects.create(team=team, game=game, question=question, player=player, clue_given=clue )
     print('created GameTurn ' + str(new_game_turn))
-
 
 # obsoleted by clue_form function
 def clue_form_two(request):
@@ -332,12 +335,10 @@ def question_response_form(request):
     question_response = request.POST['question_response']
 
     return HttpResponseRedirect(reverse('app:game_end'))
-
  
 def scale(request):
     context = {}
     return render(request, "app/scale.html", context)
-
 
 def dashboard(request):
     context = { }
