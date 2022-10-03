@@ -113,7 +113,7 @@ class WavelengthConsumer(AsyncWebsocketConsumer):
         username = event.get('username')
         value = event.get('value')
         print('receiving from broadcast')
-        print('value is ' + str(event))
+        # print('value is ' + value)
 
     # Send message to WebSocket
         await self.send(text_data=json.dumps({
