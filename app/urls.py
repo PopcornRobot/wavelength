@@ -8,7 +8,6 @@ urlpatterns = [
     path('chatty', views.index, name='index'),
     path('chatty/<str:room_name>/', views.room, name='room'),
     path("clue_form", views.clue_form, name="clue_form"),
-    path("clue_form_two", views.clue_form_two, name="clue_form_two"), #obsoleted by clue_form
     path("dashboard", views.dashboard, name="dashboard"),
     path("dashboard/games", views.dashboard_games, name="dashboard_games"),
     path("dashboard/players", views.dashboard_players, name="dashboard_players"),
@@ -31,5 +30,6 @@ urlpatterns = [
     path('team_creation/<int:game_id>/<int:player_id>', views.team_creation, name='team_creation'),
     path('team_page/<int:game_id>/<int:team_id>/<int:player_id>', views.team_page, name='team_page'),
     path("team_score", views.team_score, name='team_score'),
-    path("waiting_room/<host>", views.waiting_room, name="waiting_room"),
+    path('game_result/<int:game_id>/<int:team_id>/<int:player_id>/<int:turn_id>', views.game_result, name='game_result'),
+    path("waiting_room", views.waiting_room, name="waiting_room"),
 ]

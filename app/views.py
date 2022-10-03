@@ -183,8 +183,8 @@ def game_session(request, game_id, player_id):
     return render(request, 'app/game_session.html', context)
 
 # create a waiting room   
-def waiting_room(request, host):
-    context = {"host": host}
+def waiting_room(request):
+    context = {}
     return render(request, "app/waiting_room.html", context)
 
 def start_page(request):
@@ -284,14 +284,10 @@ def clue_form(request):
 
     new_game_turn = GameTurn.objects.create(team=team, game=game, question=question, player=player, clue_given=clue )
     print('created GameTurn ' + str(new_game_turn))
-
-
-# obsoleted by clue_form function
-def clue_form_two(request):
-    player_clue2 = request.POST['clue2']
-    gameturn = GameTurn.objects.create(clue_given=player_clue2)
     
-def game_end(request):
+def game_end(request, game_id):
+
+
     context = {}
     return render(request, "app/game_end.html", context)
 
@@ -321,6 +317,15 @@ def game_turn(request, game_id, team_id, player_id):
 
     # render game_turn page
     return render(request, "app/game_turn.html", context)
+
+def game_result(request, game_id, team_id, player_id, turn_id):
+    game_turn = GameTurn.objects.get(id=turn_id)
+    question = game_turn.question
+    team = Team.objects.get(id=team_id)
+    turns_remaining = GameTurn.objects.filter(team=team, team_answer=0).count()
+
+    context = {"game_turn" : game_turn, "question" : question, "turns_remaining" : turns_remaining, "game_id" : game_id, "team_id" : team_id, "player_id" : player_id}
+    return render(request, "app/game_result.html", context)
 
 # save the already used spectrum into a dictionary
 def question_save(request, left_spectrum, right_spectrum):

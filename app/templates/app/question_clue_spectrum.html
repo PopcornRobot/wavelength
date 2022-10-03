@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(submit_count + ' players are ready')
             if (submit_count == team_size){
                 console.log('everyone has submitted!')
-                window.location.href = "{% url 'app:game_turn' game_id=game_id team_id=team_id player_id=player.id %}"
+                window.location.href = "{% url 'app:game_turn' game_id=game_id team_id=team_id player_id=player_id %}"
             };        
         }
     };
