@@ -30,7 +30,7 @@ urlpatterns = [
     path("scale", views.scale, name="scale"),
     path('team_creation/<int:game_id>/<int:player_id>', views.team_creation, name='team_creation'),
     path('team_page/<int:game_id>/<int:team_id>/<int:player_id>', views.team_page, name='team_page'),
-    path("team_score", views.team_score, name='team_score'),
+    # path("team_score", views.team_score, name='team_score'),
     path('game_result/<int:game_id>/<int:team_id>/<int:player_id>/<int:turn_id>', views.game_result, name='game_result'),
     path("waiting_room", views.waiting_room, name="waiting_room"),
 ]

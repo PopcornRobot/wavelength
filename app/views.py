@@ -183,8 +183,10 @@ def game_session(request, game_id, player_id):
     return render(request, 'app/game_session.html', context)
 
 # create a waiting room   
-def waiting_room(request):
-    context = {}
+def waiting_room(request, game_id):
+    game = Game.objects.get(id=game_id)
+    session_players = Player.objects.filter(game=game)
+    context = {"session_players" : session_players}
     return render(request, "app/waiting_room.html", context)
 
 def start_page(request):
