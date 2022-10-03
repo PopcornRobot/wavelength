@@ -3,11 +3,88 @@
     "model": "app.team",
     "pk": 1,
     "fields": {
-      "name": "Game 1",
+      "name": "Team 1",
       "score": 10,
       "game": 1,
       "created_at": "2022-08-22T08:08:08.472Z",
       "updated_at": "2022-08-22T08:08:08.472Z"
+    }
+  },
+  {
+    "model": "app.team",
+    "pk": 2,
+    "fields": {
+      "name": "Team 2",
+      "score": 12,
+      "game": 1,
+      "created_at": "2022-08-22T08:08:08.472Z",
+      "updated_at": "2022-08-22T08:08:08.472Z"
+    }
+  },
+  {
+    "model": "app.team",
+    "pk": 3,
+    "fields": {
+      "name": "Team 3",
+      "score": 13,
+      "game": 2,
+      "created_at": "2022-08-23T08:08:08.472Z",
+      "updated_at": "2022-08-23T08:08:08.472Z"
+    }
+  },
+  {
+    "model": "app.team",
+    "pk": 4,
+    "fields": {
+      "name": "Team 4",
+      "score": 14,
+      "game": 2,
+      "created_at": "2022-08-23T08:08:08.472Z",
+      "updated_at": "2022-08-23T08:08:08.472Z"
+    }
+  },
+  {
+    "model": "app.team",
+    "pk": 5,
+    "fields": {
+      "name": "Team 5",
+      "score": 15,
+      "game": 3,
+      "created_at": "2022-08-24T08:08:08.472Z",
+      "updated_at": "2022-08-24T08:08:08.472Z"
+    }
+  },
+  {
+    "model": "app.team",
+    "pk": 6,
+    "fields": {
+      "name": "Team 6",
+      "score": 16,
+      "game": 3,
+      "created_at": "2022-08-24T08:08:08.472Z",
+      "updated_at": "2022-08-24T08:08:08.472Z"
+    }
+  },
+  {
+    "model": "app.team",
+    "pk": 7,
+    "fields": {
+      "name": "Team 7",
+      "score": 17,
+      "game": 4,
+      "created_at": "2022-08-25T08:08:08.472Z",
+      "updated_at": "2022-08-25T08:08:08.472Z"
+    }
+  },
+  {
+    "model": "app.team",
+    "pk": 8,
+    "fields": {
+      "name": "Team 8",
+      "score": 18,
+      "game": 4,
+      "created_at": "2022-08-25T08:08:08.472Z",
+      "updated_at": "2022-08-25T08:08:08.472Z"
     }
   }
 ]
