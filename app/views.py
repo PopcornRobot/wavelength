@@ -302,24 +302,14 @@ def team_score(request):
     return HttpResponseRedirect(reverse('app:game_end'))
 
 def game_turn(request, game_id, team_id, player_id):
-    # game_turn spectrum has to be from team members
-    # check if spectrum already be used
-
     game = Game.objects.get(id=game_id)
     team = Team.objects.get(id=team_id)
     player = Player.objects.get(id=player_id)
 
-    questions = Question.objects.all()
-    random_question = choice(questions)                                                                                                                                                   
-    left_spectrum = random_question.left_spectrum
-    right_spectrum = random_question.right_spectrum
-  
-    # pass player clue to game_trun page
-    # give left and right spectrum as context
-    context = {"left_spectrum": left_spectrum, "right_spectrum": right_spectrum, 'game': game, 'team': team, 'player': player}
-    question = Question.objects.create(left_spectrum=left_spectrum, right_spectrum=right_spectrum)
+    unanswered_clues = GameTurn.objects.filter(team=team, team_answer=0)
+    clue = choice(unanswered_clues)
 
-    # render game_turn page
+    context = {'game_id':game_id, 'team_id': team_id, 'player_id': player_id, 'game': game, 'team': team, 'player': player, 'clue': clue, 'unanswered_clues': unanswered_clues}
     return render(request, "app/game_turn.html", context)
 
 # save the already used spectrum into a dictionary
@@ -328,10 +318,15 @@ def question_save(request, left_spectrum, right_spectrum):
 
     return HttpResponseRedirect(reverse('app:game_turn'))
 
-def question_response_form(request):
-    question_response = request.POST['question_response']
+def team_answer_response_form(request, game_id, team_id, player_id):
+    print("This is being called")
 
-    return HttpResponseRedirect(reverse('app:game_end'))
+    if request.method == 'POST':
+        team_answer_form = request.POST['slider']
+        print(team_answer_form + " | this is team_answer_form")
+        # team_answer = GameTurn.objects.create(team_answer=team_answer_form)
+
+    return HttpResponseRedirect(reverse('app:game_turn', kwargs={'game_id': game_id, 'team_id' : team_id, 'player_id': player_id }))
 
  
 def scale(request):

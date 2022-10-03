@@ -29,14 +29,14 @@ class WavelengthConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         # Send message to room group
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'disc',
-                'message': "remove player",
-                'username': 'userName',
-            }
-        )
+        # await self.channel_layer.group_send(
+        #     self.room_group_name,
+        #     {
+        #         'type': 'disc',
+        #         'message': "remove player",
+        #         'username': 'userName',
+        #     }
+        # )
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name          
