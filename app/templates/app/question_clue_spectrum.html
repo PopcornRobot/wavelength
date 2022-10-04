@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_two.html" %}
 {% load static %}
 
 <style>
@@ -20,8 +20,17 @@
 <br>
     <hr>
 
-    <div id='question_1'>
-    <img src='/static/img/question_clue_spectrum.png' alt="Left Right" />
+<div id='question_1'>
+
+    <div class="row">
+        <div class="col">
+            <div class="center" id="slider"></div>
+            <br>
+            <div id="gameGeneratedAnswer">{{generated_random_question_answer}}</div>
+        </div>
+    </div>
+
+    <!-- <img src='/static/img/question_clue_spectrum.png' alt="Left Right" /> -->
     <p style="text-align:left; width: 450px;">
         {{left_spectrum}}
         <span style="float:right;">
@@ -45,9 +54,17 @@
 
     <hr>
 
-
     <div id='question_2' style='display:none'>
-    <img src='/static/img/question_clue_spectrum.png' alt="Left Right" />
+
+    <div class="row">
+        <div class="col">
+            <div class="center" id="sliderTwo"></div>
+            <br>
+            <div id="gameGeneratedAnswer">BUG | Slider disappears in 2nd Clue || This is the Slider Value = {{generated_random_question_answer_two}}</div>
+        </div>
+    </div>
+
+    <!-- <img src='/static/img/question_clue_spectrum.png' alt="Left Right" /> -->
     <p style="text-align:left; width: 450px;">
         {{left_spectrum2}}
         <span style="float:right;">
@@ -61,7 +78,7 @@
     </br>
     <br>
     <input id='submit_clue_2' type="submit" value="Submit" >
-</br>
+    </br>
     {% comment %} </form> {% endcomment %}
     </div>
 
@@ -103,6 +120,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const submit_clue_1_btn = document.getElementById('submit_clue_1');
     const submit_clue_2_btn = document.getElementById('submit_clue_2');
     const please_wait = document.getElementById('please_wait');
+
+    $("#slider").roundSlider({
+            sliderType: "min-range",
+            radius: 130,
+            width: 16,
+            value: '{{generated_random_question_answer }}',
+            handleSize: 0,
+            handleShape: "square",
+            circleShape: "half-top",
+            min: 1,
+            max: 100,
+            disabled: true,
+    }); //end of .roundSlider 
+
+    $("#sliderTwo").roundSlider({
+            sliderType: "min-range",
+            radius: 130,
+            width: 16,
+            value: '{{generated_random_question_answer_two}}',
+            handleSize: 0,
+            handleShape: "square",
+            circleShape: "half-top",
+            min: 1,
+            max: 100,
+            // disabled: true,
+    }); //end of .roundSliderTwo
     
     submit_clue_1_btn.onclick = (e) =>{
         let clue1 = document.getElementById('clue1').value;
@@ -246,4 +289,8 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
 </script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>                            
+<script src="https://cdnjs.cloudflare.com/ajax/libs/roundSlider/1.6.1/roundslider.min.js" integrity="sha512-OztPUuNsmM+BUn6NOM5EVZED6aFf/0P4V+cVwcf5iR5T58hGyIJ8XtWFd5ctuOpGytfCsxy4/9JqxeTLliXrBA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 {% endblock %}

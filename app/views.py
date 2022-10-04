@@ -265,8 +265,15 @@ def question_clue_spectrum(request, game_id, team_id, player_id):
     # save the generated question into QuestionHistory
     question_history = QuestionHistory.objects.create(player=player, question=random_question)
     question_history2 = QuestionHistory.objects.create(player=player, question=random_question2)
+   
+    # save the generate answer into GameTurn
+    generated_random_question_answer = random.randint(1, 100)
+    team_answer = GameTurn.objects.filter(team=team, player=player).update(team_answer=generated_random_question_answer)
+    generated_random_question_answer_two = random.randint(1, 100)
+    print(str(generated_random_question_answer ) + " | this is question_answer")
+   
 
-    context = {"left_spectrum": left_spectrum, "right_spectrum": right_spectrum, "left_spectrum2": left_spectrum2, "right_spectrum2": right_spectrum2, 'team_id' : team_id, 'player_id' : player_id, 'player' : player, 'game_id' : game_id, 'random_question' : random_question, 'random_question2' : random_question2, 'team_members' : team_members}
+    context = {"left_spectrum": left_spectrum, "right_spectrum": right_spectrum, "left_spectrum2": left_spectrum2, "right_spectrum2": right_spectrum2, 'team_id' : team_id, 'player_id' : player_id, 'player' : player, 'game_id' : game_id, 'random_question' : random_question, 'random_question2' : random_question2, 'team_members' : team_members, 'generated_random_question_answer': generated_random_question_answer, 'generated_random_question_answer_two': generated_random_question_answer_two}
     return render(request, "app/question_clue_spectrum.html", context)
     
 # submit clue and create new GameTurn object
@@ -311,23 +318,17 @@ def game_end(request, game_id):
 
 def game_turn(request, game_id, team_id, player_id):
     # game_turn spectrum has to be from team members
-    # check if spectrum already be used
 
     game = Game.objects.get(id=game_id)
     team = Team.objects.get(id=team_id)
     player = Player.objects.get(id=player_id)
 
-    questions = Question.objects.all()
-    random_question = choice(questions)                                                                                                                                                   
-    left_spectrum = random_question.left_spectrum
-    right_spectrum = random_question.right_spectrum
-  
-    # pass player clue to game_trun page
-    # give left and right spectrum as context
-    context = {"left_spectrum": left_spectrum, "right_spectrum": right_spectrum, 'game': game, 'team': team, 'player': player}
-    question = Question.objects.create(left_spectrum=left_spectrum, right_spectrum=right_spectrum)
+    unanswered_clues = GameTurn.objects.filter(team=team, team_answer=0)
+    clue = choice(unanswered_clues)
+    turn_id = clue.id
 
-    # render game_turn page
+    context = {'turn_id': turn_id, 'game': game, 'team': team, 'player': player, 'clue': clue, 'game_id': game_id, 'team_id': team_id, 'player_id':player_id}
+
     return render(request, "app/game_turn.html", context)
 
 def game_result(request, game_id, team_id, player_id, turn_id):
@@ -336,7 +337,12 @@ def game_result(request, game_id, team_id, player_id, turn_id):
     team = Team.objects.get(id=team_id)
     turns_remaining = GameTurn.objects.filter(team=team, team_answer=0).count()
 
-    context = {"game_turn" : game_turn, "question" : question, "turns_remaining" : turns_remaining, "game_id" : game_id, "team_id" : team_id, "player_id" : player_id}
+    team_answer = game_turn.team_answer
+    question_answer = game_turn.question_answer
+
+
+
+    context = {'team_answer':team_answer, 'question_answer': question_answer, "game_turn" : game_turn, "question" : question, "turns_remaining" : turns_remaining, "game_id" : game_id, "team_id" : team_id, "player_id" : player_id}
     return render(request, "app/game_result.html", context)
 
 # save the already used spectrum into a dictionary
@@ -345,12 +351,14 @@ def question_save(request, left_spectrum, right_spectrum):
 
     return HttpResponseRedirect(reverse('app:game_turn'))
 
-def question_response_form(request):
+def team_answer_response_form(request, game_id, team_id, player_id, turn_id):
   
-    question_response = request.POST['question_response']
-    # context = { "team_id": team_id }
+    if request.method == 'POST':
+        team_answer_form = request.POST['slider']
+        print(str(team_answer_form) + " this is team answer")
+        team_answer = GameTurn.objects.filter(id=turn_id).update(team_answer=team_answer_form)
     
-    return HttpResponseRedirect(reverse('app:game_end'))
+    return HttpResponseRedirect(reverse('app:game_result', kwargs={'game_id':game_id, 'team_id':team_id, 'player_id':player_id,'turn_id':turn_id}))
  
 def scale(request):
     context = {}

@@ -13,7 +13,7 @@
   width: 22px;
   background: black;
   right: -11px;
-  bottom: -11px;
+  bottom: -15px;
   border-radius: 100px;
 }
 
@@ -22,6 +22,32 @@
 }
 #slider .rs-path-color  {
   background-color: #F0C5C5;
+}
+
+#sliderTwo .rs-handle  {
+  background-color: transparent;
+  border: 8px solid transparent;
+  border-right-color: black;
+  margin: -6px 0px 0px 14px !important;
+  border-width: 6px 104px 6px 4px;
+}
+#sliderTwo .rs-handle:before  {
+  display: block;
+  content: " ";
+  position: absolute;
+  height: 22px;
+  width: 22px;
+  background: black;
+  right: -11px;
+  bottom: -11px;
+  border-radius: 100px;
+}
+
+#sliderTwo .rs-range-color  {
+  background-color: rgb(61, 15, 226);
+}
+#sliderTwo .rs-path-color  {
+  background-color: rgb(155, 165, 173);
 }
 
 .center {margin:0 auto; text-align:center;}

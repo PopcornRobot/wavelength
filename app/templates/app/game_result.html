@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_two.html" %}
 {% load static %}
 
 <style>
@@ -15,16 +15,30 @@
     <hr>
 
     <div id='question_1'>
-    <img src='/static/img/question_clue_spectrum.png' alt="Left Right" />
-    <p style="text-align:left; width: 450px;">
-        {{question.left_spectrum}}
-        <span style="float:right;">
-            {{question.right_spectrum}}
-        </span>
-    </p>
-    <br>
+
+        <div class="row" id="sliderOne">
+            <div class="col">
+                <div class="center" id="slider"></div>
+                <p>This is the game's answer</p>      
+            </div>
+        </div>
+
+        <p style="text-align:left; width: 450px;">
+            {{question.left_spectrum}}
+            <span style="float:right;">
+                {{question.right_spectrum}}
+            </span>
+        </p>
+        
     </div>
-    <br>
+
+    <div class="row" class="sliderTwoTwo">
+        <div class="col">
+            <div class="center" id="sliderTwo"></div>
+            <p>This is your team's answer</p>
+        </div>
+    </div>
+
 </center>
 
 {% comment %} transfers context data to javascript {% endcomment %}
@@ -41,6 +55,32 @@
     const playerID = JSON.parse(document.getElementById('json-player-id').textContent);
 
 document.addEventListener('DOMContentLoaded', () => {
+
+    $("#slider").roundSlider({
+        sliderType: "min-range",
+        radius: 130,
+        width: 16,
+        value: '{{team_answer}}',
+        handleSize: 0,
+        handleShape: "square",
+        circleShape: "half-top",
+        min: 1,
+        max: 100,
+        disabled: true,
+    }); //end of .roundSlider 
+
+    $("#sliderTwo").roundSlider({
+        sliderType: "min-range",
+        radius: 130,
+        width: 16,
+        value: '{{question_answer}}',
+        handleSize: 0,
+        handleShape: "square",
+        circleShape: "half-top",
+        min: 1,
+        max: 100,
+        disabled: true,
+    }); //end of .roundSliderTwo
 
 
     //Countdown Timer
@@ -124,5 +164,18 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     };
 
+    setTimeout(() => {
+        const slider = document.getElementById('sliderOne');
+        slider.style.display = 'none';
+        const sliderTwo = document.getElementById('sliderTwoTwo');
+        sliderTwo.style.display = 'block';
+    }, 4000);
+
+    
+
 </script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>                            
+<script src="https://cdnjs.cloudflare.com/ajax/libs/roundSlider/1.6.1/roundslider.min.js" integrity="sha512-OztPUuNsmM+BUn6NOM5EVZED6aFf/0P4V+cVwcf5iR5T58hGyIJ8XtWFd5ctuOpGytfCsxy4/9JqxeTLliXrBA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 {% endblock %}
