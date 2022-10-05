@@ -30,7 +30,6 @@
         </div>
     </div>
 
-    <!-- <img src='/static/img/question_clue_spectrum.png' alt="Left Right" /> -->
     <p style="text-align:left; width: 450px;">
         {{left_spectrum}}
         <span style="float:right;">
@@ -60,11 +59,9 @@
         <div class="col">
             <div class="center" id="sliderTwo"></div>
             <br>
-            <div id="gameGeneratedAnswer">BUG | Slider disappears in 2nd Clue || This is the Slider Value = {{generated_random_question_answer_two}}</div>
         </div>
     </div>
 
-    <!-- <img src='/static/img/question_clue_spectrum.png' alt="Left Right" /> -->
     <p style="text-align:left; width: 450px;">
         {{left_spectrum2}}
         <span style="float:right;">
@@ -120,12 +117,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const submit_clue_1_btn = document.getElementById('submit_clue_1');
     const submit_clue_2_btn = document.getElementById('submit_clue_2');
     const please_wait = document.getElementById('please_wait');
+    
 
     $("#slider").roundSlider({
             sliderType: "min-range",
             radius: 130,
             width: 16,
-            value: '{{generated_random_question_answer }}',
+            value: '{{generated_random_question_answer}}',
             handleSize: 0,
             handleShape: "square",
             circleShape: "half-top",
@@ -144,13 +142,15 @@ document.addEventListener('DOMContentLoaded', () => {
             circleShape: "half-top",
             min: 1,
             max: 100,
-            // disabled: true,
+            disabled: true,
     }); //end of .roundSliderTwo
     
     submit_clue_1_btn.onclick = (e) =>{
         let clue1 = document.getElementById('clue1').value;
         question_1.style.display = 'none';
         question_2.style.display = 'block';
+        var sliderValue = $("#slider").data("roundSlider").getValue()
+
         console.log(clue1);
         sessionSocket.send(JSON.stringify({
             'action': 'submit clue',
@@ -159,6 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'game' : gameID,
             'team': teamID,
             'username': userName,
+            'value': sliderValue,
         }));
         return false;
     };
@@ -167,6 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let clue2 = document.getElementById('clue2').value;
         question_2.style.display = 'none';
         please_wait.style.display = 'block';
+        var sliderValueTwo = $("#sliderTwo").data("roundSlider").getValue()
         console.log('submitting ' + clue2);
         sessionSocket.send(JSON.stringify({
             'action': 'submit clue',
@@ -176,6 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'game' : gameID,
             'team': teamID,
             'username': userName,
+            'value': sliderValueTwo,
         }));
         return false;
     };
@@ -204,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
             submit_count += 1;
             console.log(data.username + ' submitted their clues');
             console.log(submit_count + ' players are ready')
-            if (submit_count == team_size){
+            if (submit_count >= team_size){
                 console.log('everyone has submitted!')
                 window.location.href = "{% url 'app:game_turn' game_id=game_id team_id=team_id player_id=player_id %}"
             };        

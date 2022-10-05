@@ -66,6 +66,7 @@ class WavelengthConsumer(AsyncWebsocketConsumer):
         action = data.get('action')
         team = data.get('team')
         question = data.get('question')
+        
         # print('text data should be here:' + text_data)
         # print(data)
         if (action == 'submit clue'):

@@ -1,7 +1,7 @@
 #slider .rs-handle  {
   background-color: transparent;
   border: 8px solid transparent;
-  border-right-color: black;
+  border-right-color: rgb(29, 219, 61);
   margin: -6px 0px 0px 14px !important;
   border-width: 6px 104px 6px 4px;
 }
@@ -9,16 +9,16 @@
   display: block;
   content: " ";
   position: absolute;
-  height: 22px;
-  width: 22px;
-  background: black;
-  right: -11px;
-  bottom: -15px;
+  height: 80px;
+  width: 80px;
+  background: rgb(223, 12, 117);
+  right: -40px;
+  bottom: -40px;
   border-radius: 100px;
 }
 
 #slider .rs-range-color  {
-  background-color: #DB5959;
+  background-color: rgb(244, 248, 7);
 }
 #slider .rs-path-color  {
   background-color: #F0C5C5;
@@ -35,11 +35,11 @@
   display: block;
   content: " ";
   position: absolute;
-  height: 22px;
-  width: 22px;
+  height: 80px;
+  width: 80px;
   background: black;
-  right: -11px;
-  bottom: -11px;
+  right: -40px;
+  bottom: -40px;
   border-radius: 100px;
 }
 

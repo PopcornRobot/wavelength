@@ -20,8 +20,9 @@
                 <div id="gameValue"></div>
             </div>
         </div>
+        <br>
+        <br>
         <input id="teamAnswer" name="teamAnswer" type="submit" value="Submit">
-        <!-- <button id='teamAnswer' href= '#!' type="button" value="Submit"> Submit</button> -->
     </form>
 
     <div class="left_spectrum" align="left">{{clue.question.left_spectrum}}</div>
@@ -33,13 +34,10 @@
     {{ player.username|json_script:'json-username' }}
     {{ team_id|json_script:'json-team-id' }}
 
-
-
 <script>
     const gameID = JSON.parse(document.getElementById('json-game-id').textContent);
     const userName = JSON.parse(document.getElementById('json-username').textContent);
     const teamID = JSON.parse(document.getElementById('json-team-id').textContent);
- 
 
     const sessionSocket = new WebSocket(
             'ws://'
@@ -66,7 +64,7 @@
             } 
         };
 
-        submitButton.addEventListener("click", () => {
+        submitButton.addEventListener("click", () => { 
             submitButtonRefresh()
         }) //end of submit Button
 
