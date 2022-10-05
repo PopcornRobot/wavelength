@@ -1,8 +1,157 @@
 {% extends "base.html" %}
 {% load static %}
 
+<style>
+    {% block style %}    
+    {% endblock %}
+</style>
+
 {% block body %}
-<h1>This is the waiting room</h1>
-<h1>{{host}}</h1>
-<a href="/game_end/{{host}}">this is just a test</a>
-{% endblock%}
+ 
+<center>
+    <h1>Wavelength Tournament</h1>
+
+    <div id='please_wait' style='display:none'>
+        <h1>Waiting for other teams to submit their guesses....</h1>
+    </div>
+    <br>
+</center>
+
+{% comment %} transfers context data to javascript {% endcomment %}
+{{ game_id|json_script:'json-game-id' }}
+{{ team_id|json_script:'json-team-id' }}
+{{ player.username|json_script:'json-username' }}
+{{ team_members.count|json_script:'json-team-size' }}
+
+
+<script>
+    const gameID = JSON.parse(document.getElementById('json-game-id').textContent);
+    const teamID = JSON.parse(document.getElementById('json-team-id').textContent);
+    const userName = JSON.parse(document.getElementById('json-username').textContent);
+    const team_size = JSON.parse(document.getElementById('json-team-size').textContent);
+    console.log('team size is ' + team_size);
+    
+    const sessionSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/game_session/'
+            + gameID
+        );
+
+    sessionSocket.onopen = (e) => {
+    message= 'finished guessing';
+    console.log('socket opened!');
+    sessionSocket.send(JSON.stringify({
+        'message': message,
+        'username': userName,
+        'game': gameID,
+        }));
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    let submit_count = 0;
+
+    sessionSocket.onmessage = function(e) {
+        console.log('message received');
+        const data = JSON.parse(e.data);
+        console.log(data);
+        if (data.message == 'clue submitted'){
+            if (data.username == confirm_1.innerHTML){
+                confirm_1.removeAttribute('disabled');
+            } else if (data.username == confirm_2.innerHTML){
+                confirm_2.removeAttribute('disabled');
+            } else if (data.username == confirm_3.innerHTML){
+                confirm_3.removeAttribute('disabled');
+            } else if (data.username == confirm_4.innerHTML){
+                confirm_4.removeAttribute('disabled');
+            };
+            submit_count += 1;
+            console.log(data.username + ' submitted their clues');
+            console.log(submit_count + ' players are ready')
+            if (submit_count == team_size){
+                console.log('everyone has submitted!')
+                window.location.href = "{% url 'app:game_turn' game_id=game_id team_id=team_id player_id=player_id %}"
+            };        
+        }
+    };
+
+    //Countdown Timer
+    window.onload = function() {
+
+    var display = document.querySelector('#time'),
+    timer = new CountDownTimer(10);
+
+    timer.onTick(format).onTick(timesUp).start();
+
+    function timesUp() {
+        if (this.expired()) {
+            console.log('Times up!')
+            //setTimeout(function() { timer.start(); }, 1000); //reset function, not used
+
+            //send player to GameTurn page
+            //insert windows.location.href to GameTurn page here
+        }
+    }
+
+    function format(minutes, seconds) {
+        minutes = minutes < 10 ? + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+        display.textContent = minutes + ':' + seconds;
+    }
+    };
+    });
+
+    function CountDownTimer(duration, granularity) {
+        this.duration = duration;
+        this.granularity = granularity || 1000;
+        this.tickFtns = [];
+        this.running = false;
+    }
+
+    CountDownTimer.prototype.start = function() {
+        if (this.running) {
+            return;
+        }
+        this.running = true;
+        var start = Date.now(),
+        that = this,
+        diff, obj;
+
+        (function timer() {
+            diff = that.duration - (((Date.now() - start) / 1000) | 0);
+
+            if (diff > 0) {
+                setTimeout(timer, that.granularity);
+            } else {
+                diff = 0;
+                that.running = false;
+            }
+
+            obj = CountDownTimer.parse(diff);
+            that.tickFtns.forEach(function(ftn) {
+                ftn.call(this, obj.minutes, obj.seconds);
+            }, that);
+        }());
+    };
+
+    CountDownTimer.prototype.onTick = function(ftn) {
+        if (typeof ftn === 'function') {
+            this.tickFtns.push(ftn);
+        }
+        return this;
+    };
+
+    CountDownTimer.prototype.expired = function() {
+        return !this.running;
+    };
+
+    CountDownTimer.parse = function(seconds) {
+        return {
+            'minutes': (seconds / 60) | 0,
+            'seconds': (seconds % 60) | 0
+        };
+    };
+
+</script>
+{% endblock %}

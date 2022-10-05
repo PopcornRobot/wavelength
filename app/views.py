@@ -182,8 +182,10 @@ def game_session(request, game_id, player_id):
     return render(request, 'app/game_session.html', context)
 
 # create a waiting room   
-def waiting_room(request, host):
-    context = {"host": host}
+def waiting_room(request, game_id):
+    game = Game.objects.get(id=game_id)
+    session_players = Player.objects.filter(game=game)
+    context = {"session_players" : session_players}
     return render(request, "app/waiting_room.html", context)
 
 def start_page(request):
@@ -330,6 +332,15 @@ def game_turn(request, game_id, team_id, player_id):
 
     # render game_turn page
     return render(request, "app/game_turn.html", context)
+
+def game_result(request, game_id, team_id, player_id, turn_id):
+    game_turn = GameTurn.objects.get(id=turn_id)
+    question = game_turn.question
+    team = Team.objects.get(id=team_id)
+    turns_remaining = GameTurn.objects.filter(team=team, team_answer=0).count()
+
+    context = {"game_turn" : game_turn, "question" : question, "turns_remaining" : turns_remaining, "game_id" : game_id, "team_id" : team_id, "player_id" : player_id}
+    return render(request, "app/game_result.html", context)
 
 # save the already used spectrum into a dictionary
 def question_save(request, left_spectrum, right_spectrum):
