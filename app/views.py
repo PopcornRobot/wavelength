@@ -295,7 +295,6 @@ def clue_form(request):
     new_game_turn = GameTurn.objects.create(team=team, game=game, question=question, player=player, clue_given=clue, question_answer=question_answer)
     print('created GameTurn ' + str(new_game_turn))
 
-
 # obsoleted by clue_form function
 def clue_form_two(request):
     player_clue2 = request.POST['clue2']
@@ -311,8 +310,6 @@ def game_end(request, game_id):
     return render(request, "app/game_end.html", context)
 
 def game_turn(request, game_id, team_id, player_id):
-    # game_turn spectrum has to be from team members
-
     game = Game.objects.get(id=game_id)
     team = Team.objects.get(id=team_id)
     player = Player.objects.get(id=player_id)

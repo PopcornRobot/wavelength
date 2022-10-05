@@ -11,54 +11,53 @@
 <center>
     <h1>Wavelength Tournament</h1>
     <div><h4>Time remaining to enter clue: <span id="time">1:00</span></h4></div>
-<br>
+    <br />
     <button id='confirm_1' type="button" class="btn btn-primary" disabled>{{ team_members.0 }}</button>
     <button id='confirm_2' type="button" class="btn btn-success" disabled style= {% if team_members.count > 1 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.1 }}</button>
     <button id='confirm_3' type="button" class="btn btn-danger" disabled style= {% if team_members.count > 2 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.2 }}</button>
     <button id='confirm_4' type="button" class="btn btn-warning" disabled style= {% if team_members.count > 3 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.3 }}</button>
     {% comment %} team size is {{ team_members.count }} {% endcomment %}
-<br>
-    <hr>
+    <br />
+    <hr />
 
-<div id='question_1'>
+    <div id='question_1'>
 
-    <div class="row">
-        <div class="col">
-            <div class="center" id="slider"></div>
-            <br>
-            <div id="gameGeneratedAnswer">{{generated_random_question_answer}}</div>
+        <div class="row">
+            <div class="col">
+                <div class="center" id="slider"></div>
+                <br />
+                <div id="gameGeneratedAnswer">{{generated_random_question_answer}}</div>
+            </div>
         </div>
+
+        <p style="text-align:left; width: 450px;">
+            {{left_spectrum}}
+            <span style="float:right;">
+                {{right_spectrum}}
+            </span>
+        </p>
+        <p><b>Timer: 3 minutes</b></p>
+
+        {% comment %} <form action="{% url 'app:clue_form_one' %}" method="post">
+            {% csrf_token %} {% endcomment %}
+            <br />
+                <label for="clue1">Clue1:</label>
+                <input id="clue1" type="text" name="clue1">
+            <br />
+        <br />
+        <button id='submit_clue_1' href= '#!' type="button" value="Submit"> Submit</button>
+        {% comment %} onclick="this.disabled=true" {% endcomment %}
+        <br />
+
     </div>
-
-    <p style="text-align:left; width: 450px;">
-        {{left_spectrum}}
-        <span style="float:right;">
-            {{right_spectrum}}
-        </span>
-    </p>
-    <p><b>Timer: 3 minutes</b></p>
-
-    {% comment %} <form action="{% url 'app:clue_form_one' %}" method="post">
-        {% csrf_token %} {% endcomment %}
-        <br>
-            <label for="clue1">Clue1:</label>
-            <input id="clue1" type="text" name="clue1">
-        <br>
-    <br>
-    <button id='submit_clue_1' href= '#!' type="button" value="Submit"> Submit</button>
-    {% comment %} onclick="this.disabled=true" {% endcomment %}
-    <br>
-
-</div>
-
-    <hr>
+    <hr />
 
     <div id='question_2' style='display:none'>
 
     <div class="row">
         <div class="col">
             <div class="center" id="sliderTwo"></div>
-            <br>
+            <br />
         </div>
     </div>
 
@@ -82,7 +81,7 @@
     <div id='please_wait' style='display:none'>
         <h1>Waiting for other teammates to submit their clues....</h1>
     </div>
-    <br>
+    <br />
 </center>
 
 {% comment %} transfers context data to javascript {% endcomment %}
@@ -118,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const submit_clue_2_btn = document.getElementById('submit_clue_2');
     const please_wait = document.getElementById('please_wait');
     
-
+    //BELOW SLIDER DISPLAYS 1ST RANDOM QUESTION ANSWER
     $("#slider").roundSlider({
             sliderType: "min-range",
             radius: 130,
@@ -132,6 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
             disabled: true,
     }); //end of .roundSlider 
 
+    //BELOW SLIDER DISPLAYS 2ND RANDOM QUESTION
     $("#sliderTwo").roundSlider({
             sliderType: "min-range",
             radius: 130,
