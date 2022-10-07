@@ -244,11 +244,13 @@ def join_player_registration_form(request):
     # return HttpResponse("form success")
 
 def question_clue_spectrum(request, game_id, team_id, player_id):
+    print('************question*************************')
     all_question_history = QuestionHistory.objects.all()
     player = Player.objects.get(id=player_id)
     team = Team.objects.get(id=team_id)
     team_members = Player.objects.filter(team=team)
     questions = Question.objects.all()
+
     random_question = choice(questions)
     random_question2 = choice(questions)
 
