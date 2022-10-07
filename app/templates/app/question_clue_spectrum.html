@@ -102,9 +102,12 @@
     const question2 = JSON.parse(document.getElementById('json-random-question2').textContent);
     const team_size = JSON.parse(document.getElementById('json-team-size').textContent);
     console.log('team size is ' + team_size);
+    let web_protocol
+    location.protocol == "http:" ? web_protocol = "ws://" : web_protocol = "wss://"
+    console.log("web_protocol", web_protocol)
     
     const sessionSocket = new WebSocket(
-        'ws://'
+        web_protocol
         + window.location.host
         + '/ws/team_session/'
         + teamID
