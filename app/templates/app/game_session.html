@@ -78,6 +78,7 @@ base.html and static are in development
     const sort_teams_btn = document.getElementById('sort_teams_btn');
     let web_protocol
     location.protocol == "http:" ? web_protocol = "ws://" : web_protocol = "wss://"
+    console.log("web_protocol", web_protocol)
     const sessionSocket = new WebSocket(
             web_protocol
             + window.location.host
