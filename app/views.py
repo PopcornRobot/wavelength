@@ -185,8 +185,8 @@ def game_session(request, game_id, player_id):
 # create a waiting room   
 def waiting_room(request, game_id):
     game = Game.objects.get(id=game_id)
-    session_players = Player.objects.filter(game=game)
-    context = {"session_players" : session_players, 'game_id':game_id}
+    questions_left = GameTurn.objects.filter(game=game, team_answer=0)
+    context = {"questions_left" : questions_left, 'game_id':game_id}
     return render(request, "app/waiting_room.html", context)
 
 def start_page(request):
