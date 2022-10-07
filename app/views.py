@@ -366,7 +366,6 @@ def scale(request):
     context = {}
     return render(request, "app/scale.html", context)
 
-
 def dashboard(request):
     context = {}
 

@@ -37,9 +37,12 @@
     const gameID = JSON.parse(document.getElementById('json-game-id').textContent);
     const userName = JSON.parse(document.getElementById('json-username').textContent);
     const teamID = JSON.parse(document.getElementById('json-team-id').textContent);
+    let web_protocol
+    location.protocol == "http:" ? web_protocol = "ws://" : web_protocol = "wss://"
+    console.log("web_protocol", web_protocol)
 
     const sessionSocket = new WebSocket(
-            'ws://'
+            web_protocol
             + window.location.host
             + '/ws/game_session/'
             + gameID
@@ -49,6 +52,7 @@
 
         let submitButton = document.getElementById('teamAnswer');
         var submitButtonStatus = false; 
+        console.log(submitButtonStatus + " this is false before drag")
 
         sessionSocket.onmessage = function(e) {
             console.log('message received in game_turn')
@@ -59,7 +63,7 @@
                 $("#slider").data("roundSlider").setValue(data.value)      
                 console.log(data.value + " this is data.value in game_turn websockets after function")  
                 //add submit refresh + check if all players have submitted    
-                // submitButton() 
+               
             } 
         };
 
@@ -72,11 +76,10 @@
             gameValue.innerHTML = sliderValue    
         } //eof
 
-        // function submitButtonRefresh(){
-        //     submitButtonStatus = true;
-        //     console.log(userName + "this is teamID")
-        // } 
-        //eof
+        function submitButtonRefresh(){
+            submitButtonStatus = true;
+            console.log(submitButtonStatus + "this is true after drag")
+        } //eof
 
         $("#slider").roundSlider({
             sliderType: "min-range",
@@ -91,8 +94,8 @@
 
             drag: function (e) {
                 var sliderValue = $("#slider").data("roundSlider").getValue()
-                console.log(sliderValue + " || this is sliderValue in drag function")
                 updateGameValue(sliderValue)
+                submitButtonRefresh() 
                 message="value change"
                 sessionSocket.send(JSON.stringify({
                     'message': message,

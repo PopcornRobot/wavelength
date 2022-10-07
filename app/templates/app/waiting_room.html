@@ -29,10 +29,13 @@
     const teamID = JSON.parse(document.getElementById('json-team-id').textContent);
     const userName = JSON.parse(document.getElementById('json-username').textContent);
     const session_size = JSON.parse(document.getElementById('json-session-size').textContent);
+    let web_protocol
+    location.protocol == "http:" ? web_protocol = "ws://" : web_protocol = "wss://"
+    console.log("web_protocol", web_protocol)
 
     
     const sessionSocket = new WebSocket(
-            'ws://'
+            web_protocol
             + window.location.host
             + '/ws/game_session/'
             + gameID
