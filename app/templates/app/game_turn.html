@@ -4,42 +4,39 @@
 {% block body %}
 <center>
     <h1>Wavelength</h1>
-    <hr>
-    <h6>This is the clue:</h6>
+    <h1>Tournament</h1>
+    <hr />
+    <h2>YOUR CLUE</h2>
 
-    <p>{{clue}}</p>
-
-    <form action="/question_response_form" method="post">
+    <h1>{{clue.clue_given}}</h1>
+   
+    <form action="{% url 'app:team_answer_response_form' game_id=game_id team_id=team_id player_id=player_id turn_id=turn_id %}" method="post">
         {% csrf_token %}
-        <br>
-            <label for="response">Response: </label>
-        </br>
-        <br>
-            <input id="response" type="text" name="question_response" placeholder="Enter your response"/>
-        </br>
-        <br>
-        <input type="submit" value="Submit">
-        </br>
+        <div class="row">
+            <div class="col">
+                <div class="center" id="slider"></div>
+                <br />
+                <div id="gameValue"></div>
+            </div>
+        </div>
+        <br />
+        <br />
+        <input id="teamAnswer" name="teamAnswer" type="submit" value="Submit">
     </form>
 
-    <div class="row">
-        <div class="col">
-            <h3>Slider with Two</h3>
-            <div class="center" id="slider"></div>
-            <br>
-            <div id="gameValue">50</div>
-        </div>
-    </div>
+    <div class="left_spectrum" align="left">{{clue.question.left_spectrum}}</div>
+    <div class="right_spectrum" align="right">{{clue.question.right_spectrum}}</div>
+
+</center>    
 
     {{ game_id|json_script:'json-game-id' }}
     {{ player.username|json_script:'json-username' }}
+    {{ team_id|json_script:'json-team-id' }}
 
-</center>
-
-{% comment %} <script>
+<script>
     const gameID = JSON.parse(document.getElementById('json-game-id').textContent);
     const userName = JSON.parse(document.getElementById('json-username').textContent);
-    // var sliderValue = 0
+    const teamID = JSON.parse(document.getElementById('json-team-id').textContent);
 
     const sessionSocket = new WebSocket(
             'ws://'
@@ -50,6 +47,9 @@
 
     document.addEventListener('DOMContentLoaded', () => {
 
+        let submitButton = document.getElementById('teamAnswer');
+        var submitButtonStatus = false; 
+
         sessionSocket.onmessage = function(e) {
             console.log('message received in game_turn')
             const data = JSON.parse(e.data);
@@ -57,14 +57,26 @@
             if  (data.message == 'value change') {
                 console.log('data.message == value change | SUCCESS')
                 $("#slider").data("roundSlider").setValue(data.value)      
-                console.log(data.value + " this is data.value in game_turn websockets after function")       
+                console.log(data.value + " this is data.value in game_turn websockets after function")  
+                //add submit refresh + check if all players have submitted    
+                // submitButton() 
             } 
         };
+
+        submitButton.addEventListener("click", () => { 
+            submitButtonRefresh()
+        }) //end of submit Button
 
         function updateGameValue(sliderValue) {
             var gameValue = document.getElementById('gameValue')
             gameValue.innerHTML = sliderValue    
         } //eof
+
+        // function submitButtonRefresh(){
+        //     submitButtonStatus = true;
+        //     console.log(userName + "this is teamID")
+        // } 
+        //eof
 
         $("#slider").roundSlider({
             sliderType: "min-range",
@@ -74,12 +86,12 @@
             handleSize: 0,
             handleShape: "square",
             circleShape: "half-top",
-            min: 0,
+            min: 1,
             max: 100,
 
             drag: function (e) {
                 var sliderValue = $("#slider").data("roundSlider").getValue()
-                console.log(sliderValue + " || this is arlene")
+                console.log(sliderValue + " || this is sliderValue in drag function")
                 updateGameValue(sliderValue)
                 message="value change"
                 sessionSocket.send(JSON.stringify({
@@ -94,7 +106,7 @@
     
     }); //end of page load
 
-</script> {% endcomment %}
+</script> 
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>                            
 <script src="https://cdnjs.cloudflare.com/ajax/libs/roundSlider/1.6.1/roundslider.min.js" integrity="sha512-OztPUuNsmM+BUn6NOM5EVZED6aFf/0P4V+cVwcf5iR5T58hGyIJ8XtWFd5ctuOpGytfCsxy4/9JqxeTLliXrBA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

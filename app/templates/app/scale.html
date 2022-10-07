@@ -2,64 +2,48 @@
 {% load static %}
 
 {% block body %}
+<center>
+    <h1>Wavelength</h1>
+    <h1>Tournament</h1>
 
-    <div class="row center">
-        <div class="col">
-            <h3>Slider with Two</h3>
-            <div class="center" id="slider"></div>
-            <br>
-            <div id="gameValue">50</div>
+        <div class="row">
+            <div class="col">
+                <div class="center" id="slider"></div>
+                <br>
+                <div id="gameValue"></div>
+            </div>
         </div>
-    </div>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>                            
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/roundSlider/1.6.1/roundslider.min.js" integrity="sha512-OztPUuNsmM+BUn6NOM5EVZED6aFf/0P4V+cVwcf5iR5T58hGyIJ8XtWFd5ctuOpGytfCsxy4/9JqxeTLliXrBA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</center>    
 
-    <script>
+<script>
+  
 
-        document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', () => {
 
-            function updateGameValue(sliderValue) {
-                var gameValue = document.getElementById('gameValue')
-                gameValue.innerHTML = sliderValue    
-            } //eof
+        $("#handle2").roundSlider({
+            sliderType: "min-range",
+            radius: 130,
+            showTooltip: false,
+            width: 16,
+            value: 75,
+            handleSize: 0,
+            handleShape: "square",
+            circleShape: "half-top",
 
-            $("#slider").roundSlider({
-                sliderType: "min-range",
-                radius: 130,
-                showTooltip: false,
-                width: 16,
-                value: 50,
-                handleSize: 0,
-                handleShape: "square",
-                circleShape: "half-top",
-                min: 0,
-                max: 100,
+            drag: function (e) {
+                var sliderValue = $("#slider").data("roundSlider").getValue()
+                
+            } //end of drag function
+        
+        }); //end of .roundSlider 
+    
+    }); //end of page load
 
+</script> 
 
-                drag: function (e) {
-                    var sliderValue = $("#slider").data("roundSlider").getValue()
-                    console.log(sliderValue + " | This is sliderValue within the drag function")
-                    updateGameValue(sliderValue)
-
-            
-                    // message="value change"
-                    // sessionSocket.send(JSON.stringify({
-                    //     'message': message,
-                    //     'username': userName,
-                    //     'room': gameID,
-                    //     'value': sliderValue,
-                    // })); 
-                } //end of drag function
-
-            }); //eof
-
-
-
-        }); //end of page load
-    </script>
-
-
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>                            
+<script src="https://cdnjs.cloudflare.com/ajax/libs/roundSlider/1.6.1/roundslider.min.js" integrity="sha512-OztPUuNsmM+BUn6NOM5EVZED6aFf/0P4V+cVwcf5iR5T58hGyIJ8XtWFd5ctuOpGytfCsxy4/9JqxeTLliXrBA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 {% endblock %}
 

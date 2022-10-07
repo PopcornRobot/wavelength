@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_two.html" %}
 {% load static %}
 
 <style>
@@ -11,43 +11,56 @@
 <center>
     <h1>Wavelength</h1>
     <div><h4>Time remaining to enter clue: <span id="time">1:00</span></h4></div>
-<br>
+    <br />
     <button id='confirm_1' type="button" class="btn btn-primary" disabled>{{ team_members.0 }}</button>
     <button id='confirm_2' type="button" class="btn btn-success" disabled style= {% if team_members.count > 1 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.1 }}</button>
     <button id='confirm_3' type="button" class="btn btn-danger" disabled style= {% if team_members.count > 2 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.2 }}</button>
     <button id='confirm_4' type="button" class="btn btn-warning" disabled style= {% if team_members.count > 3 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.3 }}</button>
     {% comment %} team size is {{ team_members.count }} {% endcomment %}
-<br>
-    <hr>
+    <br />
+    <hr />
 
     <div id='question_1'>
-    <img src='/static/img/question_clue_spectrum.png' alt="Left Right" />
-    <p style="text-align:left; width: 450px;">
-        {{left_spectrum}}
-        <span style="float:right;">
-            {{right_spectrum}}
-        </span>
-    </p>
-    <p><b>Timer: 3 minutes</b></p>
 
-    {% comment %} <form action="{% url 'app:clue_form_one' %}" method="post">
-        {% csrf_token %} {% endcomment %}
-        <br>
-            <label for="clue1">Please Enter Your First Clue:</label>
-            <input id="clue1" type="text" name="clue1">
-        <br>
-    <br>
-    <button id='submit_clue_1' href= '#!' type="button" value="Submit"> Submit</button>
-    {% comment %} onclick="this.disabled=true" {% endcomment %}
-    <br>
+        <div class="row">
+            <div class="col">
+                <div class="center" id="slider"></div>
+                <br />
+                <div id="gameGeneratedAnswer">{{generated_random_question_answer}}</div>
+            </div>
+        </div>
 
-</div>
+        <p style="text-align:left; width: 450px;">
+            {{left_spectrum}}
+            <span style="float:right;">
+                {{right_spectrum}}
+            </span>
+        </p>
+        <p><b>Timer: 3 minutes</b></p>
 
-    <hr>
+        {% comment %} <form action="{% url 'app:clue_form_one' %}" method="post">
+            {% csrf_token %} {% endcomment %}
+            <br />
+                <label for="clue1">Clue1:</label>
+                <input id="clue1" type="text" name="clue1">
+            <br />
+        <br />
+        <button id='submit_clue_1' href= '#!' type="button" value="Submit"> Submit</button>
+        {% comment %} onclick="this.disabled=true" {% endcomment %}
+        <br />
 
+    </div>
+    <hr />
 
     <div id='question_2' style='display:none'>
-    <img src='/static/img/question_clue_spectrum.png' alt="Left Right" />
+
+    <div class="row">
+        <div class="col">
+            <div class="center" id="sliderTwo"></div>
+            <br />
+        </div>
+    </div>
+
     <p style="text-align:left; width: 450px;">
         {{left_spectrum2}}
         <span style="float:right;">
@@ -61,14 +74,14 @@
     </br>
     <br>
     <input id='submit_clue_2' type="submit" value="Submit" >
-</br>
+    </br>
     {% comment %} </form> {% endcomment %}
     </div>
 
     <div id='please_wait' style='display:none'>
         <h1>Waiting for other teammates to submit their clues....</h1>
     </div>
-    <br>
+    <br />
 </center>
 
 {% comment %} transfers context data to javascript {% endcomment %}
@@ -104,10 +117,40 @@ document.addEventListener('DOMContentLoaded', () => {
     const submit_clue_2_btn = document.getElementById('submit_clue_2');
     const please_wait = document.getElementById('please_wait');
     
+    //BELOW SLIDER DISPLAYS 1ST RANDOM QUESTION ANSWER
+    $("#slider").roundSlider({
+            sliderType: "min-range",
+            radius: 130,
+            width: 16,
+            value: '{{generated_random_question_answer}}',
+            handleSize: 0,
+            handleShape: "square",
+            circleShape: "half-top",
+            min: 1,
+            max: 100,
+            disabled: true,
+    }); //end of .roundSlider 
+
+    //BELOW SLIDER DISPLAYS 2ND RANDOM QUESTION
+    $("#sliderTwo").roundSlider({
+            sliderType: "min-range",
+            radius: 130,
+            width: 16,
+            value: '{{generated_random_question_answer_two}}',
+            handleSize: 0,
+            handleShape: "square",
+            circleShape: "half-top",
+            min: 1,
+            max: 100,
+            disabled: true,
+    }); //end of .roundSliderTwo
+    
     submit_clue_1_btn.onclick = (e) =>{
         let clue1 = document.getElementById('clue1').value;
         question_1.style.display = 'none';
         question_2.style.display = 'block';
+        var sliderValue = $("#slider").data("roundSlider").getValue()
+
         console.log(clue1);
         sessionSocket.send(JSON.stringify({
             'action': 'submit clue',
@@ -116,6 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'game' : gameID,
             'team': teamID,
             'username': userName,
+            'value': sliderValue,
         }));
         return false;
     };
@@ -124,6 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let clue2 = document.getElementById('clue2').value;
         question_2.style.display = 'none';
         please_wait.style.display = 'block';
+        var sliderValueTwo = $("#sliderTwo").data("roundSlider").getValue()
         console.log('submitting ' + clue2);
         sessionSocket.send(JSON.stringify({
             'action': 'submit clue',
@@ -133,6 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'game' : gameID,
             'team': teamID,
             'username': userName,
+            'value': sliderValueTwo,
         }));
         return false;
     };
@@ -161,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
             submit_count += 1;
             console.log(data.username + ' submitted their clues');
             console.log(submit_count + ' players are ready')
-            if (submit_count == team_size){
+            if (submit_count >= team_size){
                 console.log('everyone has submitted!')
                 window.location.href = "{% url 'app:game_turn' game_id=game_id team_id=team_id player_id=player_id %}"
             };        
@@ -246,4 +292,8 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
 </script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>                            
+<script src="https://cdnjs.cloudflare.com/ajax/libs/roundSlider/1.6.1/roundslider.min.js" integrity="sha512-OztPUuNsmM+BUn6NOM5EVZED6aFf/0P4V+cVwcf5iR5T58hGyIJ8XtWFd5ctuOpGytfCsxy4/9JqxeTLliXrBA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 {% endblock %}
