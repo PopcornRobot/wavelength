@@ -51,12 +51,12 @@ base.html and static are in development
                 Room {{game.id}} <button class="btn btn-primary" >Join Game</button>
             </a>   
         {% endif %}
-        <div style='padding:10px ; text-align:center'>
-            <a href= "{% url 'app:start_page' %}">
-                <button class="btn btn-primary" >Return to Start Page</button>
-            </a>
-        </div>
     {% endfor %}
+<div style='padding:10px ; text-align:center'>
+    <a href= "{% url 'app:start_page' %}">
+        <button class="btn btn-primary" >Return to Start Page</button>
+    </a>
+</div>
 </div>
 
 <script>

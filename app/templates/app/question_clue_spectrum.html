@@ -11,6 +11,7 @@
 <center>
     <h1>Wavelength</h1>
     <div><h4>Time remaining to enter clue: <span id="time">1:00</span></h4></div>
+    <p>This is the game turn page, you would input your clue for your team members to get the spectrum you got</p>
     <br />
     <button id='confirm_1' type="button" class="btn btn-primary" disabled>{{ team_members.0 }}</button>
     <button id='confirm_2' type="button" class="btn btn-success" disabled style= {% if team_members.count > 1 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.1 }}</button>
