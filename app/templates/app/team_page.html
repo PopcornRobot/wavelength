@@ -59,10 +59,13 @@ base.html and static are in development
     const gameID = JSON.parse(document.getElementById('json-game-id').textContent);
     const userName = JSON.parse(document.getElementById('json-username').textContent);
     const start_game_btn = document.getElementById('start_game_btn');
+    let web_protocol
+    location.protocol == "http:" ? web_protocol = "ws://" : web_protocol = "wss://"
+    console.log("web_protocol", web_protocol)
 
     document.addEventListener('DOMContentLoaded', () => {
         const sessionSocket = new WebSocket(
-            'ws://'
+            web_protocol
             + window.location.host
             + '/ws/game_session/'
             + gameID

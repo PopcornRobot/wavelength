@@ -1,1 +1,2 @@
-web: gunicorn wavelength.wsgi:application
+
+web: daphne wavelength.asgi:application --port $PORT --bind 0.0.0.0 -v
