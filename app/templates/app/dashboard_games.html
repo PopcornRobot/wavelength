@@ -1,0 +1,26 @@
+{% extends "base_dashboard.html" %}
+
+{% block body %}
+<h1>Game Manager</h1>
+
+<table style="width:10%">
+  <tr>
+    <th>ID</th>
+    <th>Is_Game_Running</th>
+    <th>Action</th>
+  </tr>
+  {% for game in games %}
+    <tr>
+      <td>{{game.id}}</td>
+      <td>{{game.is_game_running}}</td>
+      <td>
+        {% if game.is_game_runnig == True %}
+          Stop Game
+        {% else %}
+          Start Game
+        {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+</table>
+{% endblock %}

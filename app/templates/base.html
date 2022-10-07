@@ -1,1 +1,84 @@
-{% comment %} THIS IS A PLACEHOLDER {% endcomment %}
+{% comment %} THIS IS A PLACEHOLDER 
+
+Content:
+Start page
+Game list
+Game session
+Team page
+
+{% endcomment %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- bootstrap.css-->
+    <link href="{% static "css/bootstrap.css" %}?ver=040722" rel="stylesheet">
+    <link href="{% static "css/bootstrap-icons.css" %}" rel="stylesheet">
+    <link href="{% static "css/scale.css" %}" rel="stylesheet">
+
+    <!-- Custom min css -->
+    <link href="{% static "css/custom.min.css" %}" rel="stylesheet">
+
+    <!-- font-awesome Core CSS -->
+    <link href="{% static "css/font-awesome.min.css" %}" rel="stylesheet">
+    
+    <!-- Prism okaida -->
+    <link href="{% static "css/prism-okaidia.css" %}" rel="stylesheet"> 
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="{% static "css/ie10-viewport-bug-workaround.css" %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static "css/jumbotron-narrow.css" %}" rel="stylesheet">
+
+    <!-- Adding Google tagmanager -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-23019901-1"></script>
+
+    <!-- Adding Font Awesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" xmlns="https://use.fontawesome.com/releases/v5.14.4/css/all.css">
+  </head>
+    {% block css %}{% endblock %}
+
+    {% url 'app:start_page' as url_start_page %}
+    {% url 'app:game_list' as url_game_list %}
+    {% url 'app:team_score' as url_team_score %}
+
+    <body>
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+              <a class="navbar-brand" href={{url_start_page}}>Wavelength</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarColor02">
+                <ul class="navbar-nav me-auto">
+                  <li class="nav-item">
+                    <a href={{url_start_page}} class="nav-link">Start Page</a>
+                  </li>
+                  <li class="nav-item">
+                    <a href={{url_game_list}} class="nav-link">Game list</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+
+          {% block body %}{% endblock %}
+    <!-- JavaScripts simple tags -->
+    <script xmlns="..\static\js\bootstrap.bundle.min.js"></script>
+    <script xmlns="..\static\js\prism.js" data-manual></script>  
+    <script xmlns="..\static\js\bootstrap.bundle.min.js"></script>
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/fontawesome.min.js" integrity="sha512-vF2g7ozd8M2AA8re3eCrfJT2vvrOmIbW9JhodInQHN5Xjg6ec6nJpMJQcwuXm+aOhQze+CrM2rFQLftMtQA+bA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    </body>
+</html>
+

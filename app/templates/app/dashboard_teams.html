@@ -1,0 +1,23 @@
+{% extends "base_dashboard.html" %}
+
+{% block body %}
+<h1>Team Manager</h1>
+
+<table style="width:10%">
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Score</th>
+    <th>Game</th>
+  </tr>
+  {% for team in teams %}
+    <tr>
+      <td>{{team.id}}</td>
+      <td>{{team.name}}</td>
+      <td>{{team.score}}</td>
+      <td>{{team.game}}</td>
+    </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}

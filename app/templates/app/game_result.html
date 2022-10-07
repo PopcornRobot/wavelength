@@ -1,0 +1,180 @@
+{% extends "base_two.html" %}
+{% load static %}
+
+<style>
+    {% block style %}    
+    {% endblock %}
+</style>
+
+{% block body %}
+ 
+<center>
+    <h1>Wavelength Tournament</h1>
+    <div><h4>Proceeding to next clue in <span id="time">10</span></h4></div>
+    <br />
+
+    <div id='question_1'>
+
+        <div class="row" id="sliderOne">
+            <div class="col">
+                <div class="center" id="slider"></div>
+                <p>This is the game's answer {{question_answer}}</p>      
+            </div>
+        </div>
+
+        <p style="text-align:left; width: 450px;">
+            {{question.left_spectrum}}
+            <span style="float:right;">
+                {{question.right_spectrum}}
+            </span>
+        </p>
+        
+    </div>
+
+    <div class="row" class="sliderTwoTwo">
+        <div class="col">
+            <div class="center" id="sliderTwo"></div>
+            <p>This is your team's answer {{team_answer}}</p>
+        </div>
+    </div>
+
+</center>
+
+{% comment %} transfers context data to javascript {% endcomment %}
+{{ game_id|json_script:'json-game-id' }}
+{{ team_id|json_script:'json-team-id' }}
+{{ player_id|json_script:'json-player-id' }}
+{{ turns_remaining|json_script:'json-turns-remaining'}}
+
+
+<script>
+    const gameID = JSON.parse(document.getElementById('json-game-id').textContent);
+    console.log('game id is ' + gameID)
+    const teamID = JSON.parse(document.getElementById('json-team-id').textContent);
+    const playerID = JSON.parse(document.getElementById('json-player-id').textContent);
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    $("#slider").roundSlider({
+        sliderType: "min-range",
+        radius: 130,
+        width: 16,
+        value: '{{question_answer}}',
+        handleSize: 0,
+        handleShape: "square",
+        circleShape: "half-top",
+        min: 1,
+        max: 100,
+        disabled: true,
+    }); //end of .roundSlider 
+
+    $("#sliderTwo").roundSlider({
+        sliderType: "min-range",
+        radius: 130,
+        width: 16,
+        value: '{{team_answer}}',
+        handleSize: 0,
+        handleShape: "square",
+        circleShape: "half-top",
+        min: 1,
+        max: 100,
+        disabled: true,
+    }); //end of .roundSliderTwo
+
+
+    //Countdown Timer
+    window.onload = function() {
+
+    var display = document.querySelector('#time'),
+    timer = new CountDownTimer(10);
+
+    timer.onTick(format).onTick(timesUp).start();
+
+    function timesUp() {
+        const turnsRemaining = JSON.parse(document.getElementById('json-turns-remaining').textContent);
+        if (this.expired()) {
+            console.log('Times up!')
+           if (turnsRemaining == 0){
+            window.location.href = "{% url 'app:waiting_room' game_id=game_id %}"
+           } else {
+            //send player to next GameTurn page for guessing
+            window.location.href = "{% url 'app:game_turn' game_id=game_id team_id=team_id player_id=player_id %}"
+           }
+            
+        }
+    }
+
+    function format(minutes, seconds) {
+        minutes = minutes < 10 ? + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+        display.textContent = minutes + ':' + seconds;
+    }
+    };
+    });
+
+    function CountDownTimer(duration, granularity) {
+        this.duration = duration;
+        this.granularity = granularity || 1000;
+        this.tickFtns = [];
+        this.running = false;
+    }
+
+    CountDownTimer.prototype.start = function() {
+        if (this.running) {
+            return;
+        }
+        this.running = true;
+        var start = Date.now(),
+        that = this,
+        diff, obj;
+
+        (function timer() {
+            diff = that.duration - (((Date.now() - start) / 1000) | 0);
+
+            if (diff > 0) {
+                setTimeout(timer, that.granularity);
+            } else {
+                diff = 0;
+                that.running = false;
+            }
+
+            obj = CountDownTimer.parse(diff);
+            that.tickFtns.forEach(function(ftn) {
+                ftn.call(this, obj.minutes, obj.seconds);
+            }, that);
+        }());
+    };
+
+    CountDownTimer.prototype.onTick = function(ftn) {
+        if (typeof ftn === 'function') {
+            this.tickFtns.push(ftn);
+        }
+        return this;
+    };
+
+    CountDownTimer.prototype.expired = function() {
+        return !this.running;
+    };
+
+    CountDownTimer.parse = function(seconds) {
+        return {
+            'minutes': (seconds / 60) | 0,
+            'seconds': (seconds % 60) | 0
+        };
+    };
+
+    // setTimeout(() => {
+        // const slider = document.getElementById('sliderOne');
+        // slider.style.display = 'none';
+        // const sliderTwo = document.getElementById('sliderTwoTwo');
+        // sliderTwo.style.display = 'block';
+    // }, 4000);
+
+    
+
+</script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>                            
+<script src="https://cdnjs.cloudflare.com/ajax/libs/roundSlider/1.6.1/roundslider.min.js" integrity="sha512-OztPUuNsmM+BUn6NOM5EVZED6aFf/0P4V+cVwcf5iR5T58hGyIJ8XtWFd5ctuOpGytfCsxy4/9JqxeTLliXrBA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+{% endblock %}

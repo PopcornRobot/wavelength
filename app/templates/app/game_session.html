@@ -1,16 +1,18 @@
+{% extends "base.html" %}
+{% load static %} 
 {% comment %} 
 
 OBJECTIVE:
 Place Holder for "base.html" and static objects
 {% extends "base.html" %}
-{% load static %} 
+
 
 STAUTS:
 base.html and static are in development
 
 {% endcomment %}
 
-<style>>
+<style>
     {% block style %}
     .container {
         height: 200px;
@@ -31,68 +33,113 @@ base.html and static are in development
         border: 3px solid blue;
       }
     {% endblock %}
-    </style>
+</style>
     
-    {% block body %} 
-    <div class="center">
-        Room {{game.id}}
-    </div>
+{% block body %} 
+  <div class="center">
     
+      <br />
+      Room {{game.id}}
+      <br />
+      Page for {{player_page.username}}
+      <br />
+      {% if player_page.is_host == True %}
+      <a href="{% url 'app:team_creation' game_id=game.id player_id=player_page.id %}">
+        <button type="submit">Start Game</button>
+      </a>
+      {% endif %}
+      <button href="{% url 'app:start_page' %}" >Leave Room</button>
+  </div>
 
-        <div class='center'>
-          <div id='player_list' style='max-height: 300px; overflow-y:scroll;'>
-            {% for player in player_list  %} {{ player.username}}<br>{% endfor %}
-          </div>
-        </div>
+  <div class='center'>
+    <div id='player_list' style='padding:10px ; text-align:center'>
+        {% for player in player_list %}
+        <div id='{{ player.username}}'>{{ player.username}} </div> 
+        {% if player.is_host == True%} <p> -- Host {{player.id}} </p> {% endif %}
+          <br />
+        {% endfor %}
+    </div>
+  </div>
 
         <div style='padding:10px ; text-align:center'>
             <button href="{% url 'app:start_page' %}" >Leave Room</button>
-            {% if player.is_host == True %}
-                <a href="{% url 'app:team_creation' player_game=game.id player_id=player.id %}">
-                    <button type="submit">Start Game</button>
-                </a>
-            {% endif %} 
+            <a>
+            <button id='sort_teams_btn' type="submit" {% if player.is_host == False %}style='display:none'{%endif%}>Sort Teams</button>
+            </a>
         </div>
 
+
         {{ game_id|json_script:'json-game-id' }}
-        {{ username|json_script:'json-username' }}
+        {{ player.username|json_script:'json-username' }}
 
 <script>
     const gameID = JSON.parse(document.getElementById('json-game-id').textContent);
     const userName = JSON.parse(document.getElementById('json-username').textContent);
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const sessionSocket = new WebSocket(
+    const sort_teams_btn = document.getElementById('sort_teams_btn');
+    const sessionSocket = new WebSocket(
             'ws://'
             + window.location.host
             + '/ws/game_session/'
             + gameID
           );
-        
-        sessionSocket.onopen = (e) => {
+
+          sessionSocket.onopen = (e) => {
             message= '';
             console.log('socket opened!');
             sessionSocket.send(JSON.stringify({
                 'message': message,
                 'username': userName,
-                'room': gameID,
+                'game': gameID,
               }));
         };
 
+    document.addEventListener('DOMContentLoaded', () => {
+        
+
         sessionSocket.onmessage = function(e) {
-            console.log('onmessage');
+            console.log('message received');
             const data = JSON.parse(e.data);
             console.log(data);
-          
-            if (data.username) {
-              document.querySelector('#player_list').innerHTML += ('<b>' + data.username + '</b>: ' + '</br>');
-              console.log('username added to list');
-            } else {
-              alert('The message was empty!')
-            }
+            if (data.message == 'remove player'){
+              //document.getElementById(data.userName).remove();
+              console.error(data.username + ' has left the session');
+            } else if (data.message == 'sort teams'){
+              console.log('sort teams')              
+              setTimeout(() => {
+                console.log("Sort delayed for 1 second.");
+                window.location.href = "{% url 'app:team_creation' game_id=game.id player_id=player.id %}";
+              }, 1000)                          
+            } else if (data.username != userName) {
+              document.querySelector('#player_list').innerHTML += ("<div id='" + data.username + "'>" + data.username + '</div>');
+              console.log(data.username + ' added to list');
+            } 
+            
+        };
+        
+        sessionSocket.onclose = (e) => {
+          message=''
+          sessionSocket.send(JSON.stringify({
+            'message': message,
+            'username': userName,
+            'game': gameID,
+          }));
+          document.getElementById(userName).remove();
+          console.error('The socket closed unexpectedly');
           };
 
-    });
-          
+        const sort_teams_btn = document.getElementById('sort_teams_btn');
+        sort_teams_btn.onclick = (e) =>{
+        
+          message='sort teams'
+          sessionSocket.send(JSON.stringify({
+            'message': message,
+            'username': userName,
+            'game': gameID,
+            //'admin' : 'admin',
+            //'player_id': {{player.id}},
+          }));
+          window.location.href = "{% url 'app:team_creation' game_id=game.id player_id=player.id %}";
+        };
+    });          
 </script>
-    {% endblock %}
+{% endblock %}

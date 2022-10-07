@@ -1,0 +1,21 @@
+{% extends "base_dashboard.html" %}
+
+{% block body %}
+<h1>Question Manager</h1>
+
+<table style="width:10%">
+  <tr>
+    <th>ID</th> 
+    <th>Left Spectrum</th>
+    <th>Right Spectrum</th>
+  </tr>
+  {% for question in questions %}
+    <tr>
+      <td>{{question.id}}</td>
+      <td>{{question.left_spectrum}}</td>
+      <td>{{question.right_spectrum}}</td>
+    </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}
