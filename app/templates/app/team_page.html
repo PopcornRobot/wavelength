@@ -46,9 +46,9 @@ base.html and static are in development
     {% endfor %}
 
         <div style='padding:10px ; text-align:center'>
-            {% comment %} <button href="{% url 'app:start_page' %}" >Leave Room</button> {% endcomment %}
+            <button href="{% url 'app:leaving_user' player_id=current_player.id %}" >Leave Game</button>
             <a>
-            <button id='start_game_btn' type="submit" {% if player.is_host == False %}style='display:none'{%endif%}>Start Game!</button>
+              <button id='start_game_btn' type="submit" {% if player.is_host == False %}style='display:none'{%endif%}>Start Game!</button>
             </a>
         </div>
 

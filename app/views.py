@@ -303,14 +303,30 @@ def clue_form(request):
 def clue_form_two(request):
     player_clue2 = request.POST['clue2']
     gameturn = GameTurn.objects.create(clue_given=player_clue2)
-    
-def game_end(request, game_id):
-    
-    game = Game.objects.get(id=game_id)
-    teams = Team.objects.filter(game = game).order_by('-score')
-    win_team = Team.objects.filter(game = game).order_by('-score').first()
 
-    context = { "teams": teams, "win_team": win_team }
+# Verify object deletion. If we delete the player, refreshing the end_game page will cause an error.
+# If there are remaining users in the game. This issue can occur when playing with big teams(>100)
+def game_end(request, game_id):
+    average_score=[]
+    points = []
+    results={}
+    game = Game.objects.get(id=game_id)
+    teams_in_game = Team.objects.filter(game = game).order_by('-score')
+    # team_points = teams_in_game.score
+    # Calculates the average questions
+    for team in teams_in_game:
+        total_team_clues = Player.objects.filter(game=game, team=team).count() * 2
+        total_team_points = team.score
+        team_names = team.name
+        average = total_team_points / total_team_clues
+        average_score.append(average)
+        results = dict(zip(teams_in_game, average_score))
+
+    # Dictionary with the average scores
+    print(results)
+
+
+    context = { "results":results, "total_team_clues":total_team_clues,"teams_in_game": teams_in_game }
     return render(request, "app/game_end.html", context)
 
 def game_turn(request, game_id, team_id, player_id):
@@ -329,10 +345,10 @@ def game_turn(request, game_id, team_id, player_id):
 def game_result(request, game_id, team_id, player_id, turn_id):
     
     ## Improved the function print the average of the team scores.
-    
     game_turn = GameTurn.objects.get(id=turn_id)
     question = game_turn.question
     team = Team.objects.get(id=team_id)
+    # Number of turns/questions for the team
     turns_remaining = GameTurn.objects.filter(team=team, team_answer=0).count()
 
     team_answer = game_turn.team_answer
@@ -346,6 +362,12 @@ def question_save(request, left_spectrum, right_spectrum):
     question = Question.objects.create(left_spectrum=left_spectrum, right_spectrum=right_spectrum)
 
     return HttpResponseRedirect(reverse('app:game_turn'))
+
+def leaving_user(request, player_id):
+    # Function deletes the user and send's it to the start page
+    print("++++++++++++++++++++++++++++++++++ You are here ++++++++++++++++++++++++++++++++++")
+    Player.objects.get(id=player_id).delete()
+    return HttpResponseRedirect(reverse('app:start_page'))
 
 def team_answer_response_form(request, game_id, team_id, player_id, turn_id):
   

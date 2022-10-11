@@ -6,13 +6,23 @@
   <h1>Tournament</h1>
   <hr>
   <p>
-    Congratuations! {{win_team}} win!
+    Congratuations! {{teams_in_game.first}} win!
   </p>
-  
-  {% comment %} To display score from highest to lowest {% endcomment %}
-  {% for team in teams %}
-    <p>{{team.name}}:{{team.score}}</p>
+
+    {% comment %} To display score from highest to lowest {% endcomment %}
+  <h5> Final scores </h5>
+  {% for key, values in results.items %}
+    <p>{{key}} : {{values}}</p>
   {% endfor %}
+
+
+  <h5> Total points </h5>
+  {% for team in teams_in_game %}
+    <p>{{team.name}} : {{team.score}}</p>
+  {% endfor %}
+  
+
+
   
   <a href="join_player_registration_form"><button>Join New Game</button></a>
   <a href="host_player_registration_form"><button>Start New Game</button></a>
