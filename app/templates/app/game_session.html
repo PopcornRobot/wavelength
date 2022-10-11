@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_cyberpunk.html" %}
 {% load static %} 
 {% comment %} 
 
@@ -39,16 +39,18 @@ base.html and static are in development
   <div class="center">
     
       <br />
-      Room {{game.id}}
+      <h1> You are in Room {{game.id}} </h1>
       <br />
-      Page for {{player_page.username}}
+      <h4> Please wait until the host starts the game </h4>
+      <hr />
+      {% comment %} Page for {{player_page.username}} {% endcomment %}
       <br />
       {% if player_page.is_host == True %}
       <a href="{% url 'app:team_creation' game_id=game.id player_id=player_page.id %}">
         <button type="submit">Start Game</button>
       </a>
       {% endif %}
-      <button href="{% url 'app:start_page' %}" >Leave Room</button>
+      {% comment %} <button href="{% url 'app:start_page' %}" >Leave Room</button> {% endcomment %}
   </div>
 
   <div class='center'>
@@ -62,7 +64,7 @@ base.html and static are in development
   </div>
 
         <div style='padding:10px ; text-align:center'>
-            <button href="{% url 'app:start_page' %}" >Leave Room</button>
+            {% comment %} <button href="{% url 'app:start_page' %}" >Leave Room</button> {% endcomment %}
             <a>
             <button id='sort_teams_btn' type="submit" {% if player.is_host == False %}style='display:none'{%endif%}>Sort Teams</button>
             </a>
