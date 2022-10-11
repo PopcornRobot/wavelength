@@ -266,10 +266,6 @@ def question_clue_spectrum(request, game_id, team_id, player_id):
             random_question = choice(questions)
             random_question2 = choice(questions)
 
-    # for teams in game return largest team
-    # If current player's team is less than largest team, then random_question3, random question4.
-    # user 1 enters the function random assignation and creates an object for that player and passess it as context   
-
     left_spectrum = random_question.left_spectrum
     right_spectrum = random_question.right_spectrum
     left_spectrum2 = random_question2.left_spectrum
@@ -277,10 +273,6 @@ def question_clue_spectrum(request, game_id, team_id, player_id):
     # save the generated question into QuestionHistory
     question_history = QuestionHistory.objects.create(player=player, question=random_question)
     question_history2 = QuestionHistory.objects.create(player=player, question=random_question2)
-
-    #if the condition is true
-    # player object created with question3
-    # context = player_extra_question--> 3 questions 
    
     # save the generate answer into GameTurn
     generated_random_question_answer = random.randint(1, 100)
