@@ -8,7 +8,7 @@
     <hr />
     <h2>YOUR CLUE</h2>
 
-    <div><h4>Time remaining to enter guess: <span id="time">1:00</span></h4></div>
+    <div><h4>Time remaining to enter guess: <span id="time">2:00</span></h4></div>
 
     <h1>{{clue.clue_given}}</h1>
    
@@ -46,8 +46,8 @@
     const sessionSocket = new WebSocket(
             web_protocol
             + window.location.host
-            + '/ws/game_session/'
-            + gameID
+            + '/ws/team_session/'
+            + teamID
     );
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -113,7 +113,7 @@
        window.onload = function() {
 
         var display = document.querySelector('#time'),
-        timer = new CountDownTimer(10);
+        timer = new CountDownTimer(120);
     
         timer.onTick(format).onTick(timesUp).start();
     

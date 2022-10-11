@@ -10,7 +10,7 @@
  
 <center>
     <h1>Wavelength Tournament</h1>
-    <div><h4>Proceeding to next clue in <span id="time">10</span></h4></div>
+    <div><h4>Proceeding to next clue in <span id="time">20</span></h4></div>
     <br />
 
     <div id='question_1'>
@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.onload = function() {
 
     var display = document.querySelector('#time'),
-    timer = new CountDownTimer(10);
+    timer = new CountDownTimer(5); //sets countdown time in seconds
 
     timer.onTick(format).onTick(timesUp).start();
 

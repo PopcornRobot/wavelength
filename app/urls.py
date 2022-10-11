@@ -24,7 +24,6 @@ urlpatterns = [
     path('player_game_assignation/<int:game_id>', views.player_game_assignation, name='player_game_assignation'),
     path('player_game_assignation/<int:game_id>/<int:player_id>', views.player_game_assignation, name='player_game_assignation'),
     path("question_clue_spectrum/<int:game_id>/<int:team_id>/<int:player_id>", views.question_clue_spectrum, name='question_clue_spectrum'),
-    path("question_save", views.question_save, name="question_save"),
     path("scale", views.scale, name="scale"),
     path('team_creation/<int:game_id>/<int:player_id>', views.team_creation, name='team_creation'),
     path('team_page/<int:game_id>/<int:team_id>/<int:player_id>', views.team_page, name='team_page'),

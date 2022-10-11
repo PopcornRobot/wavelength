@@ -46,9 +46,9 @@
     sessionSocket.send(JSON.stringify({
         'message': message,
         'username': userName,
-        'game': gameID,
+        'value': questionsLeft,
         }));
-};
+    };
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data.message == 'finished guessing'){
             console.log(data.userName + ' submitted their clues');
             console.log(questionsLeft + ' questions left to answer')
-            if (questionsLeft == 0){
+            if (data.value == 0){
                 console.log('everyone has submitted!')
                 window.location.href = "{% url 'app:game_end' game_id=game_id %}"
             };        

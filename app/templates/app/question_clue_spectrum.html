@@ -10,7 +10,7 @@
  
 <center>
     <h1>Wavelength Tournament</h1>
-    <div><h4>Time remaining to enter clue: <span id="time">1:00</span></h4></div>
+    <div><h4>Time remaining to enter clue: <span id="time">2:00</span></h4></div>
     <br />
     <button id='confirm_1' type="button" class="btn btn-primary" disabled>{{ team_members.0 }}</button>
     <button id='confirm_2' type="button" class="btn btn-success" disabled style= {% if team_members.count > 1 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.1 }}</button>
@@ -221,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.onload = function() {
 
     var display = document.querySelector('#time'),
-    timer = new CountDownTimer(10);
+    timer = new CountDownTimer(120);
 
     timer.onTick(format).onTick(timesUp).start();
 
@@ -231,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
             //setTimeout(function() { timer.start(); }, 1000); //reset function, not used
 
             //send player to GameTurn page
-            //insert windows.location.href to GameTurn page here
+            //window.location.href = "{% url 'app:game_turn' game_id=game_id team_id=team_id player_id=player_id %}"
         }
     }
 
