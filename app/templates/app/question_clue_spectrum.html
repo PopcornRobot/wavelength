@@ -12,12 +12,12 @@
     <br />
     <h1>Give a clue</h1>
     <div><h3>Time remaining to enter clue: <span id="time">1:00</span></h3></div>
-    <h5> The dial below shows a pointer at a fixed position, 
-         the position indicates the level of the answer.
-         If the dial is all the way to the left indicates the most extreme example for the left concept,
-         while if the dial is all the way to the right is the most extreme example of the right concept..
-         You need to provide a "clue" that sits where the dial points at.
-         You have two clues. </h5>
+    <h5> The dial below shows a pointer at a fixed position.
+         The position indicates your target answer.
+         A dial all the way to the left indicates the most extreme example for the left concept,
+         while a dial all the way to the right indicates the most extreme example of the right concept.
+         You need to provide a "clue" that will help your team guess the position of the dial.
+         You will be providing clues for two dials. </h5>
     <br />
     <button id='confirm_1' type="button" class="btn btn-primary" disabled>{{ team_members.0 }}</button>
     <button id='confirm_2' type="button" class="btn btn-success" disabled style= {% if team_members.count > 1 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.1 }}</button>
