@@ -1,4 +1,4 @@
-{% extends "base_two.html" %}
+{% extends "base_cyberpunk.html" %}
 {% load static %}
 
 <style>
@@ -9,16 +9,21 @@
 {% block body %}
  
 <center>
-    <h1>Wavelength Tournament</h1>
-    <div><h4>Proceeding to next clue in <span id="time">20</span></h4></div>
     <br />
+    <h1>Responses</h1>
+    <div><h4>Proceeding to next clue in <span id="time">10</span></h4></div>
+    <hr />
 
     <div id='question_1'>
 
         <div class="row" id="sliderOne">
             <div class="col">
+            <br>
                 <div class="center" id="slider"></div>
-                <p>This is the game's answer {{question_answer}}</p>      
+            </br>
+            <br>
+                <p>This is the game's answer {{question_answer}}</p> 
+            </br>     
             </div>
         </div>
 
@@ -33,11 +38,15 @@
 
     <div class="row" class="sliderTwoTwo">
         <div class="col">
+        <br>
             <div class="center" id="sliderTwo"></div>
+        </br>
+        <br>
             <p>This is your team's answer {{team_answer}}</p>
+        </br>
         </div>
     </div>
-
+    
 </center>
 
 {% comment %} transfers context data to javascript {% endcomment %}
