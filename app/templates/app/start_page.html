@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_cyberpunk.html" %}
 {% load static %}
 {% block title %} Wavelegth {% endblock %}
 {% block page_title %} <center> Wavelegth  </center> {% endblock %}
@@ -6,40 +6,34 @@
 
 {% block body %}
 <center>
-  <h1>Wavelegth Tournament</h1>
+  <h1>Wavelegth</h1>
   <form action="host_player_registration_form" method="post">
       {% csrf_token %}
-        <br>
+        <br />
           <label>Name:</label>
           <input type="text" name="username">
-        </br>
-        <br>
+        <br />
           {% for host in players %}
             {% if host.username == player_name %}
               <p>{{host.username}} + ' is already created'</p>
             {% endif %}
           {% endfor %}
-        </br>
-        <br>
+        <br />
           <button type="submit">Create Room</button>
-        </br>
   </form>
   <form action="join_player_registration_form" method="post">
     {% csrf_token %}
-      <br>
+      <br />
         <label>Name:</label>
         <input type="text" name="username">
-      </br>
-      <br>
+      <br />
         {% for join_player in players %}
           {% if join_player.username == player_name %}
             <p>{{join_player.username}} + ' is already added'</p>
           {% endif %}
         {% endfor %}
-      </br>
-      <br>
+      <br />
        <button type="submit">Join Room</button>
-      </br>  
   </form>
 </center>
 {% endblock %}
