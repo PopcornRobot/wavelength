@@ -1,12 +1,15 @@
 {% extends "base_cyberpunk.html" %}
 {% load static %}
-{% block title %} Wavelegth {% endblock %}
-{% block page_title %} <center> Wavelegth  </center> {% endblock %}
-
 
 {% block body %}
 <center>
-  <h1>Wavelegth</h1>
+  <br />
+  <br />
+  <p class="mono" style="font-size:40px;">W A V E L E N G T H</h1>
+  <p class="mono" style="font-size:25px;">Welcome to the Wavelength game!</h6> 
+  <p class="mono" style="font-size:15px;">To start, create your username to either host a new game (create room) or join an exisiting game (join room).</h6>
+  <p class="mono" style="font-size:15px;">If you're new to this game, click <a href="{% url 'app:game_tutorial' %}">here</a> to watch the tutorial.</p>
+
   <form action="host_player_registration_form" method="post">
       {% csrf_token %}
         <br />
@@ -19,7 +22,7 @@
             {% endif %}
           {% endfor %}
         <br />
-          <button type="submit">Create Room</button>
+          <button class="btn btn-primary" type="submit">Create Room</button>
   </form>
   <form action="join_player_registration_form" method="post">
     {% csrf_token %}
@@ -33,7 +36,7 @@
           {% endif %}
         {% endfor %}
       <br />
-       <button type="submit">Join Room</button>
+       <button class="btn btn-primary" type="submit">Join Room</button>
   </form>
 </center>
 {% endblock %}

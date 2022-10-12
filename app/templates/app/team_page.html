@@ -1,16 +1,5 @@
 {% extends "base_cyberpunk.html" %}
 {% load static %}
-{% comment %} 
-
-OBJECTIVE:
-Place Holder for "base.html" and static objects
-{% extends "base.html" %}
-{% load static %} 
-
-STAUTS:
-base.html and static are in development
-
-{% endcomment %}
 
 {% block title %}Wavelength{% endblock %}
 {% block page_title %} Team Room {% endblock %}
@@ -52,7 +41,7 @@ base.html and static are in development
         <div style='padding:10px ; text-align:center'>
             <button href="{% url 'app:leaving_user' player_id=current_player.id %}" >Leave Game</button>
             <a>
-              <button id='start_game_btn' type="submit" {% if player.is_host == False %}style='display:none'{%endif%}>Start Game!</button>
+            <button class="btn btn-primary" id='start_game_btn' type="submit" {% if player.is_host == False %}style='display:none'{%endif%}>Start Game!</button>
             </a>
         </div>
 

@@ -184,8 +184,8 @@ def game_session(request, game_id, player_id):
 # create a waiting room   
 def waiting_room(request, game_id):
     game = Game.objects.get(id=game_id)
-    session_players = Player.objects.filter(game=game)
-    context = {"session_players" : session_players, 'game_id':game_id}
+    questions_left = GameTurn.objects.filter(game=game, team_answer=0)
+    context = {"questions_left" : questions_left, 'game_id':game_id}
     return render(request, "app/waiting_room.html", context)
 
 def start_page(request):
@@ -296,14 +296,7 @@ def clue_form(request):
 
     new_game_turn = GameTurn.objects.create(team=team, game=game, question=question, player=player, clue_given=clue, question_answer=question_answer)
     print('created GameTurn ' + str(new_game_turn))
-
-# obsoleted by clue_form function
-def clue_form_two(request):
-    player_clue2 = request.POST['clue2']
-    gameturn = GameTurn.objects.create(clue_given=player_clue2)
-
-# Verify object deletion. If we delete the player, refreshing the end_game page will cause an error.
-# If there are remaining users in the game. This issue can occur when playing with big teams(>100)
+    
 def game_end(request, game_id):
     average_score=[]
     points = []
@@ -440,4 +433,7 @@ def cleaning_data_base(request, game_id):
         game.delete()
 
     return HttpResponseRedirect(reverse('app:start_page'))
+def game_tutorial(request):
+    context = {}
+    return render(request, 'app/game_tutorial.html', context)
 ##########################################################################################
