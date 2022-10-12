@@ -11,7 +11,7 @@
 <center>
     <br />
     <h1>Give a clue</h1>
-    <div><h3>Time remaining to enter clue: <span id="time">1:00</span></h3></div>
+    <div><h3>Time remaining to enter clue: <span id="time">2:00</span></h3></div>
     <h5> DO NOT LET YOUR TEAMMATES SEE THIS PAGE!
          The dial below shows a pointer at a fixed position.
          The position indicates your target answer.
@@ -44,8 +44,6 @@
             </div>
         </div>
 
-        <p><b>Timer: 3 minutes</b></p>
-
         {% comment %} <form action="{% url 'app:clue_form_one' %}" method="post">
             {% csrf_token %} {% endcomment %}
             <br />
@@ -75,7 +73,6 @@
             {{right_spectrum2}}
         </span>
     </p>
-    <p><b>Timer: 3 minutes</b></p>
     <br>
         <label for="clue2">Enter Your Second Clue:</label>
         <input id="clue2" type="text" name="clue2">
@@ -239,7 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
             //setTimeout(function() { timer.start(); }, 1000); //reset function, not used
 
             //send player to GameTurn page
-            //window.location.href = "{% url 'app:game_turn' game_id=game_id team_id=team_id player_id=player_id %}"
+            window.location.href = "{% url 'app:game_turn' game_id=game_id team_id=team_id player_id=player_id %}"
         }
     }
 
