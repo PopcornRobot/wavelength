@@ -5,16 +5,11 @@
 <center>
     <br />
     <h1> Time to guess! </h1>
-    <h5> The dial below shows a pointer at a fixed position,
-         the position indicates the level of the answer,
-         If the dial is all the way to the left indicates the most extreme example for the left concept,
-         while if the dial is all the way to the right is the most extreme example of the right concept..
-         As a team use the dial to indicate where do you think the clue sits. </h5>
     <hr />
     <h2>YOUR CLUE</h2>
-
+    
     <h1>{{clue.clue_given}}</h1>
-   
+    
     <form action="{% url 'app:team_answer_response_form' game_id=game_id team_id=team_id player_id=player_id turn_id=turn_id %}" method="post">
         {% csrf_token %}
         <div class="row">
@@ -33,6 +28,17 @@
     <div class="right_spectrum" align="right">{{clue.question.right_spectrum}}</div>
 
 </center>    
+
+<div style="width:600px; margin:0 auto;">
+    <h5>Instructions:</h5>
+    <ul>
+        <li><h6>The dial below shows a pointer at a fixed position,</h6></li>
+        <li><h6>the position indicates the level of the answer,</h6></li>
+        <li><h6>If the dial is all the way to the left indicates the most extreme example for the left concept,</h6></li>
+        <li><h6>while if the dial is all the way to the right is the most extreme example of the right concept..</h6></li>
+        <li><h6>As a team use the dial to indicate where do you think the clue sits.</h5></li> 
+    </ul>
+</div>
 
     {{ game_id|json_script:'json-game-id' }}
     {{ player.username|json_script:'json-username' }}
