@@ -351,6 +351,11 @@ def game_result(request, game_id, team_id, player_id, turn_id):
     context = {'team_answer':team_answer, 'question_answer': question_answer, "game_turn" : game_turn, "question" : question, "turns_remaining" : turns_remaining, "game_id" : game_id, "team_id" : team_id, "player_id" : player_id}
     return render(request, "app/game_result.html", context)
 
+def leaving_user(request, player_id):
+    # Function deletes the user and send's it to the start page
+    Player.objects.get(id=player_id).delete()
+    return HttpResponseRedirect(reverse('app:start_page'))
+
 # save the already used spectrum into a dictionary
 def question_save(request, left_spectrum, right_spectrum):
     question = Question.objects.create(left_spectrum=left_spectrum, right_spectrum=right_spectrum)
