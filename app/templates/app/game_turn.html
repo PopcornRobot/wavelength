@@ -14,22 +14,6 @@
     <h2>YOUR CLUE</h2>
 
     <h1>{{clue.clue_given}}</h1>
-    <p>{{player.id}}</p>
-    <p>{{clue.player.id}}</p>
-   
-    {% comment %} <form action="{% url 'app:team_answer_response_form' game_id=game_id team_id=team_id player_id=player_id turn_id=turn_id %}" method="post"> 
-        {% csrf_token %} 
-        <div class="row">
-            <div class="col">
-                <div class="center" id="slider"></div>
-                <br />
-                <div id="gameValue"></div>
-            </div>
-        </div>
-        <br />
-        <br />
-        <input id="teamAnswer" name="teamAnswer" type="submit" value="Submit">
-    </form> {% endcomment %}
 
     <form id="teamAnswerForm" action="{% url 'app:team_answer_response_form' game_id=game_id team_id=team_id player_id=player_id turn_id=turn_id %}" method="post"> 
         {% csrf_token %} 
@@ -37,17 +21,21 @@
             <div class="col">
                 <div class="center" id="slider"></div>
                 <br />
-                <div id="gameValue"></div>
+                <div id="gameValue" style="display: none;"></div>
+                <p style="text-align:left; width: 375px;">
+                    {{clue.question.left_spectrum}}
+                    <span style="float:right;">
+                            {{clue.question.right_spectrum}}
+                    </span>
+                </p>     
             </div>
         </div>
         <br />
         <br />
-        <button id="submitButton" type="button" style= {% if player.id != clue.player.id %} 'display:block' {% else %} 'display:none' {% endif %}>Submit</button>
+        <button class="btn btn-primary" id="submitButton" type="button" style= {% if player.id != clue.player.id %} 'display:block' {% else %} 'display:none' {% endif %}>Submit</button>
     </form>
-      
 
-    <div class="left_spectrum" align="left">{{clue.question.left_spectrum}}</div>
-    <div class="right_spectrum" align="right">{{clue.question.right_spectrum}}</div>
+ 
 
 </center>    
 
