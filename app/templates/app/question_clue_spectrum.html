@@ -2,7 +2,8 @@
 {% load static %}
 
 <style>
-    {% block style %}    
+    {% block style %}
+
     {% endblock %}
 </style>
 
@@ -12,13 +13,6 @@
     <br />
     <h1>Give a clue</h1>
     <div><h3>Time remaining to enter clue: <span id="time">1:00</span></h3></div>
-    <h5> DO NOT LET YOUR TEAMMATES SEE THIS PAGE!
-         The dial below shows a pointer at a fixed position.
-         The position indicates your target answer.
-         A dial all the way to the left indicates the most extreme example for the left concept,
-         while a dial all the way to the right indicates the most extreme example of the right concept.
-         You need to provide a "clue" that will help your team guess the position of the dial.
-         You will be providing clues for two dials. </h5>
     <br />
     <button id='confirm_1' type="button" class="btn btn-primary" disabled>{{ team_members.0 }}</button>
     <button id='confirm_2' type="button" class="btn btn-success" disabled style= {% if team_members.count > 1 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.1 }}</button>
@@ -27,9 +21,8 @@
     {% comment %} team size is {{ team_members.count }} {% endcomment %}
     <br />
     <hr />
-
+    
     <div id='question_1'>
-        <h3>Spectrum 1</h3>
         <div class="row">
             <div class="col">
                 <div class="center" id="slider"></div>
@@ -43,13 +36,20 @@
                 <!-- <div id="gameGeneratedAnswer">{{generated_random_question_answer}}</div> -->
             </div>
         </div>
+        
+        <p style="text-align:left; width: 450px;">
+            {{left_spectrum}}
+            <span style="float:right;">
+                {{right_spectrum}}
+            </span>
+        </p>
 
         <p><b>Timer: 3 minutes</b></p>
-
+        
         {% comment %} <form action="{% url 'app:clue_form_one' %}" method="post">
             {% csrf_token %} {% endcomment %}
             <br />
-                <label for="clue1">Clue1:</label>
+            <label for="clue1">Clue1:</label>
                 <input id="clue1" type="text" name="clue1">
             <br />
         <br />
@@ -68,7 +68,7 @@
             <br />
         </div>
     </div>
-
+    
     <p style="text-align:left; width: 450px;">
         {{left_spectrum2}}
         <span style="float:right;">
@@ -84,13 +84,25 @@
     <input class="btn btn-primary" id='submit_clue_2' type="submit" value="Submit" >
     </br>
     {% comment %} </form> {% endcomment %}
-    </div>
+</div>
 
-    <div id='please_wait' style='display:none'>
-        <h1>Waiting for other teammates to submit their clues....</h1>
-    </div>
-    <br />
+<div id='please_wait' style='display:none'>
+    <h1>Waiting for other teammates to submit their clues....</h1>
+</div>
+<br />
 </center>
+
+<div style="width:600px; margin:0 auto;">
+    <h5>Instructions:</h5>
+    <ul>
+        <li><h6>The dial below shows a h6ointer at a fixed h6osition,</h6></li>
+        <li><h6>the h6osition indicates the level of the answer.</h6></li>
+        <li><h6>If the dial is all the way to the left indicates the most extreme examh6le for the left conceh6t,</h6></li>
+        <li><h6>while if the dial is all the way to the right is the most extreme examh6le of the right conceh6t..</h6></li>
+        <li><h6>You need to h6rovide a "clue" that sits where the dial h6oints at.</h6></li>
+        <li><h6>You have two clues.</h6></li>
+    </ul>
+</div>
 
 {% comment %} transfers context data to javascript {% endcomment %}
 {{ game_id|json_script:'json-game-id' }}
