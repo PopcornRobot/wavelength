@@ -6,7 +6,7 @@
   <h1>Final Scores</h1>
   <hr /> 
   <p>
-    <h2> Congratuations! {{win_team}} win! </h2>
+    <h2> Congratuations! {{win_team}} won! </h2>
   </p>
   
   {% comment %} To display score from highest to lowest {% endcomment %}
@@ -14,7 +14,7 @@
     <p><h4>{{team.name}}:{{team.score}}</h4></p>
   {% endfor %}
   
-  <a href="join_player_registration_form"><button>Join New Game</button></a>
-  <a href="host_player_registration_form"><button>Start New Game</button></a>
+  <a href="join_player_registration_form"><button class="btn btn-primary">Join New Game</button></a>
+  <a href="host_player_registration_form"><button class="btn btn-primary">Start New Game</button></a>
 </center>
 {% endblock %}

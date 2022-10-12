@@ -15,35 +15,35 @@
     <hr />
 
     <div id='question_1'>
-
         <div class="row" id="sliderOne">
             <div class="col">
-            <br>
+                <br />
                 <div class="center" id="slider"></div>
-            </br>
-            <br>
-                <p>This is the game's answer {{question_answer}}</p> 
-            </br>     
+                <p style="text-align:left; width: 375px;">
+                    {{question.left_spectrum}}
+                    <span style="float:right;">
+                        {{question.right_spectrum}}
+                    </span>
+                </p>
+                <p class="mono" style="font-size:20px;">The correct answer is {{question_answer}}!</p> 
+                <br />     
             </div>
-        </div>
-
-        <p style="text-align:left; width: 450px;">
-            {{question.left_spectrum}}
-            <span style="float:right;">
-                {{question.right_spectrum}}
-            </span>
-        </p>
-        
+        </div>    
     </div>
 
     <div class="row" class="sliderTwoTwo">
         <div class="col">
-        <br>
+            <br />
             <div class="center" id="sliderTwo"></div>
-        </br>
-        <br>
-            <p>This is your team's answer {{team_answer}}</p>
-        </br>
+            <p style="text-align:left; width: 375px;">
+                {{question.left_spectrum}}
+                <span style="float:right;">
+                    {{question.right_spectrum}}
+                </span>
+            </p>
+            <p class="mono" style="font-size:20px;">Your team guessed {{team_answer}}!</p>
+            <!-- <p class="mono" style="font-size:40px;">+{{team_answer}}!</p> -->
+            <br />
         </div>
     </div>
     
@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.onload = function() {
 
     var display = document.querySelector('#time'),
-    timer = new CountDownTimer(10);
+    timer = new CountDownTimer(5); //sets countdown time in seconds
 
     timer.onTick(format).onTick(timesUp).start();
 
