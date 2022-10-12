@@ -23,21 +23,21 @@
     <hr />
     
     <div id='question_1'>
-        
+        <h3>Spectrum 1</h3>
         <div class="row">
             <div class="col">
                 <div class="center" id="slider"></div>
                 <br />
-                <div id="gameGeneratedAnswer">{{generated_random_question_answer}}</div>
+                <p style="text-align:left; width: 375px;">
+                    {{left_spectrum}}
+                    <span style="float:right;">
+                        {{right_spectrum}}
+                    </span>
+                </p>
+                <!-- <div id="gameGeneratedAnswer">{{generated_random_question_answer}}</div> -->
             </div>
         </div>
-        
-        <p style="text-align:left; width: 450px;">
-            {{left_spectrum}}
-            <span style="float:right;">
-                {{right_spectrum}}
-            </span>
-        </p>
+
         <p><b>Timer: 3 minutes</b></p>
         
         {% comment %} <form action="{% url 'app:clue_form_one' %}" method="post">
@@ -47,7 +47,7 @@
                 <input id="clue1" type="text" name="clue1">
             <br />
         <br />
-        <button id='submit_clue_1' href= '#!' type="button" value="Submit"> Submit</button>
+        <button class="btn btn-primary" id='submit_clue_1' href= '#!' type="button" value="Submit"> Submit</button>
         {% comment %} onclick="this.disabled=true" {% endcomment %}
         <br />
 
@@ -55,7 +55,7 @@
     <hr />
 
     <div id='question_2' style='display:none'>
-
+        <h3>Spectrum 2</h3>
     <div class="row">
         <div class="col">
             <div class="center" id="sliderTwo"></div>
@@ -71,11 +71,11 @@
     </p>
     <p><b>Timer: 3 minutes</b></p>
     <br>
-        <label for="clue2">Please Enter Your Second Clue:</label>
+        <label for="clue2">Enter Your Second Clue:</label>
         <input id="clue2" type="text" name="clue2">
     </br>
     <br>
-    <input id='submit_clue_2' type="submit" value="Submit" >
+    <input class="btn btn-primary" id='submit_clue_2' type="submit" value="Submit" >
     </br>
     {% comment %} </form> {% endcomment %}
 </div>
@@ -235,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.onload = function() {
 
     var display = document.querySelector('#time'),
-    timer = new CountDownTimer(10);
+    timer = new CountDownTimer(120);
 
     timer.onTick(format).onTick(timesUp).start();
 
@@ -245,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
             //setTimeout(function() { timer.start(); }, 1000); //reset function, not used
 
             //send player to GameTurn page
-            //insert windows.location.href to GameTurn page here
+            //window.location.href = "{% url 'app:game_turn' game_id=game_id team_id=team_id player_id=player_id %}"
         }
     }
 

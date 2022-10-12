@@ -185,8 +185,8 @@ def game_session(request, game_id, player_id):
 # create a waiting room   
 def waiting_room(request, game_id):
     game = Game.objects.get(id=game_id)
-    session_players = Player.objects.filter(game=game)
-    context = {"session_players" : session_players, 'game_id':game_id}
+    questions_left = GameTurn.objects.filter(game=game, team_answer=0)
+    context = {"questions_left" : questions_left, 'game_id':game_id}
     return render(request, "app/waiting_room.html", context)
 
 def start_page(request):
@@ -294,11 +294,6 @@ def clue_form(request):
 
     new_game_turn = GameTurn.objects.create(team=team, game=game, question=question, player=player, clue_given=clue, question_answer=question_answer)
     print('created GameTurn ' + str(new_game_turn))
-
-# obsoleted by clue_form function
-def clue_form_two(request):
-    player_clue2 = request.POST['clue2']
-    gameturn = GameTurn.objects.create(clue_given=player_clue2)
     
 def game_end(request, game_id):
     
@@ -314,11 +309,14 @@ def game_turn(request, game_id, team_id, player_id):
     team = Team.objects.get(id=team_id)
     player = Player.objects.get(id=player_id)
 
+    team_members = Player.objects.filter(team=team)
+    team_size = team_members.count()
+
     unanswered_clues = GameTurn.objects.filter(team=team, team_answer=0).order_by('player').first()
     clue = unanswered_clues
     turn_id = clue.id
 
-    context = {'turn_id': turn_id, 'game': game, 'team': team, 'player': player, 'clue': clue, 'game_id': game_id, 'team_id': team_id, 'player_id':player_id}
+    context = {'turn_id': turn_id, 'game': game, 'team': team, 'player': player, 'clue': clue, 'game_id': game_id, 'team_id': team_id, 'player_id':player_id, 'team_size': team_size }
 
     return render(request, "app/game_turn.html", context)
 
@@ -334,31 +332,29 @@ def game_result(request, game_id, team_id, player_id, turn_id):
     context = {'team_answer':team_answer, 'question_answer': question_answer, "game_turn" : game_turn, "question" : question, "turns_remaining" : turns_remaining, "game_id" : game_id, "team_id" : team_id, "player_id" : player_id}
     return render(request, "app/game_result.html", context)
 
-# save the already used spectrum into a dictionary
-def question_save(request, left_spectrum, right_spectrum):
-    question = Question.objects.create(left_spectrum=left_spectrum, right_spectrum=right_spectrum)
-
-    return HttpResponseRedirect(reverse('app:game_turn'))
-
 def team_answer_response_form(request, game_id, team_id, player_id, turn_id):
   
     if request.method == 'POST':
         team_answer_form = request.POST['slider']
-        team_answer = GameTurn.objects.filter(id=turn_id).update(team_answer=team_answer_form)
         question = GameTurn.objects.get(id=turn_id).question_answer      
         team = Team.objects.get(id=team_id)
         difference = abs(question - int(team_answer_form))
+        team_answer = GameTurn.objects.get(id=turn_id).team_answer
 
-        # below records score based on pre-defined threshold    
-        if difference <= 6:
-            team.score += 4
-        elif 7 <= difference <=12:
-            team.score += 3
-        elif 13 <= difference <=18:
-            team.score +=2
-        elif 19 <= difference <=24:
-            team.score  +=1
-        team.save()
+        #below prevents the websockets from adding the team_answer mutiple times
+        if team_answer == 0:
+            team_answer = GameTurn.objects.filter(id=turn_id).update(team_answer=team_answer_form)
+            # below records score based on pre-defined threshold    
+            if difference <= 6:
+                team.score += 4
+            elif 7 <= difference <=12:
+                team.score += 3
+            elif 13 <= difference <=18:
+                team.score +=2
+            elif 19 <= difference <=24:
+                team.score  +=1
+            team.save()
+        print(str(team.score) + " || team_score")
 
     return HttpResponseRedirect(reverse('app:game_result', kwargs={'game_id':game_id, 'team_id':team_id, 'player_id':player_id,'turn_id':turn_id}))
  
@@ -406,4 +402,7 @@ def dashboard_player_clues(request):
 
     return render(request, "app/dashboard_player_clues.html", context)
 
+def game_tutorial(request):
+    context = {}
+    return render(request, 'app/game_tutorial.html', context)
 ##########################################################################################

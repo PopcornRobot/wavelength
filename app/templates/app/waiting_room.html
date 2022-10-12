@@ -22,18 +22,17 @@
 {{ game_id|json_script:'json-game-id' }}
 {{ team_id|json_script:'json-team-id' }}
 {{ player.username|json_script:'json-username' }}
-{{ session_players.count|json_script:'json-session-size' }}
+{{ questions_left.count|json_script:'json-questions-left' }}
 
 
 <script>
     const gameID = JSON.parse(document.getElementById('json-game-id').textContent);
     const teamID = JSON.parse(document.getElementById('json-team-id').textContent);
     const userName = JSON.parse(document.getElementById('json-username').textContent);
-    const session_size = JSON.parse(document.getElementById('json-session-size').textContent);
+    const questionsLeft = JSON.parse(document.getElementById('json-questions-left').textContent);
     let web_protocol
     location.protocol == "http:" ? web_protocol = "ws://" : web_protocol = "wss://"
     console.log("web_protocol", web_protocol)
-
     
     const sessionSocket = new WebSocket(
             web_protocol
@@ -48,105 +47,28 @@
     sessionSocket.send(JSON.stringify({
         'message': message,
         'username': userName,
-        'game': gameID,
+        'value': questionsLeft,
         }));
-};
+    };
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    let submit_count = 0;
 
     sessionSocket.onmessage = function(e) {
         console.log('message received');
         const data = JSON.parse(e.data);
         console.log(data);
         if (data.message == 'finished guessing'){
-            submit_count += 1;
-            console.log(data.username + ' submitted their clues');
-            console.log(submit_count + ' players are ready')
-            if (submit_count >= session_size){
+            console.log(data.userName + ' submitted their clues');
+            console.log(questionsLeft + ' questions left to answer')
+            if (data.value == 0){
                 console.log('everyone has submitted!')
                 window.location.href = "{% url 'app:game_end' game_id=game_id %}"
             };        
         }
     };
 
-    //Countdown Timer
-    window.onload = function() {
-
-    var display = document.querySelector('#time'),
-    timer = new CountDownTimer(10);
-
-    timer.onTick(format).onTick(timesUp).start();
-
-    function timesUp() {
-        if (this.expired()) {
-            console.log('Times up!')
-            //setTimeout(function() { timer.start(); }, 1000); //reset function, not used
-
-            //send player to GameTurn page
-            //insert windows.location.href to GameTurn page here
-        }
-    }
-
-    function format(minutes, seconds) {
-        minutes = minutes < 10 ? + minutes : minutes;
-        seconds = seconds < 10 ? "0" + seconds : seconds;
-        display.textContent = minutes + ':' + seconds;
-    }
-    };
     });
-
-    function CountDownTimer(duration, granularity) {
-        this.duration = duration;
-        this.granularity = granularity || 1000;
-        this.tickFtns = [];
-        this.running = false;
-    }
-
-    CountDownTimer.prototype.start = function() {
-        if (this.running) {
-            return;
-        }
-        this.running = true;
-        var start = Date.now(),
-        that = this,
-        diff, obj;
-
-        (function timer() {
-            diff = that.duration - (((Date.now() - start) / 1000) | 0);
-
-            if (diff > 0) {
-                setTimeout(timer, that.granularity);
-            } else {
-                diff = 0;
-                that.running = false;
-            }
-
-            obj = CountDownTimer.parse(diff);
-            that.tickFtns.forEach(function(ftn) {
-                ftn.call(this, obj.minutes, obj.seconds);
-            }, that);
-        }());
-    };
-
-    CountDownTimer.prototype.onTick = function(ftn) {
-        if (typeof ftn === 'function') {
-            this.tickFtns.push(ftn);
-        }
-        return this;
-    };
-
-    CountDownTimer.prototype.expired = function() {
-        return !this.running;
-    };
-
-    CountDownTimer.parse = function(seconds) {
-        return {
-            'minutes': (seconds / 60) | 0,
-            'seconds': (seconds % 60) | 0
-        };
-    };
 
 </script>
 {% endblock %}

@@ -41,16 +41,16 @@ base.html and static are in development
       <br />
       <h1> You are in Room {{game.id}} </h1>
       <br />
-      <h4> Please wait until the host starts the game </h4>
+      <h4> Please wait for the host to start the game </h4>
       <hr />
       {% comment %} Page for {{player_page.username}} {% endcomment %}
       <br />
       {% if player_page.is_host == True %}
       <a href="{% url 'app:team_creation' game_id=game.id player_id=player_page.id %}">
-        <button type="submit">Start Game</button>
+        <button class="btn btn-primary" type="submit">Start Game</button>
       </a>
       {% endif %}
-      {% comment %} <button href="{% url 'app:start_page' %}" >Leave Room</button> {% endcomment %}
+      {% comment %} <button class="btn btn-primary" href="{% url 'app:start_page' %}" >Leave Room</button> {% endcomment %}
   </div>
 
   <div class='center'>
@@ -64,9 +64,9 @@ base.html and static are in development
   </div>
 
         <div style='padding:10px ; text-align:center'>
-            {% comment %} <button href="{% url 'app:start_page' %}" >Leave Room</button> {% endcomment %}
+            {% comment %} <button class="btn btn-primary" href="{% url 'app:start_page' %}" >Leave Room</button> {% endcomment %}
             <a>
-            <button id='sort_teams_btn' type="submit" {% if player.is_host == False %}style='display:none'{%endif%}>Sort Teams</button>
+            <button class="btn btn-primary" id='sort_teams_btn' type="submit" {% if player.is_host == False %}style='display:none'{%endif%}>Sort Teams</button>
             </a>
         </div>
 
