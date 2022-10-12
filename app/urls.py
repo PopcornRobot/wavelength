@@ -7,6 +7,7 @@ urlpatterns = [
     path("", views.start_page, name="start_page"),
     path("chatty", views.index, name="index"),
     path("chatty/<str:room_name>/", views.room, name="room"),
+    path("cleaning_data_base/<int:game_id>", views.cleaning_data_base, name="cleaning_data_base"),
     path("clue_form", views.clue_form, name="clue_form"),
     path("dashboard", views.dashboard, name="dashboard"),
     path("dashboard/games", views.dashboard_games, name="dashboard_games"),

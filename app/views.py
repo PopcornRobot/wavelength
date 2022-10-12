@@ -320,7 +320,7 @@ def game_end(request, game_id):
         average_score.append(average)
         results = dict(zip(teams_in_game, average_score))
 
-    context = { "results":results, "total_team_clues":total_team_clues,"teams_in_game": teams_in_game }
+    context = { "results":results, "total_team_clues":total_team_clues,"teams_in_game": teams_in_game, "game":game }
     return render(request, "app/game_end.html", context)
 
 def game_turn(request, game_id, team_id, player_id):
@@ -431,4 +431,13 @@ def dashboard_player_clues(request):
 
     return render(request, "app/dashboard_player_clues.html", context)
 
+def cleaning_data_base(request, game_id):
+    #Get all the objects
+    if Game.objects.filter(id=game_id).exists():
+        game=Game.objects.get(id=game_id)
+        players=Player.objects.filter(game=game).delete()
+        teams=Team.objects.filter(game=game).delete()
+        game.delete()
+
+    return HttpResponseRedirect(reverse('app:start_page'))
 ##########################################################################################
