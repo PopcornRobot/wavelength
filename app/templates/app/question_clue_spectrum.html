@@ -29,7 +29,7 @@
     <hr />
 
     <div id='question_1'>
-
+        <h3>Spectrum 1</h3>
         <div class="row">
             <div class="col">
                 <div class="center" id="slider"></div>
@@ -61,7 +61,7 @@
     <hr />
 
     <div id='question_2' style='display:none'>
-
+        <h3>Spectrum 2</h3>
     <div class="row">
         <div class="col">
             <div class="center" id="sliderTwo"></div>
@@ -77,7 +77,7 @@
     </p>
     <p><b>Timer: 3 minutes</b></p>
     <br>
-        <label for="clue2">Please Enter Your Second Clue:</label>
+        <label for="clue2">Enter Your Second Clue:</label>
         <input id="clue2" type="text" name="clue2">
     </br>
     <br>
@@ -229,7 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.onload = function() {
 
     var display = document.querySelector('#time'),
-    timer = new CountDownTimer(10);
+    timer = new CountDownTimer(120);
 
     timer.onTick(format).onTick(timesUp).start();
 
@@ -239,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
             //setTimeout(function() { timer.start(); }, 1000); //reset function, not used
 
             //send player to GameTurn page
-            //insert windows.location.href to GameTurn page here
+            //window.location.href = "{% url 'app:game_turn' game_id=game_id team_id=team_id player_id=player_id %}"
         }
     }
 

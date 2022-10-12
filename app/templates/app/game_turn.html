@@ -13,6 +13,8 @@
     <hr />
     <h2>YOUR CLUE</h2>
 
+    <div><h4>Time remaining to enter guess: <span id="time">2:00</span></h4></div>
+
     <h1>{{clue.clue_given}}</h1>
 
     <form id="teamAnswerForm" action="{% url 'app:team_answer_response_form' game_id=game_id team_id=team_id player_id=player_id turn_id=turn_id %}" method="post"> 
@@ -61,8 +63,8 @@
     const sessionSocket = new WebSocket(
             web_protocol
             + window.location.host
-            + '/ws/game_session/'
-            + gameID
+            + '/ws/team_session/'
+            + teamID
     );
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -135,8 +137,84 @@
         
         }); //end of .roundSlider 
     
+       //Countdown Timer
+       window.onload = function() {
+
+        var display = document.querySelector('#time'),
+        timer = new CountDownTimer(120);
+    
+        timer.onTick(format).onTick(timesUp).start();
+    
+        function timesUp() {
+            if (this.expired()) {
+                console.log('Times up!')
+                //setTimeout(function() { timer.start(); }, 1000); //reset function, not used
+    
+                //send player to GameTurn page
+                //insert windows.location.href to GameTurn page here
+            }
+        }
+    
+        function format(minutes, seconds) {
+            minutes = minutes < 10 ? + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+            display.textContent = minutes + ':' + seconds;
+        }
+        }; //end of countdown timer
+
     }); //end of page load
 
+    //countdown timer functions
+    function CountDownTimer(duration, granularity) {
+        this.duration = duration;
+        this.granularity = granularity || 1000;
+        this.tickFtns = [];
+        this.running = false;
+    }
+
+    CountDownTimer.prototype.start = function() {
+        if (this.running) {
+            return;
+        }
+        this.running = true;
+        var start = Date.now(),
+        that = this,
+        diff, obj;
+
+        (function timer() {
+            diff = that.duration - (((Date.now() - start) / 1000) | 0);
+
+            if (diff > 0) {
+                setTimeout(timer, that.granularity);
+            } else {
+                diff = 0;
+                that.running = false;
+            }
+
+            obj = CountDownTimer.parse(diff);
+            that.tickFtns.forEach(function(ftn) {
+                ftn.call(this, obj.minutes, obj.seconds);
+            }, that);
+        }());
+    };
+
+    CountDownTimer.prototype.onTick = function(ftn) {
+        if (typeof ftn === 'function') {
+            this.tickFtns.push(ftn);
+        }
+        return this;
+    };
+
+    CountDownTimer.prototype.expired = function() {
+        return !this.running;
+    };
+
+    CountDownTimer.parse = function(seconds) {
+        return {
+            'minutes': (seconds / 60) | 0,
+            'seconds': (seconds % 60) | 0
+        };
+    };
 </script> 
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>                            
