@@ -57,8 +57,9 @@ def get_teams(team_names, players):
         for i in range(number_of_teams)
     }
 
-# This function will be enable only by the host
+# AC: This function will be enable only by the host
 # NOTE: Create a player joining argument to track who joins and use it as URL #
+
 def team_creation(request, game_id, player_id):
     print(player_id)
     current_player = Player.objects.get(id=player_id)
@@ -124,7 +125,7 @@ def team_creation(request, game_id, player_id):
 
     return HttpResponseRedirect(reverse('app:team_page', kwargs={'game_id' : game_id, 'team_id' : team_id, 'player_id': player_id }))
 
-# Team page will print all the members in the team 
+# AC: Team page will print all the members in the team 
 def team_page(request, game_id, team_id, player_id):
     player = Player.objects.get(id=player_id)
     team = Team.objects.filter(game=game_id)
@@ -244,28 +245,20 @@ def join_player_registration_form(request):
     # return HttpResponse("form success")
 
 def question_clue_spectrum(request, game_id, team_id, player_id):
-    print('************ Count + 1 *************************')
-    all_question_history = QuestionHistory.objects.all()
+    print('************question*************************')
     player = Player.objects.get(id=player_id)
     team = Team.objects.get(id=team_id)
     team_members = Player.objects.filter(team=team)
     questions = Question.objects.all()
-
     random_question = choice(questions)
     random_question2 = choice(questions)
 
-    # Checks if the values exist and avoids repetead values withing the different teams
-    if QuestionHistory.objects.filter(question=random_question).exists() or QuestionHistory.objects.filter(question=random_question2).exists(): 
+   
+    # check if random_question == random_question2
+    if random_question == random_question2:
         random_question = choice(questions)
-        random_question2 = choice(questions)
-        while random_question == random_question2:
-            random_question = choice(questions)
-            random_question2 = choice(questions)
-    else:
-        while random_question == random_question2:
-            random_question = choice(questions)
-            random_question2 = choice(questions)
-
+        if random_question == random_question2:
+            random_question = choice(questions)                                                                                                                                        
     left_spectrum = random_question.left_spectrum
     right_spectrum = random_question.right_spectrum
     left_spectrum2 = random_question2.left_spectrum
@@ -284,14 +277,17 @@ def question_clue_spectrum(request, game_id, team_id, player_id):
     
 # submit clue and create new GameTurn object
 def clue_form(request):
+    print(request)
     team_id = request.get('team')
     team = Team.objects.get(id=team_id)
     game_id = request.get('game')
     game = Game.objects.get(id=game_id)
     question_id = request.get('question')
     question = Question.objects.get(id=question_id)
+    # print(question)
     player_name = request.get('username')
     player = Player.objects.get(username=player_name)
+    # print(player)
     clue = request.get('clue')
     # print(clue)
     question_answer = request.get('value')
@@ -303,30 +299,14 @@ def clue_form(request):
 def clue_form_two(request):
     player_clue2 = request.POST['clue2']
     gameturn = GameTurn.objects.create(clue_given=player_clue2)
-
-# Verify object deletion. If we delete the player, refreshing the end_game page will cause an error.
-# If there are remaining users in the game. This issue can occur when playing with big teams(>100)
+    
 def game_end(request, game_id):
-    average_score=[]
-    points = []
-    results={}
+    
     game = Game.objects.get(id=game_id)
-    teams_in_game = Team.objects.filter(game = game).order_by('-score')
-    # team_points = teams_in_game.score
-    # Calculates the average questions
-    for team in teams_in_game:
-        total_team_clues = Player.objects.filter(game=game, team=team).count() * 2
-        total_team_points = team.score
-        team_names = team.name
-        average = total_team_points / total_team_clues
-        average_score.append(average)
-        results = dict(zip(teams_in_game, average_score))
+    teams = Team.objects.filter(game = game).order_by('-score')
+    win_team = Team.objects.filter(game = game).order_by('-score').first()
 
-    # Dictionary with the average scores
-    print(results)
-
-
-    context = { "results":results, "total_team_clues":total_team_clues,"teams_in_game": teams_in_game }
+    context = { "teams": teams, "win_team": win_team }
     return render(request, "app/game_end.html", context)
 
 def game_turn(request, game_id, team_id, player_id):
@@ -334,21 +314,21 @@ def game_turn(request, game_id, team_id, player_id):
     team = Team.objects.get(id=team_id)
     player = Player.objects.get(id=player_id)
 
+    team_members = Player.objects.filter(team=team)
+    team_size = team_members.count()
+
     unanswered_clues = GameTurn.objects.filter(team=team, team_answer=0).order_by('player').first()
     clue = unanswered_clues
     turn_id = clue.id
 
-    context = {'turn_id': turn_id, 'game': game, 'team': team, 'player': player, 'clue': clue, 'game_id': game_id, 'team_id': team_id, 'player_id':player_id}
+    context = {'turn_id': turn_id, 'game': game, 'team': team, 'player': player, 'clue': clue, 'game_id': game_id, 'team_id': team_id, 'player_id':player_id, 'team_size': team_size }
 
     return render(request, "app/game_turn.html", context)
 
 def game_result(request, game_id, team_id, player_id, turn_id):
-    
-    ## Improved the function print the average of the team scores.
     game_turn = GameTurn.objects.get(id=turn_id)
     question = game_turn.question
     team = Team.objects.get(id=team_id)
-    # Number of turns/questions for the team
     turns_remaining = GameTurn.objects.filter(team=team, team_answer=0).count()
 
     team_answer = game_turn.team_answer
@@ -363,31 +343,29 @@ def question_save(request, left_spectrum, right_spectrum):
 
     return HttpResponseRedirect(reverse('app:game_turn'))
 
-def leaving_user(request, player_id):
-    # Function deletes the user and send's it to the start page
-    print("++++++++++++++++++++++++++++++++++ You are here ++++++++++++++++++++++++++++++++++")
-    Player.objects.get(id=player_id).delete()
-    return HttpResponseRedirect(reverse('app:start_page'))
-
 def team_answer_response_form(request, game_id, team_id, player_id, turn_id):
   
     if request.method == 'POST':
         team_answer_form = request.POST['slider']
-        team_answer = GameTurn.objects.filter(id=turn_id).update(team_answer=team_answer_form)
         question = GameTurn.objects.get(id=turn_id).question_answer      
         team = Team.objects.get(id=team_id)
         difference = abs(question - int(team_answer_form))
+        team_answer = GameTurn.objects.get(id=turn_id).team_answer
 
-        # below records score based on pre-defined threshold    
-        if difference <= 6:
-            team.score += 4
-        elif 7 <= difference <=12:
-            team.score += 3
-        elif 13 <= difference <=18:
-            team.score +=2
-        elif 19 <= difference <=24:
-            team.score  +=1
-        team.save()
+        #below prevents the websockets from adding the team_answer mutiple times
+        if team_answer == 0:
+            team_answer = GameTurn.objects.filter(id=turn_id).update(team_answer=team_answer_form)
+            # below records score based on pre-defined threshold    
+            if difference <= 6:
+                team.score += 4
+            elif 7 <= difference <=12:
+                team.score += 3
+            elif 13 <= difference <=18:
+                team.score +=2
+            elif 19 <= difference <=24:
+                team.score  +=1
+            team.save()
+        print(str(team.score) + " || team_score")
 
     return HttpResponseRedirect(reverse('app:game_result', kwargs={'game_id':game_id, 'team_id':team_id, 'player_id':player_id,'turn_id':turn_id}))
  

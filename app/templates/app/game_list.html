@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_cyberpunk.html" %}
 {% load static %}
 {% comment %} 
 
@@ -25,7 +25,7 @@ base.html and static are in development
     width: 10em;
 }
 
-.center {
+.roomlist {
     margin: auto;
     width: 60%;
     padding: 10px;
@@ -37,26 +37,38 @@ base.html and static are in development
 
 {% block body %} 
 <div class="center">
-    Choose a Game to Join {{current_player.username}}
+    <br />
+    <h1> Select a room </h1>
+    <h4> Ask your host for the room number {{current_player.username}} </h4> 
 </div>
-
-<div class='center'>
+<hr /> 
+<center>
+<div class='roomlist'>
     {% for game in game_list %}
         {% if current_player.id  %}        
             <a href="{%url 'app:player_game_assignation' game_id=game.id player_id=current_player.id %}">
-                Room {{game.id}} <button class="btn btn-primary" >Join Game</button>
-            </a>   
+                <h5> Room {{game.id}} </h5> 
+                <button class="btn btn-primary" >Join Game</button>
+            </a>  
+            <div class="space">
+            </div>
         {% else %}
             <a href="{%url 'app:player_game_assignation' game_id=game.id%}">
-                Room {{game.id}} <button class="btn btn-primary" >Join Game</button>
-            </a>   
-        {% endif %}
-        <div style='padding:10px ; text-align:center'>
-            <a href= "{% url 'app:leaving_user' player_id=current_player.id %}">
-                <button class="btn btn-primary" >Return to Start Page</button>
+                <h5> Room {{game.id}} </h5> 
+                <button class="btn btn-primary" >Join Game</button>
             </a>
-        </div>
+            <div class="space">
+            </div>   
+        {% endif %}
     {% endfor %}
+
+</div>
+</center>
+<br>
+<div style='padding:10px ; text-align:center'>
+    <a href= "{% url 'app:start_page' %}">
+        <button class="btn btn-primary" >Return to Start Page</button>
+    </a>
 </div>
 
 <script>

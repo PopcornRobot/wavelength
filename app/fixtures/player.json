@@ -5,7 +5,7 @@
     "fields": {
       "username": "test-player",
       "is_host": false,
-      "team": null,
+      "team": 1,
       "game": 1,
       "created_at": "2022-08-22T08:08:08.472Z",
       "updated_at": "2022-08-22T08:08:08.472Z"
@@ -17,7 +17,7 @@
     "fields": {
       "username": "player-2",
       "is_host": false,
-      "team": null,
+      "team": 1,
       "game": 1,
       "created_at": "2022-08-22T08:08:08.472Z",
       "updated_at": "2022-08-22T08:08:08.472Z"
@@ -29,7 +29,7 @@
     "fields": {
       "username": "player-3",
       "is_host": false,
-      "team": null,
+      "team": 1,
       "game": 1,
       "created_at": "2022-08-22T08:08:08.472Z",
       "updated_at": "2022-08-22T08:08:08.472Z"
@@ -41,7 +41,7 @@
     "fields": {
       "username": "player-4",
       "is_host": false,
-      "team": null,
+      "team": 1,
       "game": 1,
       "created_at": "2022-08-22T08:08:08.472Z",
       "updated_at": "2022-08-22T08:08:08.472Z"
@@ -101,7 +101,7 @@
     "fields": {
       "username": "player-9",
       "is_host": false,
-      "team": null,
+      "team": 2,
       "game": 3,
       "created_at": "2022-08-24T08:08:08.472Z",
       "updated_at": "2022-08-24T08:08:08.472Z"
@@ -113,7 +113,7 @@
     "fields": {
       "username": "player-10",
       "is_host": false,
-      "team": null,
+      "team": 2,
       "game": 3,
       "created_at": "2022-08-24T08:08:08.472Z",
       "updated_at": "2022-08-24T08:08:08.472Z"
@@ -125,7 +125,7 @@
     "fields": {
       "username": "player-11",
       "is_host": false,
-      "team": null,
+      "team": 2,
       "game": 3,
       "created_at": "2022-08-24T08:08:08.472Z",
       "updated_at": "2022-08-24T08:08:08.472Z"
@@ -137,7 +137,7 @@
     "fields": {
       "username": "player-12",
       "is_host": false,
-      "team": null,
+      "team": 2,
       "game": 3,
       "created_at": "2022-08-24T08:08:08.472Z",
       "updated_at": "2022-08-24T08:08:08.472Z"
