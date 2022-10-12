@@ -16,9 +16,11 @@
     <div><h4>Time remaining to enter guess: <span id="time">2:00</span></h4></div>
 
     <h1>{{clue.clue_given}}</h1>
+    <p>{{player.id}}</p>
+    <p>{{clue.player.id}}</p>
    
-    <form action="{% url 'app:team_answer_response_form' game_id=game_id team_id=team_id player_id=player_id turn_id=turn_id %}" method="post">
-        {% csrf_token %}
+    {% comment %} <form action="{% url 'app:team_answer_response_form' game_id=game_id team_id=team_id player_id=player_id turn_id=turn_id %}" method="post"> 
+        {% csrf_token %} 
         <div class="row">
             <div class="col">
                 <div class="center" id="slider"></div>
@@ -29,7 +31,22 @@
         <br />
         <br />
         <input id="teamAnswer" name="teamAnswer" type="submit" value="Submit">
+    </form> {% endcomment %}
+
+    <form id="teamAnswerForm" action="{% url 'app:team_answer_response_form' game_id=game_id team_id=team_id player_id=player_id turn_id=turn_id %}" method="post"> 
+        {% csrf_token %} 
+        <div class="row">
+            <div class="col">
+                <div class="center" id="slider"></div>
+                <br />
+                <div id="gameValue"></div>
+            </div>
+        </div>
+        <br />
+        <br />
+        <button id="submitButton" type="button" style= {% if player.id != clue.player.id %} 'display:block' {% else %} 'display:none' {% endif %}>Submit</button>
     </form>
+      
 
     <div class="left_spectrum" align="left">{{clue.question.left_spectrum}}</div>
     <div class="right_spectrum" align="right">{{clue.question.right_spectrum}}</div>
@@ -38,12 +55,19 @@
 
     {{ game_id|json_script:'json-game-id' }}
     {{ player.username|json_script:'json-username' }}
+    {{ player.id|json_script:'json-player-id' }}
     {{ team_id|json_script:'json-team-id' }}
+    {{ team_size|json_script:'json-team-size'}}
+    
 
 <script>
     const gameID = JSON.parse(document.getElementById('json-game-id').textContent);
     const userName = JSON.parse(document.getElementById('json-username').textContent);
+    const playerID = JSON.parse(document.getElementById('json-player-id').textContent);
     const teamID = JSON.parse(document.getElementById('json-team-id').textContent);
+    const team_size = JSON.parse(document.getElementById('json-team-size').textContent);
+    console.log(team_size + " This is team_size")
+    let submit_count = 0;
     let web_protocol
     location.protocol == "http:" ? web_protocol = "ws://" : web_protocol = "wss://"
     console.log("web_protocol", web_protocol)
@@ -57,9 +81,12 @@
 
     document.addEventListener('DOMContentLoaded', () => {
 
-        let submitButton = document.getElementById('teamAnswer');
-        var submitButtonStatus = false; 
-        console.log(submitButtonStatus + " this is false before drag")
+        let submitButton = document.getElementById('submitButton');
+        submit_count = 0;
+
+        submitButton.onclick = (e) =>{
+            teamAnswerSubmit()
+        }; //eoc
 
         sessionSocket.onmessage = function(e) {
             console.log('message received in game_turn')
@@ -68,24 +95,33 @@
             if  (data.message == 'value change') {
                 console.log('data.message == value change | SUCCESS')
                 $("#slider").data("roundSlider").setValue(data.value)      
-                console.log(data.value + " this is data.value in game_turn websockets after function")  
-                //add submit refresh + check if all players have submitted    
-               
-            } 
-        };
+                console.log(data.value + " this is data.value in game_turn websockets after function")   
+                submit_count = 0;
+                document.getElementById("submitButton").disabled = false;
+            }// eof if 
+            if (data.message == "confirm") {
+                submit_count += 1;
+                console.log(submit_count + "this is submit count after clicking")
+                if (submit_count == (team_size - 1)) {
+                    document.getElementById('teamAnswerForm').submit();
+                } //eof if
+            } //eof if
 
-        submitButton.addEventListener("click", () => { 
-            submitButtonRefresh()
-        }) //end of submit Button
+        };
 
         function updateGameValue(sliderValue) {
             var gameValue = document.getElementById('gameValue')
             gameValue.innerHTML = sliderValue    
         } //eof
 
-        function submitButtonRefresh(){
-            submitButtonStatus = true;
-            console.log(submitButtonStatus + "this is true after drag")
+        function teamAnswerSubmit() {
+            document.getElementById("submitButton").disabled = true;
+            message="confirm"
+                sessionSocket.send(JSON.stringify({
+                    'message': message,
+                    'username': userName,
+                    'room': gameID,
+                })); //end of sessionSocket
         } //eof
 
         $("#slider").roundSlider({
@@ -102,7 +138,6 @@
             drag: function (e) {
                 var sliderValue = $("#slider").data("roundSlider").getValue()
                 updateGameValue(sliderValue)
-                submitButtonRefresh() 
                 message="value change"
                 sessionSocket.send(JSON.stringify({
                     'message': message,

@@ -309,11 +309,14 @@ def game_turn(request, game_id, team_id, player_id):
     team = Team.objects.get(id=team_id)
     player = Player.objects.get(id=player_id)
 
+    team_members = Player.objects.filter(team=team)
+    team_size = team_members.count()
+
     unanswered_clues = GameTurn.objects.filter(team=team, team_answer=0).order_by('player').first()
     clue = unanswered_clues
     turn_id = clue.id
 
-    context = {'turn_id': turn_id, 'game': game, 'team': team, 'player': player, 'clue': clue, 'game_id': game_id, 'team_id': team_id, 'player_id':player_id}
+    context = {'turn_id': turn_id, 'game': game, 'team': team, 'player': player, 'clue': clue, 'game_id': game_id, 'team_id': team_id, 'player_id':player_id, 'team_size': team_size }
 
     return render(request, "app/game_turn.html", context)
 
@@ -333,21 +336,25 @@ def team_answer_response_form(request, game_id, team_id, player_id, turn_id):
   
     if request.method == 'POST':
         team_answer_form = request.POST['slider']
-        team_answer = GameTurn.objects.filter(id=turn_id).update(team_answer=team_answer_form)
         question = GameTurn.objects.get(id=turn_id).question_answer      
         team = Team.objects.get(id=team_id)
         difference = abs(question - int(team_answer_form))
+        team_answer = GameTurn.objects.get(id=turn_id).team_answer
 
-        # below records score based on pre-defined threshold    
-        if difference <= 6:
-            team.score += 4
-        elif 7 <= difference <=12:
-            team.score += 3
-        elif 13 <= difference <=18:
-            team.score +=2
-        elif 19 <= difference <=24:
-            team.score  +=1
-        team.save()
+        #below prevents the websockets from adding the team_answer mutiple times
+        if team_answer == 0:
+            team_answer = GameTurn.objects.filter(id=turn_id).update(team_answer=team_answer_form)
+            # below records score based on pre-defined threshold    
+            if difference <= 6:
+                team.score += 4
+            elif 7 <= difference <=12:
+                team.score += 3
+            elif 13 <= difference <=18:
+                team.score +=2
+            elif 19 <= difference <=24:
+                team.score  +=1
+            team.save()
+        print(str(team.score) + " || team_score")
 
     return HttpResponseRedirect(reverse('app:game_result', kwargs={'game_id':game_id, 'team_id':team_id, 'player_id':player_id,'turn_id':turn_id}))
  
