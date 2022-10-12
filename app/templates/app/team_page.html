@@ -26,10 +26,10 @@
     <div class="bs-component">  
         <div  class="row">
             <div class="col-160">
-              <h5>{{team_name.name}} - {{team_name.id}}</h5>
+              <h5>{{team_name.name}}</h5>
               {%for player_name in teammates%}
                 {% if player_name.team.name == team_name.name %}
-                  <p><h6>{{ player_name.username }} - {{ player_name.id }}</h6></p>
+                  <p><h6>{{ player_name.username }}</h6></p>
                 {% endif %}
               {%endfor%}
             </div>
@@ -39,7 +39,6 @@
 </center>
 
         <div style='padding:10px ; text-align:center'>
-            {% comment %} <button href="{% url 'app:start_page' %}" >Leave Room</button> {% endcomment %}
             <a>
             <button class="btn btn-primary" id='start_game_btn' type="submit" {% if player.is_host == False %}style='display:none'{%endif%}>Start Game!</button>
             </a>

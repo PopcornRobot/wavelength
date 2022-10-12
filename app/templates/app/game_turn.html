@@ -5,17 +5,12 @@
 <center>
     <br />
     <h1> Time to guess! </h1>
-    <h5> The dial below is adjustable.
-         Its position indicates your team's guess,
-         As a team, use the dial to indicate where you think the clue sits on the spectrum.
-         The team member who wrote the clue is not allowed to help you guess!!
-         </h5>
     <hr />
     <h2>YOUR CLUE</h2>
+    
+    <h1>{{clue.clue_given}}</h1>
 
     <div><h4>Time remaining to enter guess: <span id="time">2:00</span></h4></div>
-
-    <h1>{{clue.clue_given}}</h1>
 
     <form id="teamAnswerForm" action="{% url 'app:team_answer_response_form' game_id=game_id team_id=team_id player_id=player_id turn_id=turn_id %}" method="post"> 
         {% csrf_token %} 
@@ -40,6 +35,17 @@
  
 
 </center>    
+
+<div style="width:600px; margin:0 auto;">
+    <h5>Instructions:</h5>
+    <ul>
+        <li><h6>The dial below shows a pointer at a fixed position,</h6></li>
+        <li><h6>the position indicates the level of the answer,</h6></li>
+        <li><h6>If the dial is all the way to the left indicates the most extreme example for the left concept,</h6></li>
+        <li><h6>while if the dial is all the way to the right is the most extreme example of the right concept..</h6></li>
+        <li><h6>As a team use the dial to indicate where do you think the clue sits.</h5></li> 
+    </ul>
+</div>
 
     {{ game_id|json_script:'json-game-id' }}
     {{ player.username|json_script:'json-username' }}
