@@ -1,0 +1,29 @@
+{% extends "base_cyberpunk.html" %}
+{% load static %}
+
+{% block body %}
+
+<div class="center" >
+    <br />
+    <br />
+    <p class="mono" style="font-size:15px;">press play to start the tutorial</p>
+</div>
+
+<div class="iframe-container center" style="padding:50.15% 0 0 0;position:relative;">
+    <iframe src="https://player.vimeo.com/video/759339512?h=c7c8691560&badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;" title="tutorial_video.mp4"></iframe>
+</div>
+
+<script src="https://player.vimeo.com/api/player.js"></script>
+
+<script>
+
+    var iframe = document.querySelector('iframe');
+    var player = new Vimeo.Player(iframe);
+
+		player.on('ended', function(){
+        window.location.href = "{% url 'app:start_page' %}"
+    });
+
+</script>
+
+{% endblock %}

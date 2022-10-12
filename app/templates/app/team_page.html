@@ -41,7 +41,7 @@
         <div style='padding:10px ; text-align:center'>
             {% comment %} <button href="{% url 'app:start_page' %}" >Leave Room</button> {% endcomment %}
             <a>
-            <button id='start_game_btn' type="submit" {% if player.is_host == False %}style='display:none'{%endif%}>Start Game!</button>
+            <button class="btn btn-primary" id='start_game_btn' type="submit" {% if player.is_host == False %}style='display:none'{%endif%}>Start Game!</button>
             </a>
         </div>
 

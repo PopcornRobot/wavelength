@@ -34,16 +34,16 @@
             <div class="col">
                 <div class="center" id="slider"></div>
                 <br />
-                <div id="gameGeneratedAnswer">{{generated_random_question_answer}}</div>
+                <p style="text-align:left; width: 375px;">
+                    {{left_spectrum}}
+                    <span style="float:right;">
+                        {{right_spectrum}}
+                    </span>
+                </p>
+                <!-- <div id="gameGeneratedAnswer">{{generated_random_question_answer}}</div> -->
             </div>
         </div>
-        
-        <p style="text-align:left; width: 450px;">
-            {{left_spectrum}}
-            <span style="float:right;">
-                {{right_spectrum}}
-            </span>
-        </p>
+
         <p><b>Timer: 3 minutes</b></p>
 
         {% comment %} <form action="{% url 'app:clue_form_one' %}" method="post">
@@ -53,7 +53,7 @@
                 <input id="clue1" type="text" name="clue1">
             <br />
         <br />
-        <button id='submit_clue_1' href= '#!' type="button" value="Submit"> Submit</button>
+        <button class="btn btn-primary" id='submit_clue_1' href= '#!' type="button" value="Submit"> Submit</button>
         {% comment %} onclick="this.disabled=true" {% endcomment %}
         <br />
 
@@ -81,7 +81,7 @@
         <input id="clue2" type="text" name="clue2">
     </br>
     <br>
-    <input id='submit_clue_2' type="submit" value="Submit" >
+    <input class="btn btn-primary" id='submit_clue_2' type="submit" value="Submit" >
     </br>
     {% comment %} </form> {% endcomment %}
     </div>

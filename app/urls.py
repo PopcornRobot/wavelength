@@ -30,5 +30,5 @@ urlpatterns = [
     path('game_result/<int:game_id>/<int:team_id>/<int:player_id>/<int:turn_id>', views.game_result, name='game_result'),
     path("waiting_room/<int:game_id>", views.waiting_room, name="waiting_room"),
     path("team_answer_response_form/<int:game_id>/<int:team_id>/<int:player_id>/<int:turn_id>", views.team_answer_response_form, name="team_answer_response_form"),
-   
+    path('game_tutorial', views.game_tutorial, name="game_tutorial"),
 ]

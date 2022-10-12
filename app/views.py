@@ -402,4 +402,7 @@ def dashboard_player_clues(request):
 
     return render(request, "app/dashboard_player_clues.html", context)
 
+def game_tutorial(request):
+    context = {}
+    return render(request, 'app/game_tutorial.html', context)
 ##########################################################################################
