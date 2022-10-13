@@ -43,13 +43,7 @@ base.html and static are in development
       <br />
       <h4> Please wait for the host to start the game </h4>
       <hr />
-      {% comment %} Page for {{player_page.username}} {% endcomment %}
       <br />
-      {% if player_page.is_host == True %}
-      <a href="{% url 'app:team_creation' game_id=game.id player_id=player_page.id %}">
-        <button class="btn btn-primary" type="submit">Start Game</button>
-      </a>
-      {% endif %}
       {% comment %} <button class="btn btn-primary" href="{% url 'app:start_page' %}" >Leave Room</button> {% endcomment %}
   </div>
 
@@ -108,12 +102,12 @@ base.html and static are in development
             if (data.message == 'remove player'){
               //document.getElementById(data.userName).remove();
               console.error(data.username + ' has left the session');
-            } else if (data.message == 'sort teams'){
+            } else if (data.message == 'team page ready'){
               console.log('sort teams')              
-              setTimeout(() => {
+              //setTimeout(() => {
                 console.log("Sort delayed for 1 second.");
                 window.location.href = "{% url 'app:team_creation' game_id=game.id player_id=player.id %}";
-              }, 1000)                          
+              //}, 1000)                          
             } else if (data.username != userName) {
               document.querySelector('#player_list').innerHTML += ("<div id='" + data.username + "'>" + data.username + '</div>');
               console.log(data.username + ' added to list');
@@ -135,14 +129,14 @@ base.html and static are in development
         const sort_teams_btn = document.getElementById('sort_teams_btn');
         sort_teams_btn.onclick = (e) =>{
         
-          message='sort teams'
-          sessionSocket.send(JSON.stringify({
-            'message': message,
-            'username': userName,
-            'game': gameID,
+          //message='sort teams'
+          //sessionSocket.send(JSON.stringify({
+            //'message': message,
+            //'username': userName,
+            //'game': gameID,
             //'admin' : 'admin',
             //'player_id': {{player.id}},
-          }));
+          //}));
           window.location.href = "{% url 'app:team_creation' game_id=game.id player_id=player.id %}";
         };
     });          
