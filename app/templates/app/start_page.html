@@ -10,7 +10,7 @@
   <p class="mono" style="font-size:15px;">To start, create your username to either host a new game (create room) or join an exisiting game (join room).</h6>
   <p class="mono" style="font-size:15px;">If you're new to this game, click <a href="{% url 'app:game_tutorial' %}">here</a> to watch the tutorial.</p>
 
-  <form action="host_player_registration_form" method="post">
+  <form method="post">
       {% csrf_token %}
         <br />
           <label>Name:</label>
@@ -22,21 +22,8 @@
             {% endif %}
           {% endfor %}
         <br />
-          <button class="btn btn-primary" type="submit">Create Room</button>
-  </form>
-  <form action="join_player_registration_form" method="post">
-    {% csrf_token %}
-      <br />
-        <label>Name:</label>
-        <input type="text" name="username">
-      <br />
-        {% for join_player in players %}
-          {% if join_player.username == player_name %}
-            <p>{{join_player.username}} + ' is already added'</p>
-          {% endif %}
-        {% endfor %}
-      <br />
-       <button class="btn btn-primary" type="submit">Join Room</button>
+          <button class="btn btn-primary" type="submit" formaction="host_player_registration_form">Create Room</button>
+          <button class="btn btn-primary" type="submit" formaction="join_player_registration_form">Join Room</button>
   </form>
 </center>
 {% endblock %}

@@ -117,7 +117,7 @@ def team_creation(request, game_id, player_id):
             usr=Player.objects.get(id=player_id)
             game_id=usr.game.id
             team_id=usr.team.id
-            
+
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
             'chat_%s' % game_id,
@@ -249,7 +249,6 @@ def join_player_registration_form(request):
         else:
            return render(request, "app/start_page.html", context)
     return HttpResponseRedirect(reverse('app:game_list', kwargs={'player_id':player_id}))
-    # return HttpResponse("form success")
 
 def question_clue_spectrum(request, game_id, team_id, player_id):
     all_question_history = QuestionHistory.objects.all()
