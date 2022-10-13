@@ -120,10 +120,7 @@ def team_creation(request, game_id, player_id):
             game_id=usr.game.id
             team_id=usr.team.id
 
-        print('*********teams sorted!*************')
-        print('request is' + str(request))
         channel_layer = get_channel_layer()
-
         async_to_sync(channel_layer.group_send)(
             'chat_%s' % game_id,
             {
@@ -131,8 +128,6 @@ def team_creation(request, game_id, player_id):
                 'message': 'team page ready'
             }
         )
-        
-
     else:
         game_id=current_player.game.id
         team_id=current_player.team.id
@@ -156,14 +151,14 @@ def game_list(request, **player_id):
     # Confirms that the argument was recieved
     if not player_id:
         # Query all the games
-        game_list = Game.objects.all()
+        game_list = Game.objects.all().order_by('-created_at')
         # assigns all the games to the Context
         context = { 'game_list':game_list}
         
     else:
         #If the keyword argument is received we get the information of the current player 
         current_player = Player.objects.get(id=received_player['player_id'])
-        game_list = Game.objects.filter(is_game_waiting=True, is_game_running=False)
+        game_list = Game.objects.filter(is_game_waiting=True, is_game_running=False).order_by('-created_at')
         context = { 'game_list':game_list , 'current_player':current_player}
 
     return render(request, 'app/game_list.html', context)
@@ -340,6 +335,7 @@ def game_turn(request, game_id, team_id, player_id):
     team_size = team_members.count()
 
     unanswered_clues = GameTurn.objects.filter(team=team, team_answer=0).order_by('player')
+    # checks if no one in team submitted clue and if not, send team directly to waiting room
     if unanswered_clues.count() != 0:
         clue = unanswered_clues.first()
         turn_id = clue.id
