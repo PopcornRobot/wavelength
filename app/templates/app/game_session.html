@@ -104,10 +104,8 @@ base.html and static are in development
               console.error(data.username + ' has left the session');
             } else if (data.message == 'team page ready'){
               console.log('sort teams')              
-              //setTimeout(() => {
                 console.log("Sort delayed for 1 second.");
-                window.location.href = "{% url 'app:team_creation' game_id=game.id player_id=player.id %}";
-              //}, 1000)                          
+                window.location.href = "{% url 'app:team_creation' game_id=game.id player_id=player.id %}";                        
             } else if (data.username != userName) {
               document.querySelector('#player_list').innerHTML += ("<div id='" + data.username + "'>" + data.username + '</div>');
               console.log(data.username + ' added to list');

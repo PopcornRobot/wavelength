@@ -339,9 +339,12 @@ def game_turn(request, game_id, team_id, player_id):
     team_members = Player.objects.filter(team=team)
     team_size = team_members.count()
 
-    unanswered_clues = GameTurn.objects.filter(team=team, team_answer=0).order_by('player').first()
-    clue = unanswered_clues
-    turn_id = clue.id
+    unanswered_clues = GameTurn.objects.filter(team=team, team_answer=0).order_by('player')
+    if unanswered_clues.count() != 0:
+        clue = unanswered_clues.first()
+        turn_id = clue.id
+    else:
+        return HttpResponseRedirect(reverse('app:waiting_room', kwargs={'game_id':game_id}))
 
     context = {'turn_id': turn_id, 'game': game, 'team': team, 'player': player, 'clue': clue, 'game_id': game_id, 'team_id': team_id, 'player_id':player_id, 'team_size': team_size }
 
@@ -363,12 +366,6 @@ def leaving_user(request, player_id):
     # Function deletes the user and send's it to the start page
     Player.objects.get(id=player_id).delete()
     return HttpResponseRedirect(reverse('app:start_page'))
-
-# save the already used spectrum into a dictionary
-def question_save(request, left_spectrum, right_spectrum):
-    question = Question.objects.create(left_spectrum=left_spectrum, right_spectrum=right_spectrum)
-
-    return HttpResponseRedirect(reverse('app:game_turn'))
 
 def team_answer_response_form(request, game_id, team_id, player_id, turn_id):
   
