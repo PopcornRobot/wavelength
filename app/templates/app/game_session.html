@@ -127,14 +127,6 @@ base.html and static are in development
         const sort_teams_btn = document.getElementById('sort_teams_btn');
         sort_teams_btn.onclick = (e) =>{
         
-          //message='sort teams'
-          //sessionSocket.send(JSON.stringify({
-            //'message': message,
-            //'username': userName,
-            //'game': gameID,
-            //'admin' : 'admin',
-            //'player_id': {{player.id}},
-          //}));
           window.location.href = "{% url 'app:team_creation' game_id=game.id player_id=player.id %}";
         };
     });          
