@@ -37,32 +37,31 @@ base.html and static are in development
 </style>
 
 {% block body %} 
-<body>
-    <div class="center">
-        <br />
-        <h1> Select a room </h1>
-        <h4> Ask your host for the room number {{current_player.username}} </h4> 
-    </div>
-    <hr /> 
-    <center>
-    <div class='roomlist'>
-        {% for game in game_list %}
-            {% if current_player.id  %}        
-                <a href="{%url 'app:player_game_assignation' game_id=game.id player_id=current_player.id %}">
-                    <h5> Room {{game.id}} </h5> 
-                    <button class="btn btn-primary" >Join Game</button>
-                </a>  
-                <div class="space">
-                </div>
-            {% else %}
-                <a href="{%url 'app:player_game_assignation' game_id=game.id%}">
-                    <h5> Room {{game.id}} </h5> 
-                    <button class="btn btn-primary" >Join Game</button>
-                </a>
-                <div class="space">
-                </div>   
-            {% endif %}
-        {% endfor %}
+<div class="center">
+    <br />
+    <h1> Select a room </h1>
+    <h4> Ask your host for the room number {{current_player.username}} </h4> 
+</div>
+<hr /> 
+<center>
+<div class='roomlist'>
+    {% for game in game_list %}
+        {% if current_player.id  %}        
+            <a href="{%url 'app:player_game_assignation' game_id=game.id player_id=current_player.id %}">
+                <h5> Game {{game.id}} </h5> 
+                <button class="btn btn-primary" >Join Game</button>
+            </a>  
+            <div class="space">
+            </div>
+        {% else %}
+            <a href="{%url 'app:player_game_assignation' game_id=game.id%}">
+                <h5> Game {{game.id}} </h5> 
+                <button class="btn btn-primary" >Join Game</button>
+            </a>
+            <div class="space">
+            </div>   
+        {% endif %}
+    {% endfor %}
 
     </div>
     </center>
