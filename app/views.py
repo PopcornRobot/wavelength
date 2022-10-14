@@ -123,7 +123,7 @@ def team_creation(request, game_id, player_id):
             'chat_%s' % game_id,
             {
                 'type': 'broadcast',
-                'message': 'team page ready'
+                'message': 'team page ready',
             }
         )
     else:
@@ -149,7 +149,7 @@ def game_list(request, **player_id):
     # Confirms that the argument was recieved
     if not player_id:
         # Query all the games
-        game_list = Game.objects.all().order_by('-created_at')
+        game_list = Game.objects.all().order_by('created_at')
         # assigns all the games to the Context
         context = { 'game_list':game_list}
         
@@ -256,6 +256,7 @@ def question_clue_spectrum(request, game_id, team_id, player_id):
     team = Team.objects.get(id=team_id)
     team_members = Player.objects.filter(team=team)
     questions = Question.objects.all()
+    clues_given = GameTurn.objects.filter(player=player).count()
 
     random_question = choice(questions)
     random_question2 = choice(questions)
@@ -283,9 +284,14 @@ def question_clue_spectrum(request, game_id, team_id, player_id):
     # save the generate answer into GameTurn
     generated_random_question_answer = random.randint(1, 100)
     generated_random_question_answer_two = random.randint(1, 100)
-   
-    # context = {"left_spectrum": left_spectrum, "right_spectrum": right_spectrum, "left_spectrum2": left_spectrum2, "right_spectrum2": right_spectrum2, 'team_id' : team_id, 'player_id' : player_id, 'player' : player, 'game_id' : game_id, 'random_question' : random_question, 'random_question2' : random_question2, 'team_members' : team_members, 'generated_random_question_answer': generated_random_question_answer, 'generated_random_question_answer_two': generated_random_question_answer_two}
-    context = {"left_spectrum": left_spectrum, "right_spectrum": right_spectrum, "left_spectrum2": left_spectrum2, "right_spectrum2": right_spectrum2, 'team_id' : team_id, 'player_id' : player_id, 'player' : player, 'game_id' : game_id, 'random_question' : random_question, 'random_question2' : random_question2, 'team_members' : team_members, 'generated_random_question_answer': generated_random_question_answer, 'generated_random_question_answer_two': generated_random_question_answer_two,}
+
+    context = { "left_spectrum": left_spectrum, "right_spectrum": right_spectrum,
+                "left_spectrum2": left_spectrum2, "right_spectrum2": right_spectrum2, 
+                'random_question' : random_question, 'random_question2' : random_question2,
+                'generated_random_question_answer': generated_random_question_answer, 'generated_random_question_answer_two': generated_random_question_answer_two,
+                'team_id' : team_id, 'player_id' : player_id, 'player' : player, 'game_id' : game_id,
+                'team_members' : team_members, 'clues_given' : clues_given}
+    
     return render(request, "app/question_clue_spectrum.html", context)
     
 # submit clue and create new GameTurn object
