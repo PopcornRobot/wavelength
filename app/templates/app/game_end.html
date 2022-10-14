@@ -21,7 +21,6 @@
     <p>{{team.name}} : {{team.score}}</p>
   {% endfor %}
   
-  <p>{{game.id}}</p>
   <a href="{% url 'app:cleaning_data_base' game_id=game.id %}" ><button class="btn btn-primary"> New Game </button></a>
 </center>
 {% endblock %}

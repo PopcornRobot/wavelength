@@ -12,7 +12,7 @@
 <center>
     <br />
     <h1>Give a clue</h1>
-    <div><h3>Time remaining to enter clue: <span id="time">1:00</span></h3></div>
+    <div><h3>Time remaining to enter clue: <span id="time">4:00</span></h3></div>
     <h5>Instructions are below if you need</h5>
     <br />
     <button id='confirm_1' type="button" class="btn btn-primary" disabled>{{ team_members.0 }}</button>
@@ -23,7 +23,8 @@
     <br />
     <hr />
     
-    <div id='question_1'>
+    <div id='question_1' style={% if clues_given > 0 %}'display:none'{% endif %}>
+        <h3>Spectrum 1</h3>
         <div class="row">
             <div class="col">
                 <div class="center" id="slider"></div>
@@ -38,9 +39,13 @@
             </div>
         </div>
         
+        <p style="text-align:left; width: 450px;">
+            {{left_spectrum}}
+            <span style="float:right;">
+                {{right_spectrum}}
+            </span>
+        </p>
 
-        <p><b>Timer: 3 minutes</b></p>
-        
         {% comment %} <form action="{% url 'app:clue_form_one' %}" method="post">
             {% csrf_token %} {% endcomment %}
             <br />
@@ -55,7 +60,7 @@
     </div>
     <hr />
 
-    <div id='question_2' style='display:none'>
+    <div id='question_2' style={% if clues_given > 0 %}'display:block'{% else %}'display:none'{% endif %}>
         <h3>Spectrum 2</h3>
     <div class="row">
         <div class="col">
@@ -83,7 +88,7 @@
     {% comment %} </form> {% endcomment %}
 </div>
 
-<div id='please_wait' style='display:none'>
+<div id='please_wait' style={% if clues_given > 1 %}'display:block'{% else %}'display:none'{% endif %}>
     <h1>Waiting for other teammates to submit their clues....</h1>
 </div>
 <br />
@@ -112,13 +117,11 @@
 
 <script>
     const gameID = JSON.parse(document.getElementById('json-game-id').textContent);
-    console.log('game id is ' + gameID)
     const teamID = JSON.parse(document.getElementById('json-team-id').textContent);
     const userName = JSON.parse(document.getElementById('json-username').textContent);
     const question1 = JSON.parse(document.getElementById('json-random-question').textContent);
     const question2 = JSON.parse(document.getElementById('json-random-question2').textContent);
     const team_size = JSON.parse(document.getElementById('json-team-size').textContent);
-    console.log('team size is ' + team_size);
     let web_protocol
     location.protocol == "http:" ? web_protocol = "ws://" : web_protocol = "wss://"
     console.log("web_protocol", web_protocol)
@@ -238,7 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.onload = function() {
 
     var display = document.querySelector('#time'),
-    timer = new CountDownTimer(120);
+    timer = new CountDownTimer(240);
 
     timer.onTick(format).onTick(timesUp).start();
 
@@ -248,7 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
             //setTimeout(function() { timer.start(); }, 1000); //reset function, not used
 
             //send player to GameTurn page
-            //window.location.href = "{% url 'app:game_turn' game_id=game_id team_id=team_id player_id=player_id %}"
+            window.location.href = "{% url 'app:game_turn' game_id=game_id team_id=team_id player_id=player_id %}"
         }
     }
 

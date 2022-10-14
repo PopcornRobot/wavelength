@@ -8,6 +8,8 @@ from django.urls import reverse
 from .models import Game, Team, Player, Question, QuestionHistory, GameTurn, Message
 import random
 from random import choice
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 teams_placeholder = {}
 
@@ -60,7 +62,6 @@ def get_teams(team_names, players):
 # This function will be enable only by the host
 # NOTE: Create a player joining argument to track who joins and use it as URL #
 def team_creation(request, game_id, player_id):
-    print(player_id)
     current_player = Player.objects.get(id=player_id)
 
     if current_player.team is None and current_player.is_host == True:
@@ -94,7 +95,6 @@ def team_creation(request, game_id, player_id):
         for player in players:
             # appends the players name
             player_names.append(player.username)
-            print(player)
         
         # appends the team names based on the number of teams
         for i in range(0,number_of_teams):
@@ -118,6 +118,14 @@ def team_creation(request, game_id, player_id):
             game_id=usr.game.id
             team_id=usr.team.id
 
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            'chat_%s' % game_id,
+            {
+                'type': 'broadcast',
+                'message': 'team page ready',
+            }
+        )
     else:
         game_id=current_player.game.id
         team_id=current_player.team.id
@@ -141,14 +149,14 @@ def game_list(request, **player_id):
     # Confirms that the argument was recieved
     if not player_id:
         # Query all the games
-        game_list = Game.objects.all()
+        game_list = Game.objects.all().order_by('created_at')
         # assigns all the games to the Context
         context = { 'game_list':game_list}
         
     else:
         #If the keyword argument is received we get the information of the current player 
         current_player = Player.objects.get(id=received_player['player_id'])
-        game_list = Game.objects.filter(is_game_waiting=True, is_game_running=False)
+        game_list = Game.objects.filter(is_game_waiting=True, is_game_running=False).order_by('-created_at')
         context = { 'game_list':game_list , 'current_player':current_player}
 
     return render(request, 'app/game_list.html', context)
@@ -241,7 +249,6 @@ def join_player_registration_form(request):
         else:
            return render(request, "app/start_page.html", context)
     return HttpResponseRedirect(reverse('app:game_list', kwargs={'player_id':player_id}))
-    # return HttpResponse("form success")
 
 def question_clue_spectrum(request, game_id, team_id, player_id):
     all_question_history = QuestionHistory.objects.all()
@@ -249,6 +256,7 @@ def question_clue_spectrum(request, game_id, team_id, player_id):
     team = Team.objects.get(id=team_id)
     team_members = Player.objects.filter(team=team)
     questions = Question.objects.all()
+    clues_given = GameTurn.objects.filter(player=player).count()
 
     random_question = choice(questions)
     random_question2 = choice(questions)
@@ -276,9 +284,14 @@ def question_clue_spectrum(request, game_id, team_id, player_id):
     # save the generate answer into GameTurn
     generated_random_question_answer = random.randint(1, 100)
     generated_random_question_answer_two = random.randint(1, 100)
-   
-    # context = {"left_spectrum": left_spectrum, "right_spectrum": right_spectrum, "left_spectrum2": left_spectrum2, "right_spectrum2": right_spectrum2, 'team_id' : team_id, 'player_id' : player_id, 'player' : player, 'game_id' : game_id, 'random_question' : random_question, 'random_question2' : random_question2, 'team_members' : team_members, 'generated_random_question_answer': generated_random_question_answer, 'generated_random_question_answer_two': generated_random_question_answer_two}
-    context = {"left_spectrum": left_spectrum, "right_spectrum": right_spectrum, "left_spectrum2": left_spectrum2, "right_spectrum2": right_spectrum2, 'team_id' : team_id, 'player_id' : player_id, 'player' : player, 'game_id' : game_id, 'random_question' : random_question, 'random_question2' : random_question2, 'team_members' : team_members, 'generated_random_question_answer': generated_random_question_answer, 'generated_random_question_answer_two': generated_random_question_answer_two,}
+
+    context = { "left_spectrum": left_spectrum, "right_spectrum": right_spectrum,
+                "left_spectrum2": left_spectrum2, "right_spectrum2": right_spectrum2, 
+                'random_question' : random_question, 'random_question2' : random_question2,
+                'generated_random_question_answer': generated_random_question_answer, 'generated_random_question_answer_two': generated_random_question_answer_two,
+                'team_id' : team_id, 'player_id' : player_id, 'player' : player, 'game_id' : game_id,
+                'team_members' : team_members, 'clues_given' : clues_given}
+    
     return render(request, "app/question_clue_spectrum.html", context)
     
 # submit clue and create new GameTurn object
@@ -324,12 +337,15 @@ def game_turn(request, game_id, team_id, player_id):
     team_members = Player.objects.filter(team=team)
     team_size = team_members.count()
 
-    unanswered_clues = GameTurn.objects.filter(team=team, team_answer=0).order_by('player').first()
-    clue = unanswered_clues
-    turn_id = clue.id
+    unanswered_clues = GameTurn.objects.filter(team=team, team_answer=0).order_by('player')
+    # checks if no one in team submitted clue and if not, send team directly to waiting room
+    if unanswered_clues.count() != 0:
+        clue = unanswered_clues.first()
+        turn_id = clue.id
+    else:
+        return HttpResponseRedirect(reverse('app:waiting_room', kwargs={'game_id':game_id}))
 
     context = {'turn_id': turn_id, 'game': game, 'team': team, 'player': player, 'clue': clue, 'game_id': game_id, 'team_id': team_id, 'player_id':player_id, 'team_size': team_size }
-
     return render(request, "app/game_turn.html", context)
 
 def game_result(request, game_id, team_id, player_id, turn_id):
@@ -337,10 +353,8 @@ def game_result(request, game_id, team_id, player_id, turn_id):
     question = game_turn.question
     team = Team.objects.get(id=team_id)
     turns_remaining = GameTurn.objects.filter(team=team, team_answer=0).count()
-
     team_answer = game_turn.team_answer
     question_answer = game_turn.question_answer
-
     context = {'team_answer':team_answer, 'question_answer': question_answer, "game_turn" : game_turn, "question" : question, "turns_remaining" : turns_remaining, "game_id" : game_id, "team_id" : team_id, "player_id" : player_id}
     return render(request, "app/game_result.html", context)
 
@@ -348,12 +362,6 @@ def leaving_user(request, player_id):
     # Function deletes the user and send's it to the start page
     Player.objects.get(id=player_id).delete()
     return HttpResponseRedirect(reverse('app:start_page'))
-
-# save the already used spectrum into a dictionary
-def question_save(request, left_spectrum, right_spectrum):
-    question = Question.objects.create(left_spectrum=left_spectrum, right_spectrum=right_spectrum)
-
-    return HttpResponseRedirect(reverse('app:game_turn'))
 
 def team_answer_response_form(request, game_id, team_id, player_id, turn_id):
   

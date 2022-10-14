@@ -11,7 +11,7 @@
 <center>
     <br />
     <h1>Responses</h1>
-    <div><h4>Proceeding to next clue in <span id="time">10</span></h4></div>
+    <div><h4>Proceeding to next clue in <span id="time">30</span></h4></div>
     <hr />
 
     <div id='question_1'>
@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.onload = function() {
 
     var display = document.querySelector('#time'),
-    timer = new CountDownTimer(5); //sets countdown time in seconds
+    timer = new CountDownTimer(30); //sets countdown time in seconds
 
     timer.onTick(format).onTick(timesUp).start();
 

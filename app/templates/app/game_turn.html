@@ -148,7 +148,7 @@
        window.onload = function() {
 
         var display = document.querySelector('#time'),
-        timer = new CountDownTimer(120);
+        timer = new CountDownTimer(180); //change to set timer length
     
         timer.onTick(format).onTick(timesUp).start();
     
@@ -157,8 +157,8 @@
                 console.log('Times up!')
                 //setTimeout(function() { timer.start(); }, 1000); //reset function, not used
     
-                //send player to GameTurn page
-                //insert windows.location.href to GameTurn page here
+                //force player to confirm current value
+                teamAnswerSubmit()
             }
         }
     
