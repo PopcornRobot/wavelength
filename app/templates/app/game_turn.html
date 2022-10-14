@@ -10,7 +10,7 @@
     
     <h1>{{clue.clue_given}}</h1>
 
-    <div><h4>Time remaining to enter guess: <span id="time">2:00</span></h4></div>
+    <div><h4>Time remaining to enter guess: <span id="time">3:00</span></h4></div>
     <h5>Instructions are below if you need</h5>
 
     <form id="teamAnswerForm" action="{% url 'app:team_answer_response_form' game_id=game_id team_id=team_id player_id=player_id turn_id=turn_id %}" method="post"> 

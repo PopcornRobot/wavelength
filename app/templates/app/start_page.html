@@ -14,7 +14,7 @@
   <form method="post">
       {% csrf_token %}
         <br />
-          <label><b>Host</b> -> Name:</label>
+          <label>Name:</label>
           <input type="text" name="username">
         <br />
           {% for host in players %}
