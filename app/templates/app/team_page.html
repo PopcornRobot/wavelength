@@ -39,7 +39,6 @@
 </center>
 
         <div style='padding:10px ; text-align:center'>
-            {% comment %} <button href="{% url 'app:leaving_user' player_id=current_player.id %}" >Leave Game</button> {% endcomment %}
             <a>
             <button class="btn btn-primary" id='start_game_btn' type="submit" {% if player.is_host == False %}style='display:none'{%endif%}>Start Game!</button>
             </a>

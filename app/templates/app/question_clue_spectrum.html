@@ -12,7 +12,7 @@
 <center>
     <br />
     <h1>Give a clue</h1>
-    <div><h3>Time remaining to enter clue: <span id="time">1:00</span></h3></div>
+    <div><h3>Time remaining to enter clue: <span id="time">4:00</span></h3></div>
     <br />
     <button id='confirm_1' type="button" class="btn btn-primary" disabled>{{ team_members.0 }}</button>
     <button id='confirm_2' type="button" class="btn btn-success" disabled style= {% if team_members.count > 1 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.1 }}</button>
@@ -23,6 +23,7 @@
     <hr />
     
     <div id='question_1'>
+        <h3>Spectrum 1</h3>
         <div class="row">
             <div class="col">
                 <div class="center" id="slider"></div>
@@ -44,8 +45,6 @@
             </span>
         </p>
 
-        <p><b>Timer: 3 minutes</b></p>
-        
         {% comment %} <form action="{% url 'app:clue_form_one' %}" method="post">
             {% csrf_token %} {% endcomment %}
             <br />
@@ -75,7 +74,6 @@
             {{right_spectrum2}}
         </span>
     </p>
-    <p><b>Timer: 3 minutes</b></p>
     <br>
         <label for="clue2">Enter Your Second Clue:</label>
         <input id="clue2" type="text" name="clue2">
@@ -95,11 +93,11 @@
 <div style="width:600px; margin:0 auto;">
     <h5>Instructions:</h5>
     <ul>
-        <li><h6>The dial below shows a h6ointer at a fixed h6osition,</h6></li>
-        <li><h6>the h6osition indicates the level of the answer.</h6></li>
-        <li><h6>If the dial is all the way to the left indicates the most extreme examh6le for the left conceh6t,</h6></li>
-        <li><h6>while if the dial is all the way to the right is the most extreme examh6le of the right conceh6t..</h6></li>
-        <li><h6>You need to h6rovide a "clue" that sits where the dial h6oints at.</h6></li>
+        <li><h6>The dial below shows a pointer at a fixed position,</h6></li>
+        <li><h6>the position indicates the level of the answer.</h6></li>
+        <li><h6>If the dial is all the way to the left indicates the most extreme example for the left concept,</h6></li>
+        <li><h6>while if the dial is all the way to the right is the most extreme example of the right concept..</h6></li>
+        <li><h6>You need to provide a "clue" that sits where the dial points at.</h6></li>
         <li><h6>You have two clues.</h6></li>
     </ul>
 </div>
@@ -241,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.onload = function() {
 
     var display = document.querySelector('#time'),
-    timer = new CountDownTimer(120);
+    timer = new CountDownTimer(240);
 
     timer.onTick(format).onTick(timesUp).start();
 
@@ -251,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
             //setTimeout(function() { timer.start(); }, 1000); //reset function, not used
 
             //send player to GameTurn page
-            //window.location.href = "{% url 'app:game_turn' game_id=game_id team_id=team_id player_id=player_id %}"
+            window.location.href = "{% url 'app:game_turn' game_id=game_id team_id=team_id player_id=player_id %}"
         }
     }
 

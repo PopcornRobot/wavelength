@@ -11,9 +11,8 @@ class WavelengthConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
-        print("connecting to room")
         self.room_group_name = 'chat_%s' % self.room_name
-        
+        print("connecting to room " + str(self.room_group_name))
 
     # Join room group
         await self.channel_layer.group_add(
@@ -28,30 +27,12 @@ class WavelengthConsumer(AsyncWebsocketConsumer):
         # }))
 
     async def disconnect(self, close_code):
-        # Send message to room group
-        # await self.channel_layer.group_send(
-        #     self.room_group_name,
-        #     {
-        #         'type': 'disc',
-        #         'message': "remove player",
-        #         'username': 'userName',
-        #     }
-        # )
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name          
         )
-        print('consumer disconnect')
-
-    # async def websocket_disconnect(self, message):
-    #     await self.channel_layer.group_send(
-    #         self.room_group_name,
-    #         { 'type': 'dc_message' }
-    #     )
-    #     await super().websocket_disconnect(message)
-
-    # async def adminStart(self, text_data):
-    #     print('adminStart triggered')
+        print('consumer disconnect')        
+        
   
   # Receive message from WebSocket
     async def receive(self, text_data):
@@ -94,19 +75,6 @@ class WavelengthConsumer(AsyncWebsocketConsumer):
         print('clue form engaged!')
         clue_form(data)  
 
-# Receive message from room group
-    # async def disc(self, event):
-    #     print('disc')
-    #     message = event.get('message')
-    #     username = event.get('username')
-    #     value = event.get('value')
-
-    # # Send message to WebSocket
-    #     await self.send(text_data=json.dumps({
-    #         'message': message,
-    #         'username': username,
-    #         'value' : value,
-    #     }))
 
 # Receive message from room group
     async def broadcast(self, event):
@@ -123,8 +91,5 @@ class WavelengthConsumer(AsyncWebsocketConsumer):
             'value' : value,
         }))
     
-    # @sync_to_async
-    # def save_message(self, username, room, message):
-    #     Message.objects.create(username=username, room=room, content=message)
     
     
