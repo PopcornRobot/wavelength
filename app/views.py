@@ -309,7 +309,7 @@ def game_end(request, game_id):
         total_team_clues = Player.objects.filter(game=game, team=team).count() * 2
         total_team_points = team.score
         team_names = team.name
-        average = total_team_points / total_team_clues
+        average = '{0:.2g}'.format(total_team_points / total_team_clues)
         average_score.append(average)
         results = dict(zip(teams_in_game, average_score))
 
@@ -368,13 +368,13 @@ def team_answer_response_form(request, game_id, team_id, player_id, turn_id):
         if team_answer == 0:
             team_answer = GameTurn.objects.filter(id=turn_id).update(team_answer=team_answer_form)
             # below records score based on pre-defined threshold    
-            if difference <= 6:
+            if difference <= 10:
                 team.score += 4
-            elif 7 <= difference <=12:
+            elif 11 <= difference <=25:
                 team.score += 3
-            elif 13 <= difference <=18:
+            elif 26 <= difference <=35:
                 team.score +=2
-            elif 19 <= difference <=24:
+            elif 36<= difference <=45:
                 team.score  +=1
             team.save()
 
