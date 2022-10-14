@@ -350,7 +350,19 @@ def game_result(request, game_id, team_id, player_id, turn_id):
     turns_remaining = GameTurn.objects.filter(team=team, team_answer=0).count()
     team_answer = game_turn.team_answer
     question_answer = game_turn.question_answer
-    context = {'team_answer':team_answer, 'question_answer': question_answer, "game_turn" : game_turn, "question" : question, "turns_remaining" : turns_remaining, "game_id" : game_id, "team_id" : team_id, "player_id" : player_id}
+
+    difference = abs(question_answer-team_answer)
+    
+    if difference <= 10:
+        points = 4
+    elif 11 <= difference <=25:
+        points = 3
+    elif 26 <= difference <=35:
+        points = 2
+    elif 36<= difference <=45:
+        points = 1
+
+    context = {'points':points,'team_answer':team_answer, 'question_answer': question_answer, "game_turn" : game_turn, "question" : question, "turns_remaining" : turns_remaining, "game_id" : game_id, "team_id" : team_id, "player_id" : player_id}
     return render(request, "app/game_result.html", context)
 
 def leaving_user(request, player_id):
