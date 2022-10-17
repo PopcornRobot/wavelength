@@ -3,56 +3,104 @@
 
 {% block body %}
 <center>
-    <br />
-    <h1> Time to guess! </h1>
+
     <hr />
-    <h2>YOUR CLUE</h2>
+   
+    {% if player.id == clue.player.id %}
+
+        <p style="font-size:10px;">YOUR CLUE</p>
+        <p style="font-size:20px;">{{clue.clue_given}}</p>
+
+        <form id="teamAnswerForm" action="{% url 'app:team_answer_response_form' game_id=game_id team_id=team_id player_id=player_id turn_id=turn_id %}" method="post"> 
+                {% csrf_token %} 
+                <div class="row">
+                    <div class="col">
+                        <div class="center" id="slider"></div>
+                        <div id="gameValue" style="display: none;"></div>
+                        <p style="text-align:left; width: 375px;">
+                            {{clue.question.left_spectrum}}
+                            <span style="float:right;">
+                                    {{clue.question.right_spectrum}}
+                            </span>
+                        </p>   
+                    </div>
+                </div>
+        </form>
+
+    {% else %}
+
+        <p style="font-size:10px;">{{clue.player}}'S CLUE</p>
+        <p style="font-size:20px;">{{clue.clue_given}}</p>
+
+        <form id="teamAnswerForm" action="{% url 'app:team_answer_response_form' game_id=game_id team_id=team_id player_id=player_id turn_id=turn_id %}" method="post"> 
+                {% csrf_token %} 
+                <div class="row">
+                    <div class="col">
+                        <div class="center" id="slider"></div>
+                        <div id="gameValue" style="display: none;"></div>
+                        <p style="text-align:left; width: 375px;">
+                            {{clue.question.left_spectrum}}
+                            <span style="float:right;">
+                                    {{clue.question.right_spectrum}}
+                            </span>
+                        </p>   
+                    </div>
+                </div>
+        </form>
+
+    {% endif %}
+
+    <br />
+    <p style="font-size:10px;">Waiting on the below....</p>
+    {% if player.id == team_members.0.id %}
+        <button hidden id='confirm_1' type="button" class="btn btn-primary btn-sm" disabled>{{ team_members.0 }}</button>
+    {% else %}
+        <button id='confirm_1' type="button" class="btn btn-primary btn-sm" disabled>{{ team_members.0 }}</button>
+    {% endif %}
+
+    {% if player.id == team_members.1.id %}
+        <button hidden id='confirm_2' type="button" class="btn btn-success btn-sm" disabled style= {% if team_members.count > 1 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.1 }}</button>
+    {% else %}    
+        <button id='confirm_2' type="button" class="btn btn-success btn-sm" disabled style= {% if team_members.count > 1 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.1 }}</button>
+    {% endif %}
+
+    {% if player.id == team_members.2.id  %}
+        <button hidden id='confirm_3' type="button" class="btn btn-danger btn-sm" disabled style= {% if team_members.count > 2 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.2 }}</button>
+    {% else %}    
+        <button id='confirm_3' type="button" class="btn btn-danger btn-sm" disabled style= {% if team_members.count > 2 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.2 }}</button>
+    {% endif %}
     
-    <h1>{{clue.clue_given}}</h1>
+    {% if player.id == team_members.3.id  %}
+        <button hidden id='confirm_4' type="button" class="btn btn-warning btn-sm" disabled style= {% if team_members.count > 3 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.3 }}</button> 
+    {% else %}    
+        <button id='confirm_4' type="button" class="btn btn-warning btn-sm" disabled style= {% if team_members.count > 3 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.3 }}</button> 
+    {% endif %}
 
-    <div><h4>Time remaining to enter guess: <span id="time">2:00</span></h4></div>
+    
+    <br />
+    <br />
 
-    <form id="teamAnswerForm" action="{% url 'app:team_answer_response_form' game_id=game_id team_id=team_id player_id=player_id turn_id=turn_id %}" method="post"> 
-        {% csrf_token %} 
-        <div class="row">
-            <div class="col">
-                <div class="center" id="slider"></div>
-                <br />
-                <div id="gameValue" style="display: none;"></div>
-                <p style="text-align:left; width: 375px;">
-                    {{clue.question.left_spectrum}}
-                    <span style="float:right;">
-                            {{clue.question.right_spectrum}}
-                    </span>
-                </p>     
-            </div>
-        </div>
-        <br />
-        <br />
-        <button class="btn btn-primary" id="submitButton" type="button" style= {% if player.id != clue.player.id %} 'display:block' {% else %} 'display:none' {% endif %}>Submit</button>
-    </form>
+    <p style="font-size:15px;">Time remaining to enter guess: <span id="time">2:00</span></p>
 
- 
+    <p id="instructions" style= {% if player.id != clue.player.id %} 'display:block' {% else %} 'display:none' {% endif %}>Ready to lock in the dial?</p>
+    <button class="btn btn-primary" id="submitButton" type="button" style= {% if player.id != clue.player.id %} 'display:block' {% else %} 'display:none' {% endif %}>READY</button>
+
+    {% if player.id == clue.player.id %}
+        <p style= font-size:40px;>&#129323;</p>
+        <p>This is your clue!</p>
+        <p>You're not allowed to say ANYTHING</p>
+        <p>until the target is revealed!</p>
+    {% endif %}
 
 </center>    
-
-<div style="width:600px; margin:0 auto;">
-    <h5>Instructions:</h5>
-    <ul>
-        <li><h6>The dial below shows a pointer at a fixed position,</h6></li>
-        <li><h6>the position indicates the level of the answer,</h6></li>
-        <li><h6>If the dial is all the way to the left indicates the most extreme example for the left concept,</h6></li>
-        <li><h6>while if the dial is all the way to the right is the most extreme example of the right concept..</h6></li>
-        <li><h6>As a team use the dial to indicate where do you think the clue sits.</h5></li> 
-    </ul>
-</div>
 
     {{ game_id|json_script:'json-game-id' }}
     {{ player.username|json_script:'json-username' }}
     {{ player.id|json_script:'json-player-id' }}
     {{ team_id|json_script:'json-team-id' }}
     {{ team_size|json_script:'json-team-size'}}
-    
+   
+    {{ clue.player.id|json_script:'json-clue-player-id'}}
 
 <script>
     const gameID = JSON.parse(document.getElementById('json-game-id').textContent);
@@ -60,11 +108,13 @@
     const playerID = JSON.parse(document.getElementById('json-player-id').textContent);
     const teamID = JSON.parse(document.getElementById('json-team-id').textContent);
     const team_size = JSON.parse(document.getElementById('json-team-size').textContent);
-    console.log(team_size + " This is team_size")
+    const clue = JSON.parse(document.getElementById('json-clue-player-id').textContent);
+  
+    
+    console.log(teamID.name)
     let submit_count = 0;
-    let web_protocol
+    let web_protocol;
     location.protocol == "http:" ? web_protocol = "ws://" : web_protocol = "wss://"
-    console.log("web_protocol", web_protocol)
 
     const sessionSocket = new WebSocket(
             web_protocol
@@ -83,26 +133,54 @@
         }; //eoc
 
         sessionSocket.onmessage = function(e) {
-            console.log('message received in game_turn')
+            const confirm_1 = document.getElementById('confirm_1');
+            const confirm_2 = document.getElementById('confirm_2');
+            const confirm_3 = document.getElementById('confirm_3');
+            const confirm_4 = document.getElementById('confirm_4');
+
             const data = JSON.parse(e.data);
-            console.log(data)
             if  (data.message == 'value change') {
-                console.log('data.message == value change | SUCCESS')
-                $("#slider").data("roundSlider").setValue(data.value)      
-                console.log(data.value + " this is data.value in game_turn websockets after function")   
-                submit_count = 0;
+                document.getElementById("submitButton").innerHTML = "READY";
+                document.getElementById("instructions").innerHTML = "Ready to lock in the dial?";
                 document.getElementById("submitButton").disabled = false;
-            }// eof if 
+                $("#slider").data("roundSlider").setValue(data.value)       
+                submit_count = 0;
+
+                confirm_1.disabled = true;
+                confirm_2.disabled = true;
+                confirm_3.disabled = true;
+                confirm_4.disabled = true;
+            } // eof if 
+
             if (data.message == "confirm") {
                 submit_count += 1;
-                console.log(submit_count + "this is submit count after clicking")
                 if (submit_count == (team_size - 1)) {
                     document.getElementById('teamAnswerForm').submit();
                 } //eof if
+
+                if (data.username == confirm_1.innerHTML){
+                    // confirm_1.innerHTML = data.username
+                    // confirm_1.innerHTML = ("&#10003;" + data.username)
+                    confirm_1.removeAttribute('disabled');
+                } else if (data.username == confirm_2.innerHTML){
+                    // confirm_2.innerHTML = data.username
+                    // confirm_2.innerHTML = ("&#10003;" + data.username)
+                    confirm_2.removeAttribute('disabled');
+                } else if (data.username == confirm_3.innerHTML){
+                    // confirm_3.innerHTML = data.username
+                    // confirm_3.innerHTML = ("&#10003;" + data.username)
+                    confirm_3.removeAttribute('disabled');
+                } else if (data.username == confirm_4.innerHTML){
+                    // confirm_4.innerHTML = data.username
+                    // confirm_4.innerHTML = ("&#10003;" + data.username)
+                    confirm_4.removeAttribute('disabled');
+                }; //eof if
+
             } //eof if
 
         };
 
+        
         function updateGameValue(sliderValue) {
             var gameValue = document.getElementById('gameValue')
             gameValue.innerHTML = sliderValue    
@@ -110,6 +188,8 @@
 
         function teamAnswerSubmit() {
             document.getElementById("submitButton").disabled = true;
+            document.getElementById("submitButton").innerHTML = "&#10003; YOU'RE READY";
+            document.getElementById("instructions").innerHTML = "Waiting for consensus..."
             message="confirm"
                 sessionSocket.send(JSON.stringify({
                     'message': message,
@@ -118,30 +198,50 @@
                 })); //end of sessionSocket
         } //eof
 
-        $("#slider").roundSlider({
-            sliderType: "min-range",
-            radius: 130,
-            width: 16,
-            value: 50,
-            handleSize: 0,
-            handleShape: "square",
-            circleShape: "half-top",
-            min: 1,
-            max: 100,
+        if (playerID != clue) {
 
-            drag: function (e) {
-                var sliderValue = $("#slider").data("roundSlider").getValue()
-                updateGameValue(sliderValue)
-                message="value change"
-                sessionSocket.send(JSON.stringify({
-                    'message': message,
-                    'username': userName,
-                    'room': gameID,
-                    'value': sliderValue,
-                })); //end of sessionSocket
-            } //end of drag function
-        
-        }); //end of .roundSlider 
+            $("#slider").roundSlider({
+                sliderType: "min-range",
+                radius: 150,
+                width: 16,
+                value: 50,
+                handleSize: 17,
+                handleShape: "square",
+                circleShape: "half-top",
+                min: 1,
+                max: 100,
+                showTooltip: false,
+
+                drag: function (e) {
+                    var sliderValue = $("#slider").data("roundSlider").getValue()
+                    updateGameValue(sliderValue)
+                    message="value change"
+                    sessionSocket.send(JSON.stringify({
+                        'message': message,
+                        'username': userName,
+                        'room': gameID,
+                        'value': sliderValue,
+                    })); //end of sessionSocket
+                } //end of drag function
+            }); //end of .roundSlider 
+
+        } else {  
+
+            $("#slider").roundSlider({
+                sliderType: "min-range",
+                radius: 150,
+                width: 16,
+                value: 50,
+                handleSize: 17,
+                handleShape: "square",
+                circleShape: "half-top",
+                min: 1,
+                max: 100,
+                disabled: true,
+                showTooltip: false,
+            }); //end of .roundSlider 
+
+        } //eof
     
        //Countdown Timer
        window.onload = function() {

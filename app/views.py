@@ -328,7 +328,7 @@ def game_turn(request, game_id, team_id, player_id):
     clue = unanswered_clues
     turn_id = clue.id
 
-    context = {'turn_id': turn_id, 'game': game, 'team': team, 'player': player, 'clue': clue, 'game_id': game_id, 'team_id': team_id, 'player_id':player_id, 'team_size': team_size }
+    context = {'turn_id': turn_id, 'game': game, 'team': team, 'player': player, 'clue': clue, 'game_id': game_id, 'team_id': team_id, 'player_id':player_id, 'team_size': team_size, 'team_members':team_members, 'unanswered_clues': unanswered_clues }
 
     return render(request, "app/game_turn.html", context)
 
