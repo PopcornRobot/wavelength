@@ -6,23 +6,22 @@
   <br />
   <br />
   <p class="mono" style="font-size:20px;">W A V E L E N G T H</h1>
-  <p class="mono" style="font-size:12px;">To start, create your username to either host a new game (create room) or join an exisiting game (join room).</h6>
-  <p class="mono" style="font-size:15px;">If you're new to this game, click <a href="{% url 'app:game_tutorial' %}">here</a> to watch the tutorial.</p>
+  <p style="font-size:12px;">To start, create your username to either host a new game (create room) or join an exisiting game (join room).</h6>
 
   <form method="post">
-      {% csrf_token %}
-        <br />
-          <label>Name:</label>
-          <input type="text" name="username">
-        <br />
-          {% for host in players %}
-            {% if host.username == player_name %}
-              <p>{{host.username}} + ' is already created'</p>
-            {% endif %}
-          {% endfor %}
-        <br />
-          <button class="btn btn-primary" type="submit" formaction="host_player_registration_form">Host Game</button>
-          <button class="btn btn-primary" type="submit" formaction="join_player_registration_form">Join Game</button>
+    {% csrf_token %}
+      <br />
+        <label>Name:</label>
+        <input type="text" name="username">
+      <br />
+        {% for host in players %}
+          {% if host.username == player_name %}
+            <p>{{host.username}} + ' is already created'</p>
+          {% endif %}
+        {% endfor %}
+      <br />
+        <button class="btn btn-primary" type="submit" formaction="host_player_registration_form">Host Game</button>
+        <button class="btn btn-primary" type="submit" formaction="join_player_registration_form">Join Game</button>
   </form>
 </center>
 {% endblock %}

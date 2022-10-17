@@ -442,7 +442,8 @@ def cleaning_data_base(request, game_id):
         game.delete()
 
     return HttpResponseRedirect(reverse('app:start_page'))
-def game_tutorial(request):
-    context = {}
+
+def game_tutorial(request, game_id, team_id, player_id):
+    context = {'game_id': game_id, 'team_id': team_id, 'player_id': player_id}
     return render(request, 'app/game_tutorial.html', context)
 ##########################################################################################

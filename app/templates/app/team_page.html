@@ -40,7 +40,13 @@
 
         <div style='padding:10px ; text-align:center'>
             <a>
-            <button class="btn btn-primary" id='start_game_btn' type="submit" {% if player.is_host == False %}style='display:none'{%endif%}>Start Game!</button>
+              <button class="btn btn-primary" id='start_game_btn' type="submit" {% if player.is_host == False %}style='display:none'{%endif%}>Start Game + Watch Tutorial!</button>
+            </a>
+            <br />
+            <br />
+            <p {% if player.is_host == False %} style='display:none' {%endif%}>OR Click Below To Skip Tutorial</p>
+            <a>
+                <button class="btn btn-primary" id='skip_start_game_btn' type="submit" {% if player.is_host == False %}style='display:none'{%endif%}>Start Game + Skip Tutorial!</button>
             </a>
         </div>
 
@@ -51,6 +57,8 @@
     const gameID = JSON.parse(document.getElementById('json-game-id').textContent);
     const userName = JSON.parse(document.getElementById('json-username').textContent);
     const start_game_btn = document.getElementById('start_game_btn');
+    const skip_start_game_btn = document.getElementById('skip_start_game_btn');
+
     let web_protocol
     location.protocol == "http:" ? web_protocol = "ws://" : web_protocol = "wss://"
     console.log("web_protocol", web_protocol)
@@ -69,8 +77,11 @@
             console.log(data);            
             if (data.message == 'start game'){
               console.log('game started!')
-              window.location.href = "{% url 'app:question_clue_spectrum' game_id=game_id team_id=team_id player_id=player.id %}";
-            }            
+              window.location.href = "{% url 'app:game_tutorial' game_id=game_id team_id=team_id player_id=player.id %}"
+            }    
+            if (data.message == 'skip tut'){
+              window.location.href = "{% url 'app:question_clue_spectrum' game_id=game_id team_id=team_id player_id=player.id %}"
+            }          
         };
         
         sessionSocket.onclose = (e) => {
@@ -87,6 +98,17 @@
             'room': gameID,
           }));
         };
+
+        const skip_start_game_btn = document.getElementById('skip_start_game_btn');
+        skip_start_game_btn.onclick = (e) => {
+          message='skip tut'
+          sessionSocket.send(JSON.stringify({
+            'message': message,
+            'username': userName,
+            'room': gameID,
+          }));
+        } //eof
+
     });
 </script>
 {% endblock %}
