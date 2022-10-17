@@ -47,14 +47,14 @@ base.html and static are in development
     {% for game in game_list %}
         {% if current_player.id  %}        
             <a href="{%url 'app:player_game_assignation' game_id=game.id player_id=current_player.id %}">
-                <h5> Room {{game.id}} </h5> 
+                <h5> Game {{game.id}} </h5> 
                 <button class="btn btn-primary" >Join Game</button>
             </a>  
             <div class="space">
             </div>
         {% else %}
             <a href="{%url 'app:player_game_assignation' game_id=game.id%}">
-                <h5> Room {{game.id}} </h5> 
+                <h5> Game {{game.id}} </h5> 
                 <button class="btn btn-primary" >Join Game</button>
             </a>
             <div class="space">
