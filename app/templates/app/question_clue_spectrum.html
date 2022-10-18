@@ -13,6 +13,7 @@
     <br />
     <h1>Give a clue</h1>
     <div><h3>Time remaining to enter clue: <span id="time">4:00</span></h3></div>
+    <h5>Instructions are below if you need</h5>
     <br />
     <button id='confirm_1' type="button" class="btn btn-primary" disabled>{{ team_members.0 }}</button>
     <button id='confirm_2' type="button" class="btn btn-success" disabled style= {% if team_members.count > 1 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.1 }}</button>
@@ -21,7 +22,6 @@
     {% comment %} team size is {{ team_members.count }} {% endcomment %}
     <br />
     <hr />
-    
     <div id='question_1' style={% if clues_given > 0 %}'display:none'{% endif %}>
         <h3>Spectrum 1</h3>
         <div class="row">
@@ -37,13 +37,6 @@
                 <!-- <div id="gameGeneratedAnswer">{{generated_random_question_answer}}</div> -->
             </div>
         </div>
-        
-        <p style="text-align:left; width: 450px;">
-            {{left_spectrum}}
-            <span style="float:right;">
-                {{right_spectrum}}
-            </span>
-        </p>
 
         {% comment %} <form action="{% url 'app:clue_form_one' %}" method="post">
             {% csrf_token %} {% endcomment %}
@@ -65,21 +58,24 @@
         <div class="col">
             <div class="center" id="sliderTwo"></div>
             <br />
+            <p style="text-align:left; width: 450px;">
+                {{left_spectrum2}}
+                <span style="float:right;">
+                    {{right_spectrum2}}
+                </span>
+            </p>
         </div>
     </div>
     
-    <p style="text-align:left; width: 450px;">
-        {{left_spectrum2}}
-        <span style="float:right;">
-            {{right_spectrum2}}
-        </span>
-    </p>
+    <p><b>Timer: 3 minutes</b></p>
     <br>
+    <div style="margin-right:150px;">
         <label for="clue2">Enter Your Second Clue:</label>
         <input id="clue2" type="text" name="clue2">
+    </div>
     </br>
     <br>
-    <input class="btn btn-primary" id='submit_clue_2' type="submit" value="Submit" >
+        <input class="btn btn-primary" id='submit_clue_2' type="submit" value="Submit" >
     </br>
     {% comment %} </form> {% endcomment %}
 </div>
@@ -93,8 +89,8 @@
 <div style="width:600px; margin:0 auto;">
     <h5>Instructions:</h5>
     <ul>
-        <li><h6>The dial below shows a pointer at a fixed position,</h6></li>
-        <li><h6>the position indicates the level of the answer.</h6></li>
+        <li><h6>The dial above shows a pointer at a fixed position,</h6></li>
+        <li><h6>the position indicates the level of the answer,</h6></li>
         <li><h6>If the dial is all the way to the left indicates the most extreme example for the left concept,</h6></li>
         <li><h6>while if the dial is all the way to the right is the most extreme example of the right concept..</h6></li>
         <li><h6>You need to provide a "clue" that sits where the dial points at.</h6></li>

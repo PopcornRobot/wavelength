@@ -7,8 +7,9 @@
   <br />
   <p class="mono" style="font-size:40px;">W A V E L E N G T H</h1>
   <p class="mono" style="font-size:25px;">Welcome to the Wavelength game!</h6> 
-  <p class="mono" style="font-size:15px;">To start, create your username to either host a new game (create room) or join an exisiting game (join room).</h6>
-  <p class="mono" style="font-size:15px;">If you're new to this game, click <a href="{% url 'app:game_tutorial' %}">here</a> to watch the tutorial.</p>
+  <hr />
+  <h6>To start, create your username to either host a new game (create room) or join an exisiting game (join room).</h6>
+  <h6>If you're new to this game, click <a href="{% url 'app:game_tutorial' %}"><em><b>here</b></em></a> to watch the tutorial.</h6>
 
   <form method="post">
       {% csrf_token %}
@@ -18,7 +19,7 @@
         <br />
           {% for host in players %}
             {% if host.username == player_name %}
-              <p>{{host.username}} + ' is already created'</p>
+              <p>{{host.username}} + is already created, please enter another name</p>
             {% endif %}
           {% endfor %}
         <br />
