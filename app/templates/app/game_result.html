@@ -22,10 +22,11 @@
         <div class="row" id="sliderOne">
             <div class="col">
                 <br />
+                <p>Correct Answer</p>
                 <div class="center" id="slider"></div>
-                <p style="text-align:left; width: 375px;">
+                <p class="wrap" style="text-align:left; width: 375px;">
                     {{question.left_spectrum}}
-                    <span style="float:right;">
+                    <span class="wrap" style="float:right;">
                         {{question.right_spectrum}}
                     </span>
                 </p>
@@ -37,10 +38,11 @@
     <div class="row" class="sliderTwoTwo">
         <div class="col">
             <br />
+            <p>Your team's answer</p>
             <div class="center" id="sliderTwo"></div>
-            <p style="text-align:left; width: 375px;">
+            <p class="wrap" style="text-align:left; width: 375px;">
                 {{question.left_spectrum}}
-                <span style="float:right;">
+                <span class="wrap" style="float:right;">
                     {{question.right_spectrum}}
                 </span>
             </p>
@@ -75,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
         min: 1,
         max: 100,
         disabled: true,
+        showTooltip: false,
     }); //end of .roundSlider 
 
     $("#sliderTwo").roundSlider({
@@ -88,6 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
         min: 1,
         max: 100,
         disabled: true,
+        showTooltip: false,
     }); //end of .roundSliderTwo
 
 

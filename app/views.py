@@ -345,7 +345,8 @@ def game_turn(request, game_id, team_id, player_id):
     else:
         return HttpResponseRedirect(reverse('app:waiting_room', kwargs={'game_id':game_id}))
 
-    context = {'turn_id': turn_id, 'game': game, 'team': team, 'player': player, 'clue': clue, 'game_id': game_id, 'team_id': team_id, 'player_id':player_id, 'team_size': team_size }
+    context = {'turn_id': turn_id, 'game': game, 'team': team, 'player': player, 'clue': clue, 'game_id': game_id, 'team_id': team_id, 'player_id':player_id, 'team_size': team_size, 'team_members':team_members, 'unanswered_clues': unanswered_clues }
+
     return render(request, "app/game_turn.html", context)
 
 def game_result(request, game_id, team_id, player_id, turn_id):
@@ -453,7 +454,8 @@ def cleaning_data_base(request, game_id):
         game.delete()
 
     return HttpResponseRedirect(reverse('app:start_page'))
-def game_tutorial(request):
-    context = {}
+
+def game_tutorial(request, game_id, team_id, player_id):
+    context = {'game_id': game_id, 'team_id': team_id, 'player_id': player_id}
     return render(request, 'app/game_tutorial.html', context)
 ##########################################################################################

@@ -15,15 +15,21 @@
 
 <script src="https://player.vimeo.com/api/player.js"></script>
 
+{{ game_id|json_script:'json-game-id' }}
+{{ team_id|json_script:'json-team-id' }}
+{{ player_id|json_script:'json-player-id' }}
+
 <script>
+    const game_id = JSON.parse(document.getElementById('json-game-id').textContent);
+    const team_id = JSON.parse(document.getElementById('json-team-id').textContent);
+    const player_id = JSON.parse(document.getElementById('json-player-id').textContent);
 
     var iframe = document.querySelector('iframe');
     var player = new Vimeo.Player(iframe);
 
 		player.on('ended', function(){
-        window.location.href = "{% url 'app:start_page' %}"
+        window.location.href = "{% url 'app:question_clue_spectrum' game_id=game_id team_id=team_id player_id=player_id %}";
     });
-
 </script>
 
 {% endblock %}

@@ -2,17 +2,26 @@
 #slider .rs-handle  {
   background-color: transparent;
   border: 8px solid transparent;
-  border-right-color: rgb(29, 219, 61);
+  border-right-color: rgb(5, 255, 46);
   margin: -6px 0px 0px 14px !important;
   border-width: 6px 104px 6px 4px;
 }
+
+#slider .rs-handle-two  {
+  background-color: transparent;
+  border: 8px solid transparent;
+  border-right-color: rgb(255, 5, 18);
+  margin: -6px 0px 0px 14px !important;
+  border-width: 6px 104px 6px 4px;
+}
+
 #slider .rs-handle:before  {
   display: block;
   content: " ";
   position: absolute;
   height: 80px;
   width: 80px;
-  background: rgb(223, 12, 117);
+  background: rgb(248, 3, 126);
   right: -40px;
   bottom: -40px;
   border-radius: 100px;
@@ -22,7 +31,7 @@
   background-color: rgb(244, 248, 7);
 }
 #slider .rs-path-color  {
-  background-color: #F0C5C5;
+  background-color: rgb(247, 239, 130);
 }
 
 /* BELOW IS SCALE OF TEAM ANSWER */
@@ -69,5 +78,21 @@
 }
 
 .mono {font-family: 'Major Mono Display', monospace;}
+
+.left {
+  text-align: left;
+  display: block;
+
+  word-wrap: break-word;
+  
+}
+
+.right {
+  text-align: right;
+  display: block;
+  
+  word-wrap: break-word;
+  white-space: normal;
+}
 
 
