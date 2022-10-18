@@ -12,6 +12,7 @@ base.html and static are in development
 
 {% endcomment %}
 
+
 <style>>
 {% block style %}
 .container {
@@ -62,16 +63,17 @@ base.html and static are in development
         {% endif %}
     {% endfor %}
 
-</div>
-</center>
-<br>
-<div style='padding:10px ; text-align:center'>
-    <a href= "{% url 'app:leaving_user' player_id=current_player.id %}">
-        <button class="btn btn-primary" >Return to Start Page</button>
-    </a>
-</div>
-
+    </div>
+    </center>
+    <br>
+    <div style='padding:10px ; text-align:center'>
+        <a href= "{% url 'app:leaving_user' player_id=current_player.id %}">
+            <button class="btn btn-primary" >Return to Start Page</button>
+        </a>
+    </div>
+</body>
 <script>
 
 </script>
+
 {% endblock %}

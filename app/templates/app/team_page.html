@@ -39,9 +39,9 @@
 </center>
 
         <div style='padding:10px ; text-align:center'>
-            <a>
+          <a>
             <button class="btn btn-primary" id='start_game_btn' type="submit" {% if player.is_host == False %}style='display:none'{%endif%}>Start Game!</button>
-            </a>
+          </a>
         </div>
 
         {{ game_id|json_script:'json-game-id' }}
