@@ -8,7 +8,7 @@
    
     {% if player.id == clue.player.id %}
 
-        <p style="font-size:10px;">YOUR CLUE</p>
+        <p style="font-size:11px;">YOUR CLUE</p>
         <p style="font-size:20px;">{{clue.clue_given}}</p>
 
         <form id="teamAnswerForm" action="{% url 'app:team_answer_response_form' game_id=game_id team_id=team_id player_id=player_id turn_id=turn_id %}" method="post"> 
@@ -29,7 +29,7 @@
 
     {% else %}
 
-        <p style="font-size:10px;">{{clue.player}}'S CLUE</p>
+        <p style="font-size:11px;">{{clue.player}}'S CLUE</p>
         <p style="font-size:20px;">{{clue.clue_given}}</p>
 
         <form id="teamAnswerForm" action="{% url 'app:team_answer_response_form' game_id=game_id team_id=team_id player_id=player_id turn_id=turn_id %}" method="post"> 
@@ -52,7 +52,6 @@
 
     <br />
     <p style="font-size:10px;">Waiting on the below....</p>
-
     
     {% if clue.player.id  == team_members.0.id %}
         <button hidden id='confirm_1' type="button" class="btn btn-primary btn-sm" disabled>{{ team_members.0 }}</button>
@@ -78,8 +77,9 @@
         <button id='confirm_4' type="button" class="btn btn-warning btn-sm" disabled style= {% if team_members.count > 3 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.3 }}</button> 
     {% endif %}
 
-
-    <div><h4>Time remaining to enter guess: <span id="time">3:00</span></h4></div>
+    <br />
+    <br />
+    <p>Time remaining to enter guess: <span id="time">3:00</span></p>
 
     <p id="instructions" style= {% if player.id != clue.player.id %} 'display:block' {% else %} 'display:none' {% endif %}>Ready to lock in the dial?</p>
     <button class="btn btn-primary" id="submitButton" type="button" style= {% if player.id != clue.player.id %} 'display:block' {% else %} 'display:none' {% endif %}>READY</button>
@@ -241,6 +241,8 @@
             }); //end of .roundSlider 
 
         } //eof
+
+    
     
        //Countdown Timer
        window.onload = function() {
@@ -266,6 +268,9 @@
             display.textContent = minutes + ':' + seconds;
         }
         }; //end of countdown timer
+
+        
+
 
     }); //end of page load
 
@@ -320,6 +325,8 @@
             'seconds': (seconds % 60) | 0
         };
     };
+
+
 </script> 
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>                            
