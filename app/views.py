@@ -367,6 +367,8 @@ def game_result(request, game_id, team_id, player_id, turn_id):
         points = 2
     elif 26<= difference <=35:
         points = 1
+    else:
+        points=0
 
     context = {'points':points,'team_answer':team_answer, 'question_answer': question_answer, "game_turn" : game_turn, "question" : question, "turns_remaining" : turns_remaining, "game_id" : game_id, "team_id" : team_id, "player_id" : player_id}
     return render(request, "app/game_result.html", context)
