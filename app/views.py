@@ -358,13 +358,13 @@ def game_result(request, game_id, team_id, player_id, turn_id):
 
     difference = abs(question_answer-team_answer)
     
-    if difference <= 10:
+    if difference <= 10: # +-5
         points = 4
-    elif 11 <= difference <=25:
+    elif 11 <= difference <=25: #+-10
         points = 3
-    elif 26 <= difference <=35:
+    elif 26 <= difference <=35: #+-10
         points = 2
-    elif 36<= difference <=45:
+    elif 36<= difference <=45: #+-10
         points = 1
 
     context = {'points':points,'team_answer':team_answer, 'question_answer': question_answer, "game_turn" : game_turn, "question" : question, "turns_remaining" : turns_remaining, "game_id" : game_id, "team_id" : team_id, "player_id" : player_id}
