@@ -361,11 +361,11 @@ def game_result(request, game_id, team_id, player_id, turn_id):
     
     if difference <= 5:
         points = 4
-    elif 6 <= difference <=15:
+    elif 6 <= difference <=10:
         points = 3
-    elif 16 <= difference <=25:
+    elif 16 <= difference <=20:
         points = 2
-    elif 26<= difference <=35:
+    elif 26<= difference <=30:
         points = 1
     else:
         points=0
@@ -393,11 +393,11 @@ def team_answer_response_form(request, game_id, team_id, player_id, turn_id):
             # below records score based on pre-defined threshold    
             if difference <= 5:
                 team.score += 4
-            elif 6 <= difference <=15:
+            elif 6 <= difference <=10:
                 team.score += 3
-            elif 16 <= difference <=25:
+            elif 16 <= difference <=20:
                 team.score +=2
-            elif 26<= difference <=35:
+            elif 26<= difference <=30:
                 team.score  +=1
             team.save()
 
