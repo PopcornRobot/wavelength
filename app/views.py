@@ -322,7 +322,11 @@ def game_end(request, game_id):
         total_team_clues = Player.objects.filter(game=game, team=team).count() * 2
         total_team_points = team.score
         team_names = team.name
-        average = '{0:.2g}'.format(total_team_points / total_team_clues)
+        try:
+            average = '{0:.2g}'.format(total_team_points / total_team_clues)
+        except:
+            average = 0
+            
         average_score.append(average)
         results = dict(zip(teams_in_game, average_score))
 
