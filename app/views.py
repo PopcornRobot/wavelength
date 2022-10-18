@@ -358,13 +358,13 @@ def game_result(request, game_id, team_id, player_id, turn_id):
 
     difference = abs(question_answer-team_answer)
     
-    if difference <= 10: # +-5
+    if difference <= 5:
         points = 4
-    elif 11 <= difference <=25: #+-10
+    elif 6 <= difference <=15:
         points = 3
-    elif 26 <= difference <=35: #+-10
+    elif 16 <= difference <=25:
         points = 2
-    elif 36<= difference <=45: #+-10
+    elif 26<= difference <=35:
         points = 1
 
     context = {'points':points,'team_answer':team_answer, 'question_answer': question_answer, "game_turn" : game_turn, "question" : question, "turns_remaining" : turns_remaining, "game_id" : game_id, "team_id" : team_id, "player_id" : player_id}
@@ -388,13 +388,13 @@ def team_answer_response_form(request, game_id, team_id, player_id, turn_id):
         if team_answer == 0:
             team_answer = GameTurn.objects.filter(id=turn_id).update(team_answer=team_answer_form)
             # below records score based on pre-defined threshold    
-            if difference <= 10:
+            if difference <= 5:
                 team.score += 4
-            elif 11 <= difference <=25:
+            elif 6 <= difference <=15:
                 team.score += 3
-            elif 26 <= difference <=35:
+            elif 16 <= difference <=25:
                 team.score +=2
-            elif 36<= difference <=45:
+            elif 26<= difference <=35:
                 team.score  +=1
             team.save()
 
