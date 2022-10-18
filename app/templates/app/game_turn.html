@@ -90,8 +90,19 @@
         <p>You're not allowed to say ANYTHING</p>
         <p>until the target is revealed!</p>
     {% endif %}
+   
+    <div style="width:600px; margin:0 auto;">
+        <h5>Instructions:</h5>
+        <ul>
+            <li><h6>The dial above shows a pointer at a fixed position,</h6></li>
+            <li><h6>the position indicates the level of the answer,</h6></li>
+            <li><h6>If the dial is all the way to the left indicates the most extreme example for the left concept,</h6></li>
+            <li><h6>while if the dial is all the way to the right is the most extreme example of the right concept..</h6></li>
+            <li><h6>As a team use the dial to indicate where do you think the clue sits.</h5></li> 
+        </ul>
+    </div>
 
-</center>    
+</center>   
 
     {{ game_id|json_script:'json-game-id' }}
     {{ player.username|json_script:'json-username' }}

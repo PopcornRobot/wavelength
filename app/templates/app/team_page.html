@@ -26,10 +26,10 @@
     <div class="bs-component">  
         <div  class="row">
             <div class="col-160">
-              <h5>{{team_name.name}}</h5>
+              <h5 style="color:lightblue"><em>Team -- {{team_name.name}}:</em></h5>
               {%for player_name in teammates%}
                 {% if player_name.team.name == team_name.name %}
-                  <p><h6>{{ player_name.username }}</h6></p>
+                  <p><h6 style="color:pink; {% if player_name.id == player.id %} font-size:20px; {% endif %}">{{ player_name.username }}</h6></p>
                 {% endif %}
               {%endfor%}
             </div>

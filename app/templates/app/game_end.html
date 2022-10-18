@@ -5,22 +5,43 @@
   <br />
   <h1>Final Scores</h1>
   <hr /> 
-  <p>
+  <h1>
     Congratuations! {{teams_in_game.first}} win!
-  </p>
-
-    {% comment %} To display score from highest to lowest {% endcomment %}
-  <h5> Final scores </h5>
-  {% for key, values in results.items %}
-    <p>{{key}} : {{values}}</p>
-  {% endfor %}
+  </h1>
 
 
-  <h5> Total points </h5>
-  {% for team in teams_in_game %}
-    <p>{{team.name}} : {{team.score}}</p>
-  {% endfor %}
-  
+  {% comment %} To display score from highest to lowest {% endcomment %}
+  <h5> Scores </h5>
+  <div class="container">
+    <div class="row justify-content-md-center">    
+      <div class="col-lg-5">
+        <table class="table table-hover">
+          <thead>
+            <tr class="table-active">
+              <th scope="col"> Team </th>
+              <th scope="col"> Points </th>
+              <th scope="col"> Average </th>
+            </tr>
+          </thead>
+            {% for key, values in results.items %}
+          <tbody>
+            <tr class="table-primary">
+                <td> {{key}} </td>
+                <td> {{key.score}} </td>
+                <td> {{values}} </td>
+            </tr>
+          </tbody>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <hr /> 
+
+
+
+
   <a href="{% url 'app:cleaning_data_base' game_id=game.id %}" ><button class="btn btn-primary"> New Game </button></a>
 </center>
 

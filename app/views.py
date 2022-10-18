@@ -322,7 +322,7 @@ def game_end(request, game_id):
         total_team_clues = Player.objects.filter(game=game, team=team).count() * 2
         total_team_points = team.score
         team_names = team.name
-        average = total_team_points / total_team_clues
+        average = '{0:.2g}'.format(total_team_points / total_team_clues)
         average_score.append(average)
         results = dict(zip(teams_in_game, average_score))
 
@@ -356,7 +356,19 @@ def game_result(request, game_id, team_id, player_id, turn_id):
     turns_remaining = GameTurn.objects.filter(team=team, team_answer=0).count()
     team_answer = game_turn.team_answer
     question_answer = game_turn.question_answer
-    context = {'team_answer':team_answer, 'question_answer': question_answer, "game_turn" : game_turn, "question" : question, "turns_remaining" : turns_remaining, "game_id" : game_id, "team_id" : team_id, "player_id" : player_id}
+
+    difference = abs(question_answer-team_answer)
+    
+    if difference <= 5:
+        points = 4
+    elif 6 <= difference <=15:
+        points = 3
+    elif 16 <= difference <=25:
+        points = 2
+    elif 26<= difference <=35:
+        points = 1
+
+    context = {'points':points,'team_answer':team_answer, 'question_answer': question_answer, "game_turn" : game_turn, "question" : question, "turns_remaining" : turns_remaining, "game_id" : game_id, "team_id" : team_id, "player_id" : player_id}
     return render(request, "app/game_result.html", context)
 
 def leaving_user(request, player_id):
@@ -377,13 +389,13 @@ def team_answer_response_form(request, game_id, team_id, player_id, turn_id):
         if team_answer == 0:
             team_answer = GameTurn.objects.filter(id=turn_id).update(team_answer=team_answer_form)
             # below records score based on pre-defined threshold    
-            if difference <= 6:
+            if difference <= 5:
                 team.score += 4
-            elif 7 <= difference <=12:
+            elif 6 <= difference <=15:
                 team.score += 3
-            elif 13 <= difference <=18:
+            elif 16 <= difference <=25:
                 team.score +=2
-            elif 19 <= difference <=24:
+            elif 26<= difference <=35:
                 team.score  +=1
             team.save()
 
