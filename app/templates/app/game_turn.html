@@ -9,7 +9,7 @@
     {% if player.id == clue.player.id %}
 
         <p style="font-size:11px;">YOUR CLUE</p>
-        <p style="font-size:20px;">{{clue.clue_given}}</p>
+        <p style="font-size:35px;">{{clue.clue_given}}</p>
 
         <form id="teamAnswerForm" action="{% url 'app:team_answer_response_form' game_id=game_id team_id=team_id player_id=player_id turn_id=turn_id %}" method="post"> 
                 {% csrf_token %} 
