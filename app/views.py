@@ -62,6 +62,7 @@ def get_teams(team_names, players):
 # This function will be enable only by the host
 # NOTE: Create a player joining argument to track who joins and use it as URL #
 def team_creation(request, game_id, player_id):
+
     current_player = Player.objects.get(id=player_id)
 
     if current_player.team is None and current_player.is_host == True:
@@ -104,11 +105,10 @@ def team_creation(request, game_id, player_id):
 
         # Dictionary with the sorted teams
         teams = get_teams(team_names, player_names)
-        ###############################################################################
-        
+
         # List comprehension
         for key, value in teams.items():
-            create_team = Team.objects.create(name=key, game=game_instance)
+            create_team, created = Team.objects.get_or_create(name=key, game=game_instance)
             for member in value:
                 team_member = Player.objects.get(username=member)
                 team_member.team=create_team
@@ -116,7 +116,11 @@ def team_creation(request, game_id, player_id):
             
             usr=Player.objects.get(id=player_id)
             game_id=usr.game.id
-            team_id=usr.team.id
+
+            try:
+                team_id=usr.team.id
+            except:
+                team_id=current_player.team.id
 
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
@@ -322,7 +326,11 @@ def game_end(request, game_id):
         total_team_clues = Player.objects.filter(game=game, team=team).count() * 2
         total_team_points = team.score
         team_names = team.name
-        average = '{0:.2g}'.format(total_team_points / total_team_clues)
+        try:
+            average = '{0:.2g}'.format(total_team_points / total_team_clues)
+        except:
+            average = 0
+            
         average_score.append(average)
         results = dict(zip(teams_in_game, average_score))
 
@@ -361,11 +369,11 @@ def game_result(request, game_id, team_id, player_id, turn_id):
     
     if difference <= 5:
         points = 4
-    elif 6 <= difference <=15:
+    elif 6 <= difference <=10:
         points = 3
-    elif 16 <= difference <=25:
+    elif 16 <= difference <=20:
         points = 2
-    elif 26<= difference <=35:
+    elif 26<= difference <=30:
         points = 1
     else:
         points=0
@@ -393,11 +401,11 @@ def team_answer_response_form(request, game_id, team_id, player_id, turn_id):
             # below records score based on pre-defined threshold    
             if difference <= 5:
                 team.score += 4
-            elif 6 <= difference <=15:
+            elif 6 <= difference <=10:
                 team.score += 3
-            elif 16 <= difference <=25:
+            elif 16 <= difference <=20:
                 team.score +=2
-            elif 26<= difference <=35:
+            elif 26<= difference <=30:
                 team.score  +=1
             team.save()
 
