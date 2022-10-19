@@ -62,6 +62,13 @@ def get_teams(team_names, players):
 # This function will be enable only by the host
 # NOTE: Create a player joining argument to track who joins and use it as URL #
 def team_creation(request, game_id, player_id):
+    ######################################################################################################
+    ######################################################################################################
+
+    #Create a feature that prohibits the creation of empty teams.
+
+    ######################################################################################################
+    ######################################################################################################
     current_player = Player.objects.get(id=player_id)
 
     if current_player.team is None and current_player.is_host == True:
@@ -108,15 +115,17 @@ def team_creation(request, game_id, player_id):
         
         # List comprehension
         for key, value in teams.items():
-            create_team = Team.objects.create(name=key, game=game_instance)
-            for member in value:
-                team_member = Player.objects.get(username=member)
-                team_member.team=create_team
-                team_member.save()
-            
-            usr=Player.objects.get(id=player_id)
-            game_id=usr.game.id
-            team_id=usr.team.id
+            while key is None:
+                create_team = Team.objects.create(name=key, game=game_instance)
+                for member in value:
+                    team_member = Player.objects.get(username=member)
+                    team_member.team=create_team
+                    team_member.save()
+                
+                usr=Player.objects.get(id=player_id)
+                game_id=usr.game.id
+                team_id=usr.team.id
+
 
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
