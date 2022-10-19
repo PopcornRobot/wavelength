@@ -67,9 +67,6 @@ def team_creation(request, game_id, player_id):
     current_player = Player.objects.get(id=player_id)
 
     if current_player.team is None and current_player.is_host == True:
-        print('###################################')
-        print('teams dictionary = ' + str(current_player.team))
-        print('###################################')
         # Stores the name of all the players
         player_names = []
         # empty list that will store all the team names
@@ -109,16 +106,10 @@ def team_creation(request, game_id, player_id):
 
         # Dictionary with the sorted teams
         teams = get_teams(team_names, player_names)
-        print('###################################')
-        print('teams dictionary = ' + str(teams))
-        print('###################################')
 
         # List comprehension
         for key, value in teams.items():
             create_team, created = Team.objects.get_or_create(name=key, game=game_instance)
-            print('###################################')
-            print('Existing team ? '+str(created))
-            print('###################################')
             for member in value:
                 team_member = Player.objects.get(username=member)
                 team_member.team=create_team
