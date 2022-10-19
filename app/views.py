@@ -108,7 +108,7 @@ def team_creation(request, game_id, player_id):
 
         # List comprehension
         for key, value in teams.items():
-            create_team, created = Team.objects.create(name=key, game=game_instance)
+            create_team = Team.objects.create(name=key, game=game_instance)
             for member in value:
                 team_member = Player.objects.get(username=member)
                 team_member.team=create_team
