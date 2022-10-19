@@ -1,99 +1,63 @@
 {% extends "base_cyberpunk.html" %}
 {% load static %}
 
-<style>
-    {% block style %}
-
-    {% endblock %}
-</style>
-
 {% block body %}
  
-<center>
-    <br />
-    <h1>Give a clue</h1>
-    <div><h3>Time remaining to enter clue: <span id="time">4:00</span></h3></div>
-    <h5>Instructions are below if you need</h5>
-    <br />
-    <button id='confirm_1' type="button" class="btn btn-primary" disabled>{{ team_members.0 }}</button>
-    <button id='confirm_2' type="button" class="btn btn-success" disabled style= {% if team_members.count > 1 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.1 }}</button>
-    <button id='confirm_3' type="button" class="btn btn-danger" disabled style= {% if team_members.count > 2 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.2 }}</button>
-    <button id='confirm_4' type="button" class="btn btn-warning" disabled style= {% if team_members.count > 3 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.3 }}</button>
-    {% comment %} team size is {{ team_members.count }} {% endcomment %}
-    <br />
-    <hr />
+<div class ="center">
+    <br>
+    <h1>GIVE A CLUE</h1>
+    <p style="font-size:20px;">Time remaining to enter clue: <span id="time">4:00</span></p>
+    <hr>
+    <p style="font-size:10px;"><i>team members below have submitted their clues</i></p>
+    <button id='confirm_1' type="button" class="btn btn-primary btn-sm" disabled>{{ team_members.0 }}</button>
+    <button id='confirm_2' type="button" class="btn btn-success btn-sm" disabled style= {% if team_members.count > 1 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.1 }}</button>
+    <button id='confirm_3' type="button" class="btn btn-danger btn-sm" disabled style= {% if team_members.count > 2 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.2 }}</button>
+    <button id='confirm_4' type="button" class="btn btn-warning btn-sm" disabled style= {% if team_members.count > 3 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.3 }}</button>
+    <hr>
+
     <div id='question_1' style={% if clues_given > 0 %}'display:none'{% endif %}>
         <h3>Spectrum 1</h3>
-        <div class="row">
-            <div class="col">
-                <div class="center" id="slider"></div>
-                <br />
-                <p class="left" style="text-align:left; width: 350px;">
-                    {{left_spectrum}}
-                    <span class="right" style="float:right;">
-                        {{right_spectrum}} 
-                    </span>
-                </p>
+            <div class="center" id="slider"></div>
+            <div class="container">
+                <div class="row">
+                    <div class="col" style="font-size:15px;" >{{left_spectrum}}</div>
+                    <div class="col"></div>    
+                    <div class="col" style="font-size:15px;" >{{right_spectrum}}</div>    
+                </div>
             </div>
-        </div>
-
-        {% comment %} <form action="{% url 'app:clue_form_one' %}" method="post">
-            {% csrf_token %} {% endcomment %}
-            <br />
-            <label for="clue1">Clue1:</label>
-                <input id="clue1" type="text" name="clue1">
-            <br />
-        <br />
-        <button class="btn btn-primary" id='submit_clue_1' href= '#!' type="button" value="Submit"> Submit</button>
-        {% comment %} onclick="this.disabled=true" {% endcomment %}
-        <br />
-
+        <br>
+        <br>
+        <label for="clue1">Enter Your First Clue:</label>
+        <input id="clue1" type="text" name="clue1">
+        <br>
+        <br>
+        <input class="btn btn-primary" id='submit_clue_1' href= '#!' type="button" value="Submit">
     </div>
-    <hr />
 
     <div id='question_2' style={% if clues_given > 0 %}'display:block'{% else %}'display:none'{% endif %}>
         <h3>Spectrum 2</h3>
-    <div class="row">
-        <div class="col">
             <div class="center" id="sliderTwo"></div>
-            <br />
-            <p style="text-align:left; width: 450px;">
-                {{left_spectrum2}}
-                <span style="float:right;">
-                    {{right_spectrum2}}
-                </span>
-            </p>
-        </div>
-    </div>
-    
-    <br>
-    <div style="margin-right:150px;">
+            <div class="container">
+                <div class="row">
+                    <div class="col" style="font-size:15px;" >{{left_spectrum}}</div>
+                    <div class="col"></div>    
+                    <div class="col" style="font-size:15px;" >{{right_spectrum}}</div>    
+                </div>
+            </div>
+        <br>
+        <br>
         <label for="clue2">Enter Your Second Clue:</label>
         <input id="clue2" type="text" name="clue2">
-    </div>
-    </br>
-    <br>
+        <br>
+        <br>
         <input class="btn btn-primary" id='submit_clue_2' type="submit" value="Submit" >
-    </br>
-    {% comment %} </form> {% endcomment %}
-</div>
+    </div>
 
-<div id='please_wait' style={% if clues_given > 1 %}'display:block'{% else %}'display:none'{% endif %}>
-    <h1>Waiting for other teammates to submit their clues....</h1>
-</div>
-<br />
-</center>
-
-<div style="width:600px; margin:0 auto;">
-    <h5>Instructions:</h5>
-    <ul>
-        <li><h6>The dial above shows a pointer at a fixed position,</h6></li>
-        <li><h6>the position indicates the level of the answer,</h6></li>
-        <li><h6>If the dial is all the way to the left indicates the most extreme example for the left concept,</h6></li>
-        <li><h6>while if the dial is all the way to the right is the most extreme example of the right concept..</h6></li>
-        <li><h6>You need to provide a "clue" that sits where the dial points at.</h6></li>
-        <li><h6>You have two clues.</h6></li>
-    </ul>
+    <div id='please_wait' style={% if clues_given > 1 %}'display:block'{% else %}'display:none'{% endif %}>
+        <br>
+        <p style="font-size:30px;">Waiting for other teammates to submit their clues....</p>
+    </div>
+ 
 </div>
 
 {% comment %} transfers context data to javascript {% endcomment %}
@@ -103,7 +67,6 @@
 {{ random_question.id|json_script:'json-random-question' }}
 {{ random_question2.id|json_script:'json-random-question2' }}
 {{ team_members.count|json_script:'json-team-size' }}
-
 
 <script>
     const gameID = JSON.parse(document.getElementById('json-game-id').textContent);

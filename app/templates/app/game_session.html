@@ -1,73 +1,32 @@
 {% extends "base_cyberpunk.html" %}
 {% load static %} 
-{% comment %} 
-
-OBJECTIVE:
-Place Holder for "base.html" and static objects
-{% extends "base.html" %}
-
-
-STAUTS:
-base.html and static are in development
-
-{% endcomment %}
-
-<style>
-    {% block style %}
-    .container {
-        height: 200px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .item {
-        width: 10em;
-    }
-    
-    .center {
-        margin: auto;
-        width: 60%;
-        padding: 10px;
-        text-align: center;
-        border: 3px solid blue;
-      }
-    {% endblock %}
-</style>
     
 {% block body %} 
   <div class="center">
-    
-      <br />
-      <h1> You are in Room {{game.id}} </h1>
-      <br />
-      <h4> (You will see your team members after host sort teams) </h4>
-      <h4> Please wait for the host to start the game </h4>
-      <hr />
-      <br />
-      {% comment %} <button class="btn btn-primary" href="{% url 'app:start_page' %}" >Leave Room</button> {% endcomment %}
-  </div>
+    <br>
+    <br>
+    <p class="mono" style="font-size:26px;">W A V E L E N G T H</p>
+    <hr>
+    <p style="font-size:20px;">You are in Game Room {{game.id}}</p>
+    <p style="font-size:15px;">You will see your team members after host sort teams.</p>
+    <p style="font-size:15px;">Please wait for the host to start the game.</p>
+    <hr>
 
-  <div class='center'>
     <div id='player_list' style='padding:10px ; text-align:center'>
         {% for player in player_list %}
-        <div id='{{ player.username}}'>{{ player.username}} </div> 
-        {% if player.is_host == True%} <p> -- Host </p> {% endif %}
-          <br />
+          <div id='{{ player.username}}'>{{ player.username}}</div> 
+            {% if player.is_host == True %} <p> ^^ HOST ^^</p> {% endif %}
         {% endfor %}
     </div>
+
+    <div style='padding:10px; text-align:center'>
+        <button class="btn btn-primary" id='sort_teams_btn' type="submit" {% if player.is_host == False %} style='display:none' {%endif%}>SORT TEAMS</button>
+    </div>
+
+    {{ game_id|json_script:'json-game-id' }}
+    {{ player.username|json_script:'json-username' }}
+
   </div>
-
-        <div style='padding:10px ; text-align:center'>
-            {% comment %} <button class="btn btn-primary" href="{% url 'app:start_page' %}" >Leave Room</button> {% endcomment %}
-            <a>
-            <button class="btn btn-primary" id='sort_teams_btn' type="submit" {% if player.is_host == False %}style='display:none'{%endif%}>Sort Teams</button>
-            </a>
-        </div>
-
-
-        {{ game_id|json_script:'json-game-id' }}
-        {{ player.username|json_script:'json-username' }}
 
 <script>
     const gameID = JSON.parse(document.getElementById('json-game-id').textContent);
