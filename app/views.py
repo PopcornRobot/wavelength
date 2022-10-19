@@ -86,7 +86,7 @@ def team_creation(request, game_id, player_id):
         if len(players) > 5:
             # Calculating the amount of teams and distributions
             # number of players/4 players per team and +1 to round number
-            number_of_teams = int(players.count()/4)+1
+            number_of_teams = int(players.count()/4)
         else: 
             # Single team")
             number_of_teams = 1
@@ -108,20 +108,11 @@ def team_creation(request, game_id, player_id):
 
         # List comprehension
         for key, value in teams.items():
-            create_team, created = Team.objects.get_or_create(name=key, game=game_instance)
+            create_team, created = Team.objects.create(name=key, game=game_instance)
             for member in value:
                 team_member = Player.objects.get(username=member)
                 team_member.team=create_team
                 team_member.save()
-            
-            usr=Player.objects.get(id=player_id)
-            game_id=usr.game.id
-
-            try:
-                team_id=usr.team.id
-            except:
-                # team_id=current_player.team.id
-                team_id=None
 
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
@@ -131,6 +122,10 @@ def team_creation(request, game_id, player_id):
                 'message': 'team page ready',
             }
         )
+
+        game_id=current_player.game.id
+        team_id=current_player.team.id
+
     else:
         game_id=current_player.game.id
         team_id=current_player.team.id
