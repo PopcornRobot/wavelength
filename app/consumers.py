@@ -66,8 +66,6 @@ class WavelengthConsumer(AsyncWebsocketConsumer):
         team = data.get('team')
         question = data.get('question')
         
-        # print('text data should be here:' + text_data)
-        # print(data)
         if (action == 'submit clue'):
             await self.create_gameturn(data)
 
@@ -113,7 +111,6 @@ class WavelengthConsumer(AsyncWebsocketConsumer):
         username = event.get('username')
         value = event.get('value')
         print('receiving from broadcast')
-        # print('value is ' + value)
 
     # Send message to WebSocket
         await self.send(text_data=json.dumps({
