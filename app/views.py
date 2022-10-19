@@ -10,7 +10,6 @@ import random
 from random import choice
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
-import redis
 
 teams_placeholder = {}
 
