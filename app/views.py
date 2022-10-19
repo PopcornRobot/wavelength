@@ -68,7 +68,7 @@ def team_creation(request, game_id, player_id):
 
     if current_player.team is None and current_player.is_host == True:
         print('###################################')
-        print('teams dictionary = ' + str(teams))
+        print('teams dictionary = ' + str(current_player.team))
         print('###################################')
         # Stores the name of all the players
         player_names = []
@@ -115,7 +115,7 @@ def team_creation(request, game_id, player_id):
 
         # List comprehension
         for key, value in teams.items():
-            create_team, created = Team.objects.create_or_create(name=key, game=game_instance)
+            create_team, created = Team.objects.get_or_create(name=key, game=game_instance)
             print('###################################')
             print('Existing team ? '+str(created))
             print('###################################')
@@ -126,6 +126,7 @@ def team_creation(request, game_id, player_id):
             
             usr=Player.objects.get(id=player_id)
             game_id=usr.game.id
+
             try:
                 team_id=usr.team.id
             except:
