@@ -5,6 +5,7 @@ app_name="app"
 
 urlpatterns = [
     path("", views.start_page, name="start_page"),
+    path("host", views.host_start_page, name="host_start_page"),
     path("chatty", views.index, name="index"),
     path("chatty/<str:room_name>/", views.room, name="room"),
     path("cleaning_data_base/<int:game_id>", views.cleaning_data_base, name="cleaning_data_base"),

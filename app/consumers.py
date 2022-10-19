@@ -51,9 +51,6 @@ class WavelengthConsumer(AsyncWebsocketConsumer):
     #         { 'type': 'dc_message' }
     #     )
     #     await super().websocket_disconnect(message)
-
-    # async def adminStart(self, text_data):
-    #     print('adminStart triggered')
   
   # Receive message from WebSocket
     async def receive(self, text_data):
