@@ -29,7 +29,7 @@
               <h5 style="color:lightblue"><em>Team -- {{team_name.name}}:</em></h5>
               {%for player_name in teammates%}
                 {% if player_name.team.name == team_name.name %}
-                  <p><h6 style="color:pink; {% if player_name.id == player.id %} font-size:20px; {% endif %}">{{ player_name.username }}</h6></p>
+                  <p><h6 style="color:pink; {% if player_name.id == player.id %} font-size:25px; {% endif %}">{% if player_name.id == player.id %} <i><b> {% endif %}{{ player_name.username }}{% if player_name.id == player.id %} </b></i> {% endif %}</h6></p>
                 {% endif %}
               {%endfor%}
             </div>
