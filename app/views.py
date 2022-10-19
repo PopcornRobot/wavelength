@@ -120,7 +120,8 @@ def team_creation(request, game_id, player_id):
             try:
                 team_id=usr.team.id
             except:
-                team_id=current_player.team.id
+                # team_id=current_player.team.id
+                team_id=None
 
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
