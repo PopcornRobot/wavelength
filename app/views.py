@@ -112,20 +112,24 @@ def team_creation(request, game_id, player_id):
         # Dictionary with the sorted teams
         teams = get_teams(team_names, player_names)
         ###############################################################################
-        
+        print('#####################################')
+        print(teams['player_names'])
+        print('#####################################')
+
+
         # List comprehension
         for key, value in teams.items():
-            while key is None:
-                create_team = Team.objects.create(name=key, game=game_instance)
-                for member in value:
-                    team_member = Player.objects.get(username=member)
-                    team_member.team=create_team
-                    team_member.save()
-                
-                usr=Player.objects.get(id=player_id)
-                game_id=usr.game.id
-                team_id=usr.team.id
 
+            create_team = Team.objects.create(name=key, game=game_instance)
+            for member in value:
+                team_member = Player.objects.get(username=member)
+                team_member.team=create_team
+                team_member.save()
+            
+            usr=Player.objects.get(id=player_id)
+            game_id=usr.game.id
+            team_id=usr.team.id
+            
 
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
