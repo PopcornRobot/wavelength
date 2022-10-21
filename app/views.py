@@ -186,7 +186,8 @@ def game_session(request, game_id, player_id):
     game = Game.objects.get(id=game_id)
     player = Player.objects.get(id=player_id)
     player_list = Player.objects.filter(game=game)
-    context = { 'player_list' : player_list, 'game' : game, 'game_id' : game_id, 'player':player }
+    player_count = player_list.count()
+    context = { 'player_list' : player_list, 'game' : game, 'game_id' : game_id, 'player':player, 'player_count':player_count }
     return render(request, 'app/game_session.html', context)
 
 # create a waiting room   
@@ -336,6 +337,8 @@ def game_end(request, game_id):
 def game_turn(request, game_id, team_id, player_id):
     game = Game.objects.get(id=game_id)
     team = Team.objects.get(id=team_id)
+    team_score = team.score
+    team_name = team.name
     player = Player.objects.get(id=player_id)
 
     team_members = Player.objects.filter(team=team)
@@ -349,7 +352,7 @@ def game_turn(request, game_id, team_id, player_id):
     else:
         return HttpResponseRedirect(reverse('app:waiting_room', kwargs={'game_id':game_id}))
 
-    context = {'turn_id': turn_id, 'game': game, 'team': team, 'player': player, 'clue': clue, 'game_id': game_id, 'team_id': team_id, 'player_id':player_id, 'team_size': team_size, 'team_members':team_members, 'unanswered_clues': unanswered_clues }
+    context = {'turn_id': turn_id, 'game': game, 'team': team, 'player': player, 'clue': clue, 'game_id': game_id, 'team_id': team_id, 'player_id':player_id, 'team_size': team_size, 'team_members':team_members, 'unanswered_clues': unanswered_clues, "team_name": team_name, 'team_score': team_score }
 
     return render(request, "app/game_turn.html", context)
 
@@ -357,6 +360,8 @@ def game_result(request, game_id, team_id, player_id, turn_id):
     game_turn = GameTurn.objects.get(id=turn_id)
     question = game_turn.question
     team = Team.objects.get(id=team_id)
+    team_name = team.name
+    team_score = team.score
     turns_remaining = GameTurn.objects.filter(team=team, team_answer=0).count()
     team_answer = game_turn.team_answer
     question_answer = game_turn.question_answer
@@ -374,7 +379,7 @@ def game_result(request, game_id, team_id, player_id, turn_id):
     else:
         points=0
 
-    context = {'points':points,'team_answer':team_answer, 'question_answer': question_answer, "game_turn" : game_turn, "question" : question, "turns_remaining" : turns_remaining, "game_id" : game_id, "team_id" : team_id, "player_id" : player_id}
+    context = {'points':points,'team_answer':team_answer, 'question_answer': question_answer, "game_turn" : game_turn, "question" : question, "turns_remaining" : turns_remaining, "game_id" : game_id, "team_id" : team_id, "player_id" : player_id, 'team_score':team_score, 'team_name':team_name}
     return render(request, "app/game_result.html", context)
 
 def leaving_user(request, player_id):

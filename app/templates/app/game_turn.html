@@ -3,10 +3,12 @@
 
 {% block body %}
 <div class ="center">
-    <hr>
+    <br>
+    <p style="font-size:15px; margin-bottom: 5px;">{{team_name}} Current Score: {{team_score}}</p>
+    <hr style="margin:12px;">
     {% if player.id == clue.player.id %}
 
-        <p style="font-size:11px;">YOUR CLUE</p>
+        <p style="font-size:11px; margin-bottom: 5px;">YOUR CLUE</p>
         <p style="font-size:37px;"><b>{{clue.clue_given}}</b></p>
 
         <form id="teamAnswerForm" action="{% url 'app:team_answer_response_form' game_id=game_id team_id=team_id player_id=player_id turn_id=turn_id %}" method="post"> 
@@ -24,7 +26,7 @@
 
     {% else %}
 
-        <p style="font-size:11px;">{{clue.player}}'S CLUE</p>
+        <p style="font-size:11px; margin-bottom: 5px;">{{clue.player}}'S CLUE</p>
         <p style="font-size:37px;">{{clue.clue_given}}</p>
 
         <form id="teamAnswerForm" action="{% url 'app:team_answer_response_form' game_id=game_id team_id=team_id player_id=player_id turn_id=turn_id %}" method="post"> 
@@ -69,24 +71,24 @@
         <button id='confirm_4' type="button" class="btn btn-warning btn-sm" disabled style= {% if team_members.count > 3 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.3 }}</button> 
     {% endif %}
  
-    <hr>
+    <hr style="margin:20px;">
     <p style="display:inline; font-size:35px; padding: 5px;" id="left_hand" onclick="emoji_left()"> 👈 </p>
     <p style="display:inline; font-size:35px; padding: 5px;" id="poop" onclick="emoji_poop()"> 💩 </p>
     <p style="display:inline; font-size:35px; padding: 5px;" id="cheers" onclick="emoji_cheers()"> 🥳 </p>
     <p style="display:inline; font-size:35px; padding: 5px;" id="party" onclick="emoji_party()"> 🎊 </p>
     <p style="display:inline; font-size:35px; padding: 5px;" id="right_hand" onclick="emoji_right()"> 👉 </p>
   
-    <hr>
-    <p style="font-size:22px;">&#128337;   Remaining: <span id="time">3:00</span></p>
+    <hr style="margin:15px;">
+    <p style="font-size:22px; margin-bottom: 5px;">⏰  Remaining: <span id="time">3:00</span></p>
 
     <p id="instructions" style= {% if player.id != clue.player.id %} 'display:block' {% else %} 'display:none' {% endif %}>Ready to lock in the dial?</p>
     <button class="btn btn-success center" id="submitButton" type="button" style= {% if player.id != clue.player.id %} 'display:block' {% else %} 'display:none' {% endif %}>READY</button>
 
     {% if player.id == clue.player.id %}
-        <p style= font-size:40px;>&#129323;</p>
-        <p>This is your clue!</p>
-        <p>You're not allowed to say <b>ANYTHING</b></p>
-        <p>until the target is revealed!</p>
+        <p style="font-size:40px; margin-bottom: 5px;">🤫</p>
+        <p style="margin-bottom: 5px;">This is your clue!</p>
+        <p style="margin-bottom: 5px;">You're not allowed to say <b>ANYTHING</b></p>
+        <p style="margin-bottom: 5px;">until the target is revealed!</p>
     {% endif %}
    
 </div>   
@@ -335,11 +337,6 @@
                         'room': gameID,
                         'value': sliderValue,
                     })); //end of sessionSocket
-
-        
-
-                
-
                 } //end of drag function
             }); //end of .roundSlider 
 

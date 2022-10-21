@@ -7,14 +7,14 @@
     <br>
     <p class="mono" style="font-size:26px;">W A V E L E N G T H</p>
     <hr>
-    <p style="font-size:20px;">You are in Game Room {{game.id}}</p>
-    <p style="font-size:15px;">You will see your team members after host sort teams.</p>
-    <p style="font-size:15px;">Please wait for the host to start the game.</p>
+    <p style="font-size:20px; margin-bottom: 5px;">You are in Game Room {{game.id}}</p>
+    <p style="font-size:15px;"><i>you'll be assigned a team shortly</i></p> 
     <hr>
+    <p id="players" style="font-size:16px;">There are {{player_count}} players!</p>
 
     <div id='player_list' style='padding:10px ; text-align:center'>
         {% for player in player_list %}
-          <div id='{{ player.username}}'>{{ player.username}}</div> 
+          <div style="font-size:15px;" id='{{ player.username}}'>{{ player.username}}</div> 
             {% if player.is_host == True %} <p> ^^ HOST ^^</p> {% endif %}
         {% endfor %}
     </div>
@@ -25,6 +25,7 @@
 
     {{ game_id|json_script:'json-game-id' }}
     {{ player.username|json_script:'json-username' }}
+    {{ player_count|json_script:'json-player-count' }}
 
   </div>
 
@@ -32,6 +33,7 @@
     const gameID = JSON.parse(document.getElementById('json-game-id').textContent);
     const userName = JSON.parse(document.getElementById('json-username').textContent);
     const sort_teams_btn = document.getElementById('sort_teams_btn');
+    
     let web_protocol
     location.protocol == "http:" ? web_protocol = "ws://" : web_protocol = "wss://"
     console.log("web_protocol", web_protocol)
@@ -43,17 +45,19 @@
           );
 
           sessionSocket.onopen = (e) => {
+            const player_count = JSON.parse(document.getElementById('json-player-count').textContent);
+            console.log(player_count + " *JSON*")
             message= '';
             console.log('socket opened!');
             sessionSocket.send(JSON.stringify({
                 'message': message,
                 'username': userName,
                 'game': gameID,
+                'value': player_count,
               }));
         };
 
     document.addEventListener('DOMContentLoaded', () => {
-        
 
         sessionSocket.onmessage = function(e) {
             console.log('message received');
@@ -67,8 +71,10 @@
               window.location.href = "{% url 'app:team_creation' game_id=game.id player_id=player.id %}";                        
             } else if (data.username != userName) {
               document.querySelector('#player_list').innerHTML += ("<div id='" + data.username + "'>" + data.username + '</div>');
-              console.log(data.username + ' added to list');
-            }             
+              
+              document.getElementById('players').innerHTML = ("There are " + data.value + " players!");
+              console.log(data.username + ' added to list'); 
+            }            
           };
         
         sessionSocket.onclose = (e) => {
@@ -84,7 +90,6 @@
 
         const sort_teams_btn = document.getElementById('sort_teams_btn');
         sort_teams_btn.onclick = (e) =>{
-        
           window.location.href = "{% url 'app:team_creation' game_id=game.id player_id=player.id %}";
         };
     });          
