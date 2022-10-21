@@ -2,56 +2,48 @@
 {% load static %}
 
 {% block body %}
-<center>
-
-    <hr />
-   
+<div class ="center">
+    <hr>
     {% if player.id == clue.player.id %}
 
         <p style="font-size:11px;">YOUR CLUE</p>
-        <p style="font-size:35px;">{{clue.clue_given}}</p>
+        <p style="font-size:37px;"><b>{{clue.clue_given}}</b></p>
 
         <form id="teamAnswerForm" action="{% url 'app:team_answer_response_form' game_id=game_id team_id=team_id player_id=player_id turn_id=turn_id %}" method="post"> 
-                {% csrf_token %} 
+            {% csrf_token %} 
+            <div class="center" id="slider"></div>
+            <div id="gameValue" style="display: none;"></div>
+            <div class="container">
                 <div class="row">
-                    <div class="col">
-                        <div class="center" id="slider"></div>
-                        <div id="gameValue" style="display: none;"></div>
-                        <p style="text-align:left; width: 375px;">
-                            {{clue.question.left_spectrum}}
-                            <span style="float:right;">
-                                    {{clue.question.right_spectrum}}
-                            </span>
-                        </p>   
-                    </div>
+                    <div class="col" style="font-size:15px;" >{{clue.question.left_spectrum}}</div>
+                    <div class="col"></div>    
+                    <div class="col" style="font-size:15px;" >{{clue.question.right_spectrum}}</div>    
                 </div>
+            </div>
         </form>
 
     {% else %}
 
         <p style="font-size:11px;">{{clue.player}}'S CLUE</p>
-        <p style="font-size:20px;">{{clue.clue_given}}</p>
+        <p style="font-size:37px;">{{clue.clue_given}}</p>
 
         <form id="teamAnswerForm" action="{% url 'app:team_answer_response_form' game_id=game_id team_id=team_id player_id=player_id turn_id=turn_id %}" method="post"> 
-                {% csrf_token %} 
+            {% csrf_token %} 
+            <div class="center" id="slider"></div>
+            <div id="gameValue" style="display: none;"></div>
+            <div class="container">
                 <div class="row">
-                    <div class="col">
-                        <div class="center" id="slider"></div>
-                        <div id="gameValue" style="display: none;"></div>
-                        <p style="text-align:left; width: 375px;">
-                            {{clue.question.left_spectrum}}
-                            <span style="float:right;">
-                                    {{clue.question.right_spectrum}}
-                            </span>
-                        </p>   
-                    </div>
+                    <div class="col" style="font-size:15px;" >{{clue.question.left_spectrum}}</div>
+                    <div class="col"></div>    
+                    <div class="col" style="font-size:15px;" >{{clue.question.right_spectrum}}</div>    
                 </div>
+            </div>
         </form>
 
     {% endif %}
 
-    <br />
-    <p style="font-size:10px;">Waiting on the below....</p>
+    <br>
+    <p style="font-size:10px;"><i>Waiting on the below....</i></p>
     
     {% if clue.player.id  == team_members.0.id %}
         <button hidden id='confirm_1' type="button" class="btn btn-primary btn-sm" disabled>{{ team_members.0 }}</button>
@@ -76,40 +68,34 @@
     {% else %}    
         <button id='confirm_4' type="button" class="btn btn-warning btn-sm" disabled style= {% if team_members.count > 3 %} 'display:inline' {% else %} 'display:none'{% endif %}>{{ team_members.3 }}</button> 
     {% endif %}
+ 
+    <hr>
+    <p style="display:inline; font-size:35px; padding: 5px;" id="left_hand" onclick="emoji_left()"> 👈 </p>
+    <p style="display:inline; font-size:35px; padding: 5px;" id="poop" onclick="emoji_poop()"> 💩 </p>
+    <p style="display:inline; font-size:35px; padding: 5px;" id="cheers" onclick="emoji_cheers()"> 🥳 </p>
+    <p style="display:inline; font-size:35px; padding: 5px;" id="party" onclick="emoji_party()"> 🎊 </p>
+    <p style="display:inline; font-size:35px; padding: 5px;" id="right_hand" onclick="emoji_right()"> 👉 </p>
 
-    <br />
-    <br />
-    <p>Time remaining to enter guess: <span id="time">3:00</span></p>
+    <hr>
+    <p style="font-size:22px;">&#128337;   Remaining: <span id="time">3:00</span></p>
 
     <p id="instructions" style= {% if player.id != clue.player.id %} 'display:block' {% else %} 'display:none' {% endif %}>Ready to lock in the dial?</p>
-    <button class="btn btn-primary" id="submitButton" type="button" style= {% if player.id != clue.player.id %} 'display:block' {% else %} 'display:none' {% endif %}>READY</button>
+    <button class="btn btn-success center" id="submitButton" type="button" style= {% if player.id != clue.player.id %} 'display:block' {% else %} 'display:none' {% endif %}>READY</button>
 
     {% if player.id == clue.player.id %}
         <p style= font-size:40px;>&#129323;</p>
         <p>This is your clue!</p>
-        <p>You're not allowed to say ANYTHING</p>
+        <p>You're not allowed to say <b>ANYTHING</b></p>
         <p>until the target is revealed!</p>
     {% endif %}
    
-    <div style="width:600px; margin:0 auto;">
-        <h5>Instructions:</h5>
-        <ul>
-            <li><h6>The dial above shows a pointer at a fixed position,</h6></li>
-            <li><h6>the position indicates the level of the answer,</h6></li>
-            <li><h6>If the dial is all the way to the left indicates the most extreme example for the left concept,</h6></li>
-            <li><h6>while if the dial is all the way to the right is the most extreme example of the right concept..</h6></li>
-            <li><h6>As a team use the dial to indicate where do you think the clue sits.</h5></li> 
-        </ul>
-    </div>
-
-</center>   
+</div>   
 
     {{ game_id|json_script:'json-game-id' }}
     {{ player.username|json_script:'json-username' }}
     {{ player.id|json_script:'json-player-id' }}
     {{ team_id|json_script:'json-team-id' }}
-    {{ team_size|json_script:'json-team-size'}}
-   
+    {{ team_size|json_script:'json-team-size'}}   
     {{ clue.player.id|json_script:'json-clue-player-id'}}
 
 <script>
@@ -119,9 +105,7 @@
     const teamID = JSON.parse(document.getElementById('json-team-id').textContent);
     const team_size = JSON.parse(document.getElementById('json-team-size').textContent);
     const clue = JSON.parse(document.getElementById('json-clue-player-id').textContent);
-  
-    
-    console.log(teamID.name)
+
     let submit_count = 0;
     let web_protocol;
     location.protocol == "http:" ? web_protocol = "ws://" : web_protocol = "wss://"
@@ -136,11 +120,36 @@
     document.addEventListener('DOMContentLoaded', () => {
 
         let submitButton = document.getElementById('submitButton');
+        let left_hand = document.getElementById("left_hand");
+        let poop = document.getElementById("poop");
+        let cheers = document.getElementById("cheers");
+        let party = document.getElementById("party");
+        let right_hand = document.getElementById("right_hand");
         submit_count = 0;
 
         submitButton.onclick = (e) =>{
             teamAnswerSubmit()
         }; //eoc
+
+        left_hand.onclick = (e) =>{
+            emoji_left()
+        }
+
+        poop.onclick = (e) =>{
+            emoji_poop()
+        }
+
+        cheers.onclick = (e) =>{
+            emoji_cheers()
+        }
+
+        party.onclick = (e) =>{
+            emoji_party()
+        }
+
+        right_hand.onclick = (e) =>{
+            emoji_right()
+        }
 
         sessionSocket.onmessage = function(e) {
             const confirm_1 = document.getElementById('confirm_1');
@@ -188,14 +197,108 @@
 
             } //eof if
 
-        };
+            if (data.message == "left") {
+                floating({
+                    content: '👈',
+                    number: 5,
+                    duration: 4,
+                    repeat: 1,
+                    direction: 'reverse'
+                }); //eof floating
+            } //eoif
 
+            if (data.message == "poop") {
+                floating({
+                    content: '💩',
+                    number: 5,
+                    duration: 4,
+                    repeat: 1,
+                    direction: 'reverse'
+                }); //eof floating
+            } //eoif
+
+            if (data.message == "cheers") {
+                floating({
+                    content: '🥳',
+                    number: 5,
+                    duration: 4,
+                    repeat: 1,
+                    direction: 'reverse'
+                }); //eof floating
+            } //eoif
+
+            if (data.message == "party") {
+                floating({
+                    content: '🎊',
+                    number: 5,
+                    duration: 4,
+                    repeat: 1,
+                    direction: 'reverse'
+                }); //eof floating
+            } //eoif
+
+            if (data.message == "right") {
+                floating({
+                    content: '👉 ',
+                    number: 5,
+                    duration: 4,
+                    repeat: 1,
+                    direction: 'reverse'
+                }); //eof floating
+            } //eoif
+
+        }; //eos
         
         function updateGameValue(sliderValue) {
             var gameValue = document.getElementById('gameValue')
             gameValue.innerHTML = sliderValue    
         } //eof
 
+        function emoji_left() {
+            message="left"
+                sessionSocket.send(JSON.stringify({
+                    'message': message,
+                    'username': userName,
+                    'room': gameID,
+                })); //end of sessionSocket
+        } //eof
+        
+        function emoji_poop() {
+            message="poop"
+                sessionSocket.send(JSON.stringify({
+                    'message': message,
+                    'username': userName,
+                    'room': gameID,
+                })); //end of sessionSocket
+        } //eof
+        
+        function emoji_cheers() {
+            message="cheers"
+                sessionSocket.send(JSON.stringify({
+                    'message': message,
+                    'username': userName,
+                    'room': gameID,
+                })); //end of sessionSocket
+        } //eof
+        
+        function emoji_party() {
+            message="party"
+                sessionSocket.send(JSON.stringify({
+                    'message': message,
+                    'username': userName,
+                    'room': gameID,
+                })); //end of sessionSocket
+        } //eof
+
+        function emoji_right() {
+            message="right"
+                sessionSocket.send(JSON.stringify({
+                    'message': message,
+                    'username': userName,
+                    'room': gameID,
+                })); //end of sessionSocket
+        } //eof
+        
         function teamAnswerSubmit() {
             document.getElementById("submitButton").disabled = true;
             document.getElementById("submitButton").innerHTML = "&#10003; YOU'RE READY";
@@ -232,6 +335,11 @@
                         'room': gameID,
                         'value': sliderValue,
                     })); //end of sessionSocket
+
+        
+
+                
+
                 } //end of drag function
             }); //end of .roundSlider 
 
@@ -253,8 +361,6 @@
 
         } //eof
 
-    
-    
        //Countdown Timer
        window.onload = function() {
 
@@ -279,9 +385,6 @@
             display.textContent = minutes + ':' + seconds;
         }
         }; //end of countdown timer
-
-        
-
 
     }); //end of page load
 
@@ -336,7 +439,6 @@
             'seconds': (seconds % 60) | 0
         };
     };
-
 
 </script> 
 
