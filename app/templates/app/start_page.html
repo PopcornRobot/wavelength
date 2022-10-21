@@ -8,7 +8,10 @@
   <br>
   <p class="mono" style="font-size:26px;">W A V E L E N G T H</p>
   <hr>
-  <h6 style="margin:30px">To start, create your username to either host a new game (create room) or join an exisiting game (join room).</h6>
+  <h6 style="margin:30px">To start, create your username to join an exisiting game.</h6>
+  <a href="{% url 'app:game_tutorial' %}" >
+    <h6 style="margin:30px; color:greenyellow">Click here to watch the tutorial</h6>
+  </a>
 
   <form method="post">
       {% csrf_token %}

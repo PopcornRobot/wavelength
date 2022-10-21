@@ -44,6 +44,14 @@
 
     {% endif %}
 
+    <hr style="margin-bottom: 5px;">
+    {% if player.id == clue.player.id %}
+        <p style="font-size:40px; margin-bottom: 5px;">🤫</p>
+        <p style="margin-bottom: 5px; font-size:20px">This is your clue!</p>
+        <p style="margin-bottom: 5px; font-size:20px">You're not allowed to say <b>ANYTHING</b></p>
+        <p style="margin-bottom: 5px; font-size:20px">until the target is revealed!</p>
+    {% endif %}
+
     <br>
     <p style="font-size:10px;"><i>Waiting on the below....</i></p>
     
@@ -84,12 +92,7 @@
     <p id="instructions" style= {% if player.id != clue.player.id %} 'display:block' {% else %} 'display:none' {% endif %}>Ready to lock in the dial?</p>
     <button class="btn btn-success center" id="submitButton" type="button" style= {% if player.id != clue.player.id %} 'display:block' {% else %} 'display:none' {% endif %}>READY</button>
 
-    {% if player.id == clue.player.id %}
-        <p style="font-size:40px; margin-bottom: 5px;">🤫</p>
-        <p style="margin-bottom: 5px;">This is your clue!</p>
-        <p style="margin-bottom: 5px;">You're not allowed to say <b>ANYTHING</b></p>
-        <p style="margin-bottom: 5px;">until the target is revealed!</p>
-    {% endif %}
+    
    
 </div>   
 
