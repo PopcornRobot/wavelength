@@ -32,7 +32,6 @@ class WavelengthConsumer(AsyncWebsocketConsumer):
             self.channel_name          
         )
         print('consumer disconnect')
-        print(close_code)
         
         # # Send message to room group
         # await self.channel_layer.group_send(
@@ -51,9 +50,6 @@ class WavelengthConsumer(AsyncWebsocketConsumer):
     #         { 'type': 'dc_message' }
     #     )
     #     await super().websocket_disconnect(message)
-
-    # async def adminStart(self, text_data):
-    #     print('adminStart triggered')
   
   # Receive message from WebSocket
     async def receive(self, text_data):
@@ -69,8 +65,6 @@ class WavelengthConsumer(AsyncWebsocketConsumer):
         team = data.get('team')
         question = data.get('question')
         
-        # print('text data should be here:' + text_data)
-        # print(data)
         if (action == 'submit clue'):
             await self.create_gameturn(data)
 
@@ -116,7 +110,6 @@ class WavelengthConsumer(AsyncWebsocketConsumer):
         username = event.get('username')
         value = event.get('value')
         print('receiving from broadcast')
-        # print('value is ' + value)
 
     # Send message to WebSocket
         await self.send(text_data=json.dumps({
