@@ -1,7 +1,7 @@
 {% extends "base_cyberpunk.html" %}
 
 {% block body %}
-<center>
+<div class="center">
   <br />
   <h1>Final Scores</h1>
   <hr /> 
@@ -36,14 +36,10 @@
       </div>
     </div>
   </div>
-
-  <hr /> 
-
-
-
-
-  <a href="{% url 'app:cleaning_data_base' game_id=game.id %}" ><button class="btn btn-primary"> New Game </button></a>
-</center>
+  <hr />
+  <a href="{% url 'app:cleaning_data_base' game_id=game.id %}" >Clear Data</a>
+  <button class="btn btn-primary">New Game</button>
+</div>
 
 <script>
 
