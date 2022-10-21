@@ -9,20 +9,20 @@
     <p class="mono" style="font-size:26px;">W A V E L E N G T H</p>
     <hr>
     <h2>Select a room </h2>
-    <h5>Ask {{current_player.username}} for the room number.</h5> 
+    <h5>Ask your host for the room number.</h5> 
     <hr> 
 
     {% for game in game_list %}
         {% if current_player.id  %}   
             <br>     
             <a href="{%url 'app:player_game_assignation' game_id=game.id player_id=current_player.id %}" class="btn btn-primary">
-                <p style="font-size:18px;">Join Game Room {{game.id}}</p> 
+                <p style="font-size:18px;">Join Game {{game.id}}</p> 
             </a>  
             <br>
         {% else %}
             <br>
             <a href="{%url 'app:player_game_assignation' game_id=game.id%}" class="btn btn-primary">
-                <p style="font-size:18px;">Join Game Room {{game.id}}</p> 
+                <p style="font-size:18px;">Join Game {{game.id}}</p> 
             </a>
             <br>
         {% endif %}
