@@ -201,6 +201,10 @@ def start_page(request):
     context = {}
     return render(request, "app/start_page.html", context)
 
+def host_start_page(request):
+    context = {}
+    return render(request, "app/host_start_page.html", context)
+
 def host_player_registration_form(request):
     if request.method == 'POST':
         # Assigns the form input to the players name

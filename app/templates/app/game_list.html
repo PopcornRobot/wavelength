@@ -16,13 +16,13 @@
         {% if current_player.id  %}   
             <br>     
             <a href="{%url 'app:player_game_assignation' game_id=game.id player_id=current_player.id %}" class="btn btn-primary">
-                <p style="font-size:18px;">Join Game Room {{game.id}}</p> 
+                <p style="font-size:18px;">Join Game {{game.id}}</p> 
             </a>  
             <br>
         {% else %}
             <br>
             <a href="{%url 'app:player_game_assignation' game_id=game.id%}" class="btn btn-primary">
-                <p style="font-size:18px;">Join Game Room {{game.id}}</p> 
+                <p style="font-size:18px;">Join Game {{game.id}}</p> 
             </a>
             <br>
         {% endif %}
