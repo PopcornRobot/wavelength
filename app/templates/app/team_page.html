@@ -1,38 +1,27 @@
-<!DOCTYPE html>
-<html>
-  <style>
-    body{
-      text-align: center;
-   }
-  </style>
+{% extends "base_cyberpunk.html" %}
+{% load static %}
+{% block title %}Wavelength{% endblock %}
+{% block page_title %} Team Room {% endblock %}
 
-  <head>
-    <title>Wavelength</title>
-  </head>
-  <body>
-  {% extends "base_cyberpunk.html" %}
-  {% load static %}
-  {% block title %}Wavelength{% endblock %}
-  {% block page_title %} Team Room {% endblock %}
-  {% block body %} 
-  {% comment %} {{request.get_full_path}} {% endcomment %}
+{% block body %} 
+{% comment %} {{request.get_full_path}} {% endcomment %}
 
-{% comment %} <center> {% endcomment %}
-<div class="container">
-    <div class="bs-docs-section">
-      <div class="page header">
-        <div class="row">
-            <div class="col-lg-15">
-                {% comment %} TEAM_NAME is a place holder for team name this may change into a form {% endcomment %}
-                <br />
-                <h1> Team assignation </h1>
-                <h4> Locate your team and get your team together </h4>
-                <hr />
-            </div>
-        </div>  
+<div class ="center">
+  <div class="container">
+      <div class="bs-docs-section">
+        <div class="page header">
+          <div class="row">
+              <div class="col-lg-15">
+                  {% comment %} TEAM_NAME is a place holder for team name this may change into a form {% endcomment %}
+                  <br />
+                  <h1> Team assignation </h1>
+                  <h4> Locate your team and get your team together </h4>
+                  <hr />
+              </div>
+          </div>  
+        </div>
       </div>
-    </div>
-</div>
+  </div>
     {% comment %} the teams context will be sorted from the views {% endcomment %}
     {% for team_name in team %}
     <div class="bs-component">  
@@ -48,19 +37,15 @@
         </div>
     </div>    
     {% endfor %}
-{% comment %} </center> {% endcomment %}
 
   <div style='padding:10px ; text-align:center'>
-      <a>
-        <button class="btn btn-primary" id='start_game_btn' type="submit" {% if player.is_host == False %}style='display:none'{%endif%}>Start Game + Watch Tutorial!</button>
-      </a>
+      <button class="btn btn-primary" id='start_game_btn' type="submit" {% if player.is_host == False %} style='display:none' {% endif %}>Start Game + Watch Tutorial!</button>
       <br />
       <br />
-      <p {% if player.is_host == False %} style='display:none' {%endif%}>OR Click Below To Skip Tutorial</p>
-      <a>
-          <button class="btn btn-primary" id='skip_start_game_btn' type="submit" {% if player.is_host == False %}style='display:none'{%endif%}>Start Game + Skip Tutorial!</button>
-      </a>
+      <h6 {% if player.is_host == False %} style='display:none' {% endif %}>OR Click Below To Skip Tutorial</h6>
+      <button class="btn btn-primary" id='skip_start_game_btn' type="submit" {% if player.is_host == False %} style='display:none' {% endif %}>Start Game + Skip Tutorial!</button>
   </div>
+</div>
 
         {{ game_id|json_script:'json-game-id' }}
         {{ player.username|json_script:'json-username' }}
@@ -124,5 +109,3 @@
     });
 </script>
 {% endblock %}
-</body>
-</html>
