@@ -74,7 +74,7 @@
             console.log(data);            
             if (data.message == 'start game'){
               console.log('game started!')
-              window.location.href = "{% url 'app:game_tutorial' game_id=game_id team_id=team_id player_id=player.id %}"
+              window.location.href = "{% url 'app:game_tutorial' %}"
             }    
             if (data.message == 'skip tut'){
               window.location.href = "{% url 'app:question_clue_spectrum' game_id=game_id team_id=team_id player_id=player.id %}"
