@@ -32,17 +32,16 @@ class WavelengthConsumer(AsyncWebsocketConsumer):
             self.channel_name          
         )
         print('consumer disconnect')
-        print(close_code)
         
-        # # Send message to room group
-        # await self.channel_layer.group_send(
-        #     self.room_group_name,
-        #     {
-        #         'type': 'disc',
-        #         'message': "remove player",
-        #         'username': username,
-        #     }
-        # )
+        # Send message to room group
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'disc',
+                'message': "remove player",
+                'username': username,
+            }
+        )
         
 
     # async def websocket_disconnect(self, message):

@@ -95,13 +95,13 @@
             } else if (data.message == 'team page ready'){
               console.log('sort teams')              
               window.location.href = "{% url 'app:team_creation' game_id=game.id player_id=player.id %}";                        
-            } else if (data.username != userName) {
+            } else if (data.username != userName && document.getElementById(data.username) == null) {
               document.querySelector('#player_list').innerHTML += ("<div id='" + data.username + "'>" + data.username + '</div>');
               console.log(data.username + ' added to list');
             }             
           };
         
-        sessionSocket.onclose = (e) => {
+        document.beforeunload = (e) => {
           message='remove player'
           sessionSocket.send(JSON.stringify({
             'message': message,
