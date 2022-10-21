@@ -1,12 +1,23 @@
-{% extends "base_cyberpunk.html" %}
-{% load static %}
+<!DOCTYPE html>
+<html>
+  <style>
+    body{
+      text-align: center;
+   }
+  </style>
 
-{% block title %}Wavelength{% endblock %}
-{% block page_title %} Team Room {% endblock %}
-{% block body %} 
-{% comment %} {{request.get_full_path}} {% endcomment %}
+  <head>
+    <title>Wavelength</title>
+  </head>
+  <body>
+  {% extends "base_cyberpunk.html" %}
+  {% load static %}
+  {% block title %}Wavelength{% endblock %}
+  {% block page_title %} Team Room {% endblock %}
+  {% block body %} 
+  {% comment %} {{request.get_full_path}} {% endcomment %}
 
-<center>
+{% comment %} <center> {% endcomment %}
 <div class="container">
     <div class="bs-docs-section">
       <div class="page header">
@@ -21,6 +32,7 @@
         </div>  
       </div>
     </div>
+</div>
     {% comment %} the teams context will be sorted from the views {% endcomment %}
     {% for team_name in team %}
     <div class="bs-component">  
@@ -29,26 +41,26 @@
               <h5 style="color:lightblue"><em>Team -- {{team_name.name}}:</em></h5>
               {%for player_name in teammates%}
                 {% if player_name.team.name == team_name.name %}
-                  <p><h6 style="color:pink; {% if player_name.id == player.id %} font-size:25px; {% endif %}">{% if player_name.id == player.id %} <i><b> {% endif %}{{ player_name.username }}{% if player_name.id == player.id %} </b></i> {% endif %}</h6></p>
+                  <h6 style="color:pink; {% if player_name.id == player.id %} font-size:25px; {% endif %}">{% if player_name.id == player.id %} <i><b> {% endif %}{{ player_name.username }}{% if player_name.id == player.id %} </b></i> {% endif %}</h6>
                 {% endif %}
               {%endfor%}
             </div>
         </div>
     </div>    
     {% endfor %}
-</center>
+{% comment %} </center> {% endcomment %}
 
-        <div style='padding:10px ; text-align:center'>
-            <a>
-              <button class="btn btn-primary" id='start_game_btn' type="submit" {% if player.is_host == False %}style='display:none'{%endif%}>Start Game + Watch Tutorial!</button>
-            </a>
-            <br />
-            <br />
-            <p {% if player.is_host == False %} style='display:none' {%endif%}>OR Click Below To Skip Tutorial</p>
-            <a>
-                <button class="btn btn-primary" id='skip_start_game_btn' type="submit" {% if player.is_host == False %}style='display:none'{%endif%}>Start Game + Skip Tutorial!</button>
-            </a>
-        </div>
+  <div style='padding:10px ; text-align:center'>
+      <a>
+        <button class="btn btn-primary" id='start_game_btn' type="submit" {% if player.is_host == False %}style='display:none'{%endif%}>Start Game + Watch Tutorial!</button>
+      </a>
+      <br />
+      <br />
+      <p {% if player.is_host == False %} style='display:none' {%endif%}>OR Click Below To Skip Tutorial</p>
+      <a>
+          <button class="btn btn-primary" id='skip_start_game_btn' type="submit" {% if player.is_host == False %}style='display:none'{%endif%}>Start Game + Skip Tutorial!</button>
+      </a>
+  </div>
 
         {{ game_id|json_script:'json-game-id' }}
         {{ player.username|json_script:'json-username' }}
@@ -112,3 +124,5 @@
     });
 </script>
 {% endblock %}
+</body>
+</html>
