@@ -1,51 +1,47 @@
 {% extends "base_cyberpunk.html" %}
 {% load static %}
 
-<style>
-    {% block style %}    
-    {% endblock %}
-</style>
-
 {% block body %}
  
-<center>
-    <br />
+<div class="center">
+    <br>
     <h1>Responses</h1>
-    <div><h4>Proceeding to next clue in <span id="time">30</span></h4></div>
-    <hr />
+    <div><p style="font-size:15px;"><i>proceeding to next clue in <span id="time">30</span></i></p></div>
+    <hr>
 
-    <h3> You got {{points}} points !!!</h3>
+    <p style="font-size:35px;">You got <b> {{points}} </b> points !!!</p>
+    <hr>
 
-    <p class="mono" style="font-size:20px;">Correct answer!</p> 
-    <br />     
+    <p style="font-size:20px; color:rgb(78, 248, 78)">&#8595; Correct answer &#8595;</p>  
     <div id='question_1'>
-        <div class="row" id="sliderOne">
-            <div class="col">
-                <div class="center" id="slider"></div>
-                <p class="wrap" style="text-align:left; width: 375px;">
-                    {{question.left_spectrum}}
-                    <span class="wrap" style="float:right;">
-                        {{question.right_spectrum}}
-                    </span>
-                </p>
+        <div class="center" id="sliderOne">
+            <div class="center" id="slider"></div>
+            <div class="container">
+                <div class="row">
+                    <div class="col" style="font-size:15px;" >{{question.left_spectrum}}</div>
+                    <div class="col"></div>    
+                    <div class="col" style="font-size:15px;" >{{question.right_spectrum}}</div>    
+                </div>
             </div>
         </div>    
     </div>
-    <p class="mono" style="font-size:20px;">Your team answer!</p>
-    <br />
-    <div class="row" class="sliderTwoTwo">
-        <div class="col">
-            <div class="center" id="sliderTwo"></div>
-            <p class="wrap" style="text-align:left; width: 375px;">
-                {{question.left_spectrum}}
-                <span class="wrap" style="float:right;">
-                    {{question.right_spectrum}}
-                </span>
-            </p>
+    <br>
+    <br>
+    <br>
+    <div class="center" id="sliderTwoTwo">
+        <div class="center" id="sliderTwo"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col" style="font-size:15px;" >{{question.left_spectrum}}</div>
+                <div class="col"></div>    
+                <div class="col" style="font-size:15px;" >{{question.right_spectrum}}</div>    
+            </div>
         </div>
     </div>
+    <br>
+    <p style="font-size:20px; color:rgb(122, 200, 245)">&#8593; Your team answer &#8593;</p>
     
-</center>
+</div>
 
 {% comment %} transfers context data to javascript {% endcomment %}
 {{ game_id|json_script:'json-game-id' }}
