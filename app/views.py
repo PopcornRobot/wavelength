@@ -87,7 +87,7 @@ def team_creation(request, game_id, player_id):
             # Calculating the amount of teams and distributions
             # number of players/4 players per team and +1 to round number
             number_of_teams = int(players.count()/4)
-        else: 
+        else:
             # Single team")
             number_of_teams = 1
 
@@ -365,11 +365,11 @@ def game_result(request, game_id, team_id, player_id, turn_id):
     
     if difference <= 5:
         points = 4
-    elif 6 <= difference <=10:
+    elif 6 <= difference <=15:
         points = 3
-    elif 16 <= difference <=20:
+    elif 16 <= difference <=25:
         points = 2
-    elif 26<= difference <=30:
+    elif 26<= difference <=35:
         points = 1
     else:
         points=0
@@ -397,11 +397,11 @@ def team_answer_response_form(request, game_id, team_id, player_id, turn_id):
             # below records score based on pre-defined threshold    
             if difference <= 5:
                 team.score += 4
-            elif 6 <= difference <=10:
+            elif 6 <= difference <=15:
                 team.score += 3
-            elif 16 <= difference <=20:
+            elif 16 <= difference <=25:
                 team.score +=2
-            elif 26<= difference <=30:
+            elif 26<= difference <=35:
                 team.score  +=1
             team.save()
 
