@@ -5,14 +5,22 @@
  
 <div class="center">
     <br>
-    <h1>Responses</h1>
+    <p style="font-size:15px; margin-bottom: 5px;">{{team_name}}</p>
+    <p style="font-size:15px; margin-bottom: 5px;">Current Score: {{team_score}}</p>
+    <h1 style="margin-bottom: 5px;">Responses</h1>
     <div><p style="font-size:15px;"><i>proceeding to next clue in <span id="time">30</span></i></p></div>
     <hr>
 
-    <p style="font-size:35px;">You got <b> {{points}} </b> points !!!</p>
-    <hr>
-
-    <p style="font-size:20px; color:rgb(78, 248, 78)">&#8595; Correct answer &#8595;</p>  
+    <p style="font-size:30px; display: inline;">+<b> {{points}} </b> points !!!</p>
+    {% if points == 0 %}
+        <p style="font-size:30px; display: inline;">🤦</p>
+    {% else %}
+        <p style="font-size:30px; display: inline;">👏</p>
+    {% endif %}
+    
+    <br>
+    <br>
+    <p style="font-size:20px margin-bottom: 5px; color:rgb(78, 248, 78)">&#8595; Correct answer &#8595;</p>  
     <div id='question_1'>
         <div class="center" id="sliderOne">
             <div class="center" id="slider"></div>
@@ -25,7 +33,7 @@
             </div>
         </div>    
     </div>
-    <br>
+  
     <br>
     <br>
     <div class="center" id="sliderTwoTwo">
@@ -39,8 +47,7 @@
         </div>
     </div>
     <br>
-    <p style="font-size:20px; color:rgb(122, 200, 245)">&#8593; Your team answer &#8593;</p>
-    
+    <p style="font-size:20px; color:rgb(231, 247, 10)">&#8593; Your team answer &#8593;</p>
 </div>
 
 {% comment %} transfers context data to javascript {% endcomment %}
@@ -48,7 +55,6 @@
 {{ team_id|json_script:'json-team-id' }}
 {{ player_id|json_script:'json-player-id' }}
 {{ turns_remaining|json_script:'json-turns-remaining'}}
-
 
 <script>
     const gameID = JSON.parse(document.getElementById('json-game-id').textContent);
