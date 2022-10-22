@@ -320,12 +320,16 @@ def game_end(request, game_id):
     results={}
     game = Game.objects.get(id=game_id)
     teams_in_game = Team.objects.filter(game = game).order_by('-score')
+    
 
     # Calculates the average questions
     for team in teams_in_game:
-        total_team_clues = Player.objects.filter(game=game, team=team).count() * 2
+
+        num_players = Player.objects.filter(game=game, team=team)
+        total_team_clues = num_players.count() * 2
         total_team_points = team.score
         team_names = team.name
+
         try:
             average = '{0:.2g}'.format(total_team_points / total_team_clues)
         except:

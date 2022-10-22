@@ -1,4 +1,5 @@
 {% extends "base_cyberpunk.html" %}
+{% comment %} {% load tag_library %} {% endcomment %}
 
 {% block body %}
 <div class="center">
@@ -6,7 +7,7 @@
   <h1>Final Scores</h1>
   <hr /> 
   <h1>
-    Congratuations! {{teams_in_game.first}} win!
+    Congratuations! {{teams_in_game.first}} wins!
   </h1>
 
 
@@ -19,6 +20,7 @@
           <thead>
             <tr class="table-active">
               <th scope="col"> Team </th>
+              <th scope="col"> No. Players </th>
               <th scope="col"> Points </th>
               <th scope="col"> Average </th>
             </tr>
@@ -27,6 +29,7 @@
           <tbody>
             <tr class="table-primary">
                 <td> {{key}} </td>
+                <td>{{key.score}} * {{values}}</td>
                 <td> {{key.score}} </td>
                 <td> {{values}} </td>
             </tr>
@@ -37,8 +40,9 @@
     </div>
   </div>
   <hr />
-  <a href="{% url 'app:cleaning_data_base' game_id=game.id %}" >Clear Data</a>
-  <button class="btn btn-primary">New Game</button>
+  <a href="{% url 'app:cleaning_data_base' game_id=game.id %}" >
+    <button class="btn btn-primary">New Game</button>
+  </a>
 </div>
 
 <script>
