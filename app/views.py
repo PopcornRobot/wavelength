@@ -317,17 +317,16 @@ def clue_form(request):
     
 def game_end(request, game_id):
     average_score=[]
-    points = []
+    total_clues=[]
     results={}
     game = Game.objects.get(id=game_id)
     teams_in_game = Team.objects.filter(game = game).order_by('-score')
-    
 
     # Calculates the average questions
     for team in teams_in_game:
 
-        num_players = Player.objects.filter(game=game, team=team)
-        total_team_clues = num_players.count() * 2
+        total_team_clues = Player.objects.filter(game=game, team=team).count() * 2
+        total_clues.append(total_team_clues)
         total_team_points = team.score
         team_names = team.name
 
@@ -337,9 +336,9 @@ def game_end(request, game_id):
             average = 0
             
         average_score.append(average)
-        results = dict(zip(teams_in_game, average_score))
+        results = dict(zip(teams_in_game, zip(total_clues, average_score)))
 
-    context = { "results":results, "total_team_clues":total_team_clues,"teams_in_game": teams_in_game, "game":game }
+    context = { "results":results,"total_team_clues":total_team_clues,"teams_in_game": teams_in_game, "game":game }
     return render(request, "app/game_end.html", context)
 
 def game_turn(request, game_id, team_id, player_id):

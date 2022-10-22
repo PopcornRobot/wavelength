@@ -16,7 +16,7 @@
     "fields": {
       "name": "Team 2",
       "score": 12,
-      "game": 1,
+      "game": 2,
       "created_at": "2022-08-22T08:08:08.472Z",
       "updated_at": "2022-08-22T08:08:08.472Z"
     }

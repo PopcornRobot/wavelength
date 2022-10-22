@@ -5,22 +5,11 @@
 <div class="center">
   <br>
   <h1>Final Scores</h1>
-<<<<<<< HEAD
-  <hr /> 
-  <h1>
-    Congratuations! {{teams_in_game.first}} wins!
-  </h1>
-
-
-  {% comment %} To display score from highest to lowest {% endcomment %}
-  <h5> Scores </h5>
-=======
   <hr> 
   <h1>Congratuations!</h1>
   <h3 style="color: #4eeb75">{{teams_in_game.first}} wins!</h3>
   <br>
   
->>>>>>> master
   <div class="container">
     <div class="row justify-content-md-center">    
       <div class="col-lg-5">
@@ -28,7 +17,7 @@
           <thead>
             <tr class="table-active">
               <th scope="col"> Team </th>
-              <th scope="col"> No. Players </th>
+              <th scope="col"> No. Clues </th>
               <th scope="col"> Points </th>
               <th scope="col"> Average </th>
             </tr>
@@ -37,9 +26,9 @@
           <tbody>
             <tr class="table-primary">
                 <td> {{key}} </td>
-                <td>{{key.score}} * {{values}}</td>
+                <td> {{values.0}} </td>
                 <td> {{key.score}} </td>
-                <td> {{values}} </td>
+                <td> {{values.1}} </td>
             </tr>
           </tbody>
           {% endfor %}
@@ -47,16 +36,10 @@
       </div>
     </div>
   </div>
-<<<<<<< HEAD
-  <hr />
+  <hr>
   <a href="{% url 'app:cleaning_data_base' game_id=game.id %}" >
     <button class="btn btn-primary">New Game</button>
   </a>
-=======
-  <hr>
-  <a href="{% url 'app:cleaning_data_base' game_id=game.id %}" >Clear Data</a>
-  <button class="btn btn-primary">New Game</button>
->>>>>>> master
 </div>
 
 <script>
