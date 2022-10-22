@@ -17,8 +17,8 @@
     "fields": {
       "username": "player-2",
       "is_host": false,
-      "team": 1,
-      "game": 1,
+      "team": 2,
+      "game": 2,
       "created_at": "2022-08-22T08:08:08.472Z",
       "updated_at": "2022-08-22T08:08:08.472Z"
     }
@@ -29,8 +29,8 @@
     "fields": {
       "username": "player-3",
       "is_host": false,
-      "team": 1,
-      "game": 1,
+      "team": 2,
+      "game": 2,
       "created_at": "2022-08-22T08:08:08.472Z",
       "updated_at": "2022-08-22T08:08:08.472Z"
     }
@@ -41,8 +41,8 @@
     "fields": {
       "username": "player-4",
       "is_host": false,
-      "team": 1,
-      "game": 1,
+      "team": 2,
+      "game": 2,
       "created_at": "2022-08-22T08:08:08.472Z",
       "updated_at": "2022-08-22T08:08:08.472Z"
     }
