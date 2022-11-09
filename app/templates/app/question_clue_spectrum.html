@@ -20,9 +20,9 @@
             <div class="center" id="slider"></div>
             <div class="container">
                 <div class="row">
-                    <div class="col" style="font-size:15px;" >{{left_spectrum}}</div>
+                    <div class="col" style="font-size:15px;" id="left_spectrum">{{left_spectrum}}</div>
                     <div class="col"></div>    
-                    <div class="col" style="font-size:15px;" >{{right_spectrum}}</div>    
+                    <div class="col" style="font-size:15px;" id="right_spectrum">{{right_spectrum}}</div>    
                 </div>
             </div>
         <br>
@@ -39,9 +39,9 @@
             <div class="center" id="sliderTwo"></div>
             <div class="container">
                 <div class="row">
-                    <div class="col" style="font-size:15px;" >{{left_spectrum2}}</div>
+                    <div class="col" style="font-size:15px;" id="left_spectrum2" >{{left_spectrum2}}</div>
                     <div class="col"></div>    
-                    <div class="col" style="font-size:15px;" >{{right_spectrum2}}</div>    
+                    <div class="col" style="font-size:15px;" id="right_spectrum2">{{right_spectrum2}}</div>    
                 </div>
             </div>
         <br>
@@ -72,9 +72,15 @@
     const gameID = JSON.parse(document.getElementById('json-game-id').textContent);
     const teamID = JSON.parse(document.getElementById('json-team-id').textContent);
     const userName = JSON.parse(document.getElementById('json-username').textContent);
+    const questionOne = JSON.parse(document.getElementById('json-random-question').textContent);
     const question1 = JSON.parse(document.getElementById('json-random-question').textContent);
     const question2 = JSON.parse(document.getElementById('json-random-question2').textContent);
     const team_size = JSON.parse(document.getElementById('json-team-size').textContent);
+    const left_spectrum = document.getElementById('left_spectrum').innerHTML;
+    const right_spectrum = document.getElementById('right_spectrum').innerHTML;
+    const left_spectrum2 = document.getElementById('left_spectrum2').innerHTML;
+    const right_spectrum2 = document.getElementById('right_spectrum2').innerHTML;
+    
     let web_protocol
     location.protocol == "http:" ? web_protocol = "ws://" : web_protocol = "wss://"
     console.log("web_protocol", web_protocol)
@@ -129,7 +135,21 @@ document.addEventListener('DOMContentLoaded', () => {
         question_2.style.display = 'block';
         var sliderValue = $("#slider").data("roundSlider").getValue()
 
-        console.log(clue1);
+        if (clue1 == ""){
+            alert("You submitted an empty clue")
+            question_1.style.display = 'block';
+            question_2.style.display = 'none';
+            return false;
+        } 
+        
+        if ( (clue1.trim().toLowerCase() == left_spectrum.trim().toLowerCase()) || (clue1.trim().toLowerCase() == right_spectrum.trim().toLowerCase()) ) {
+            alert("You submitted the spectrum as your clue. Resubmit a different clue")
+            console.log(" if is being called here")
+            question_1.style.display = 'block';
+            question_2.style.display = 'none';
+            return false;
+        } 
+
         sessionSocket.send(JSON.stringify({
             'action': 'submit clue',
             'question': question1,
@@ -147,7 +167,23 @@ document.addEventListener('DOMContentLoaded', () => {
         question_2.style.display = 'none';
         please_wait.style.display = 'block';
         var sliderValueTwo = $("#sliderTwo").data("roundSlider").getValue()
-        console.log('submitting ' + clue2);
+
+        if (clue2 == ""){
+            alert("You submitted an empty clue")
+            let clue2 = document.getElementById('clue1').value;
+            question_2.style.display = 'block';
+            please_wait.style.display = 'none';
+            var sliderValue = $("#slider").data("roundSlider").getValue()
+            return false;
+        }
+
+        if ( (clue2.trim().toLowerCase() == left_spectrum2.trim().toLowerCase()) || (clue2.trim().toLowerCase() == right_spectrum2.trim().toLowerCase()) ) {
+            alert("You submitted the spectrum as your clue. Resubmit a different clue")
+            question_2.style.display = 'block';
+            please_wait.style.display = 'none';
+            return false;
+        } 
+
         sessionSocket.send(JSON.stringify({
             'action': 'submit clue',
             'message': 'clue submitted',
